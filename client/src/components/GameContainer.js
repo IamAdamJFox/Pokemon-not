@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import StartMenu from "../pages/StartMenu";
 import MoveList from "../pages/MoveList";
+import Login from "../components/signup";
 // import { Link } from "react-router-dom";
 
 export default function GameContainer() {
@@ -17,15 +19,28 @@ export default function GameContainer() {
     if (currentPage === "StartMenu") {
       return <StartMenu />;
     }
+    const handlePageChange = (page) => {
+      setCurrentPage(page);
+      history.push(`/${page}`); // Update the URL based on the selected page
+    };
     if(currentPage == "MoveList"){  
         return <MoveList />;
+    }
+    if(currentPage == "Login"){
+        return <Login />;
     }
     // Add other page rendering logic as needed.
   };
 
   return (
     <div>
-      {renderPage()}
+      <div>
+        {/* Buttons to change pages */}
+        <button onClick={() => handlePageChange("StartMenu")}>Start Menu</button>
+        <button onClick={() => handlePageChange("MoveList")}>Move List</button>
+        <button onClick={() => handlePageChange("Login")}>Login</button>
+      </div>
+      <div>{renderPage()}</div>
     </div>
   );
 }
