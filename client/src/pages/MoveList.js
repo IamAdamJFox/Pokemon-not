@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom"; // Import useParams to acces
 
 // Sample Pokémon data
 const pokemonData = [
-  { id: 1, name: "Bulbasaur", moves: ["Tackle", "Vine Whip"] },
+  { id: 1, name: "Bulbasaur", moves: ["Tackle", "Vine Whip", 'test'] },
   { id: 2, name: "Charmander", moves: ["Scratch", "Ember"] },
   { id: 3, name: "Squirtle", moves: ["Tackle", "Water Gun"] },
   { id: 4, name: "Pikachu", moves: ["Quick Attack", "Thunder Shock"] },
@@ -25,7 +25,7 @@ export default function MoveList() {
   const localStorageKey = `selectedMoves_${selectedPokemon.name}`;
 
   const [selectedMoves, setSelectedMoves] = useState([]); // State to store selected moves
-  
+
   useEffect(() => {
     // Load selected moves from local storage
     const selectedMoves = JSON.parse(localStorage.getItem("selectedMoves")) || [];
@@ -73,16 +73,9 @@ export default function MoveList() {
           </li>
         ))}
       </ul>
-      {console.log("Passing Moves to Attack:", selectedMoves)} {/* Add this line */} 
+      {console.log("Passing Moves to Attack:", selectedMoves)}
       <Link
-        to={{
-          // Pass the selected moves to the Attack component
-          pathname: "/Attack/",
-          state: {
-            // Pass the selected moves to the Attack component
-            selectedMoves: [...selectedMoves, ...selectedPokemon.moves],
-          },
-        }}
+        to={`/Attack/${encodeURIComponent(JSON.stringify(selectedMoves))}`}
       >
         <button>Attack</button>
       </Link>
