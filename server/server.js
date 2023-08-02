@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const db = require('./config/connection');
 const { ApolloServer } = require('apollo-server-express');
+const PokemonAPI = require('./datasources/pokemonAPI');
 const { typeDefs, resolvers } = require('./schemas');
 const { authMiddleware} = require('../server/utils/auth');
 
@@ -9,6 +10,9 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: authMiddleware,
+  dataSources: () => ({
+    pokemonAPI: new PokemonAPI()
+  }),
 });
 const PORT = process.env.PORT || 3001;
 

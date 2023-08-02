@@ -8,11 +8,12 @@ const typeDefs = gql`
     pokemonCount: Int
     savedPokemons: [Pokemon]
   }
+  
 
   type Pokemon {
     number: String
     name: String
-    type: String
+    type: [String!]!
     pokemonId: ID!
     title: String!
     image: String
@@ -36,6 +37,7 @@ const typeDefs = gql`
 
   type Query {
     me: User
+    getPokemonById(id: ID!): Pokemon
   }
 
   type Mutation {
