@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { useParams } from "react-router-dom"; // Import useParams to access route parameters
 
 // Sample Pokémon data
@@ -20,19 +20,28 @@ export default function MoveList() {
   if (!selectedPokemon) {
     return <div>Pokémon not found.</div>;
   }
-
-  return (
-    <div>
-      <div className="startHeader">
-        <h1>Pokemon Not</h1>
-      </div>
-      <h2>{selectedPokemon.name}</h2>
-      <h3>Moves:</h3>
-      <ul>
-        {selectedPokemon.moves.map((move, index) => (
-          <li key={index}>{move}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
+  const [selectedMove, setSelectedMove] = useState("");
+    const handleMoveSelect = (move) => {
+        setSelectedMove(move);
+        console.log("Move selected: ", move);
+    };
+    return (
+        <div>
+          <div className="startHeader">
+            <h1>Pokemon Not</h1>
+          </div>
+          <h2>{selectedPokemon.name}</h2>
+          <h3>Moves:</h3>
+          <ul>
+            {selectedPokemon.moves.map((move, index) => (
+              <li
+                key={index}
+                className={selectedMove === move ? "selected-move" : ""}
+                onClick={() => handleMoveSelect(move)}>
+                {move}
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    }

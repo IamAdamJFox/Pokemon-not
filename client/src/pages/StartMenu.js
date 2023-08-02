@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 
 export default function StartMenu() {
     const [selectedPokemon, setSelectedPokemon] = useState("");
-
+    //adding our logic so that user needs to be logged in to access the game
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const handlePokemonSelect = (pokemon)=>{
         setSelectedPokemon(pokemon);
     };
@@ -19,7 +20,7 @@ export default function StartMenu() {
     const pokemonList = [
         {id: 1 , name: "Bulbasaur"},
         {id: 2 , name: "Charmander"},
-        {id: 3 , name: "Squirle"},
+        {id: 3 , name: "Squirtle"},
         {id: 4 , name: "Pikachu"},
     ];
     return(
@@ -36,9 +37,14 @@ export default function StartMenu() {
                 ))}
             </ul>
             <div className="startBtn">
+                //checking if user is logged in
+                {isLoggedIn ? (
                 < Link to={selectedPokemon ? `/MoveList/${selectedPokemon.id}` : "#"}>
                     <button onClick={handlePokemonSelect} disabled={!selectedPokemon}>Start</button>
                 </Link>
+                ) : (
+                <p>Please log in to continue.</p>
+                )}
             </div>
         </div>
     );
