@@ -7,7 +7,7 @@ const App = () => (
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<StartMenu />} /> {/* Use StartMenu component */}
-      <Route path="/MoveList" element={<MoveList />} /> {/* Use MoveList component */}
+      <Route path="/MoveList/:pokemonId" element={<MoveList />} /> {/* Use MoveList component */}
     </Routes>
   </BrowserRouter>
 );

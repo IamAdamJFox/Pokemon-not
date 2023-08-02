@@ -36,7 +36,7 @@ export default function StartMenu() {
                 ))}
             </ul>
             <div className="startBtn">
-                <Link to="/MoveList">
+                < Link to={selectedPokemon ? `/MoveList/${selectedPokemon.id}` : "#"}>
                     <button onClick={handlePokemonSelect} disabled={!selectedPokemon}>Start</button>
                 </Link>
             </div>
