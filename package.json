@@ -11,15 +11,13 @@
     "recent": "^0.1.0"
   },
   "scripts": {
-    "start": "node pokemon-not-server/server.js",
-    "develop": "concurrently \"cd pokemon-not-server && npm run watch\" \"cd pokemon-not && npm start\"",
-    "install": "cd pokemon-not-server && npm i && cd ../pokemon-not && npm i",
-    "build": "cd pokemon-not && npm run build",
-    "seed": "cd pokemon-not-server && npm run seed"
+    "start": "node server/server.js",
+    "develop": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
+    "install": "cd server && npm i && cd ../client && npm i",
+    "build": "cd client && npm run build",
+    "seed": "cd server && npm run seed"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
+
   "browserslist": {
     "production": [
       ">0.2%",
