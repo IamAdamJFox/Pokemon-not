@@ -60,7 +60,7 @@ module.exports = {
   async deletePokemon({ user, params }, res) {
     const updatedUser = await User.findOneAndUpdate(
       { _id: user._id },
-      { $pull: { savedPokemons: { bookId: params.bookId } } },
+      { $pull: { savedPokemons: { pokemonId: params.pokemonId } } },
       { new: true }
     );
     if (!updatedUser) {

@@ -1,24 +1,21 @@
 {
-  "name": "current-project",
+  "name": "pokemon-not",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.19.0",
-    "eslint": "^6.1.0",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/user-event": "^13.5.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-scripts": "3.1.1",
-    "recent": "^0.1.0"
+    "react-router-dom": "^6.14.2",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "node pokemon-not-server/server.js",
-    "develop": "concurrently \"cd pokemon-not-server && npm run watch\" \"cd pokemon-not && npm start\"",
-    "install": "cd pokemon-not-server && npm i && cd ../pokemon-not && npm i",
-    "build": "cd pokemon-not && npm run build",
-    "seed": "cd pokemon-not-server && npm run seed"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "browserslist": {
     "production": [
