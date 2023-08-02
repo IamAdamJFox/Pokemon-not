@@ -4,7 +4,7 @@ import StartMenu from "./pages/StartMenu";
 import MoveList from "./pages/MoveList";
 import Login from "./components/signup";
 import Attack from "./pages/Attack";
-
+import PokemonDetails from './components/PokemonDetails';
 
 const App = () => (
   <BrowserRouter>
@@ -13,6 +13,7 @@ const App = () => (
       <Route path="/MoveList/:pokemonId" element={<MoveList />} />
       <Route path="/login" element={<Login />} />
       <Route path="/Attack/:selectedMoves" element={<Attack />} />
+      <Route path="/pokemon/:id" element={<PokemonDetails />} />
     </Routes>
   </BrowserRouter>
 );
