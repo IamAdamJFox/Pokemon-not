@@ -1,12 +1,15 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./pages/StartMenu";
+import StartMenu from "./pages/StartMenu"; // Update the import
+import MoveList from "./pages/MoveList"; // Update the import
 
 const App = () => (
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Home/>} />
+      <Route path="/" element={<StartMenu />} /> {/* Use StartMenu component */}
+      <Route path="/MoveList" element={<MoveList />} /> {/* Use MoveList component */}
     </Routes>
   </BrowserRouter>
 );
+
 export default App;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import StartMenu from "../pages/StartMenu";
+import MoveList from "../pages/MoveList";
 // import { Link } from "react-router-dom";
 
 export default function GameContainer() {
