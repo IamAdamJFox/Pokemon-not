@@ -58,11 +58,11 @@ const resolvers = {
     },
 
     // Define the removePokemon resolver to remove a Pokemon from the user's account
-    removePokemon: async (parent, { PokemonId }, context) => {
+    removePokemon: async (parent, { Id }, context) => {
       if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $pull: { savedPokemons: { PokemonId } } },
+          { $pull: { savedPokemons: { PokemonId: Id } } },
           { new: true }
         ).populate('savedPokemons');
     
