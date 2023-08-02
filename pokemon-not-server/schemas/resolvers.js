@@ -1,4 +1,4 @@
-const { User, Book } = require('../models');
+const { User, Pokemon } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { signToken } = require('../utils/auth');
 
@@ -7,7 +7,7 @@ const resolvers = {
     Query: {
       me: async (parent, args, context) => {
           if (context.user) {
-              return User.findOne({ _id: context.user._id }).populate('savedBooks');
+              return User.findOne({ _id: context.user._id }).populate('savedPokemons');
           }
   
           throw new AuthenticationError('You need to be logged in!');
@@ -42,29 +42,29 @@ const resolvers = {
       return { token, user };
     },
 
-    // Define the saveBook resolver to save a book to the user's account
-    saveBook: async (parent, { input }, context) => {
+    // Define the savePokemon resolver to save a Pokemon to the user's account
+    savePokemon: async (parent, { input }, context) => {
       if (context.user) {
-        const updatedBooks = await User.findOneAndUpdate(
+        const updatedPokemons = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { savedBooks: input } },
+          { $addToSet: { savedPokemons: input } },
           { new: true }
-        ).populate('savedBooks');
+        ).populate('savedPokemons');
     
-        return updatedBooks;
+        return updatedPokemons;
       }
     
       throw new AuthenticationError('You need to be logged in!');
     },
 
-    // Define the removeBook resolver to remove a book from the user's account
-    removeBook: async (parent, { bookId }, context) => {
+    // Define the removePokemon resolver to remove a Pokemon from the user's account
+    removePokemon: async (parent, { PokemonId }, context) => {
       if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $pull: { savedBooks: { bookId } } },
+          { $pull: { savedPokemons: { PokemonId } } },
           { new: true }
-        ).populate('savedBooks');
+        ).populate('savedPokemons');
     
         if (!updatedUser) {
           throw new AuthenticationError(`Couldn't find user with this id: ${context.user._id}`);

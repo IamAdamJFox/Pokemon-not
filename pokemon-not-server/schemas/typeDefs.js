@@ -5,8 +5,8 @@ const typeDefs = gql`
     _id: ID!
     username: String!
     email: String!
-    bookCount: Int
-    savedBooks: [Book]
+    pokemonCount: Int
+    savedPokemons: [Pokemon]
   }
 
   type Pokemon {
