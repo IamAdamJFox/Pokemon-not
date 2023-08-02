@@ -78,6 +78,49 @@ async function fetchBulbasaurStats() {
         console.log("Speed:", stats[5].base_stat);
       }
     });
+
+    const moveName = 'pound'; // Replace with the move name you want to fetch
+
+// Function to fetch move data from the API
+async function fetchMoveData(moveName) {
+  const apiUrl = `https://pokeapi.co/api/v2/move/${moveName}/`;
+
+  try {
+    const response = await fetch(apiUrl);
+    const moveData = await response.json();
+    return moveData;
+  } catch (error) {
+    console.error('Error fetching move data:', error);
+    return null;
+  }
+}
+
+// Function to extract accuracy, power, and type from the move data
+function extractMoveInfo(moveData) {
+  if (!moveData) {
+    console.error('Move data is null or undefined.');
+    return null;
+  }
+
+  const accuracy = moveData.accuracy;
+  const power = moveData.power;
+  const moveType = moveData.type.name;
+
+  return { accuracy, power, moveType };
+}
+
+// Usage
+(async () => {
+  const moveName = 'pound';
+  const moveData = await fetchMoveData(moveName);
+  if (moveData) {
+    const { accuracy, power, moveType } = extractMoveInfo(moveData);
+    console.log("Accuracy:", accuracy);
+    console.log("Power:", power);
+    console.log("Type:", moveType);
+  }
+})();
+
   
 
 
