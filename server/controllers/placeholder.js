@@ -47,8 +47,8 @@ fetch ('https://pokeapi.co/api/v2/move/1/',{
 .then(data => console.log(data))
 .catch(error => console.log('Error:', error));
 
-// Function to fetch Bulbasaur's stats
-async function fetchBulbasaurStats() {
+// Function to fetch Bulbasaur's stats and sprites
+async function fetchBulbasaurData() {
     const apiUrl = 'https://pokeapi.co/api/v2/pokemon/1/';
   
     try {
@@ -58,26 +58,36 @@ async function fetchBulbasaurStats() {
       }
   
       const data = await response.json();
-      return data.stats;
+      return {
+        stats: data.stats,
+        sprites: data.sprites,
+      };
     } catch (error) {
-      console.error('Error fetching Bulbasaur stats:', error);
+      console.error('Error fetching Bulbasaur data:', error);
       return null;
     }
   }
   
   // Example usage
-  fetchBulbasaurStats()
-    .then(stats => {
-      if (stats) {
+  fetchBulbasaurData()
+    .then(data => {
+      if (data) {
         // Accessing the stats
-        console.log("HP:", stats[0].base_stat);
-        console.log("Attack:", stats[1].base_stat);
-        console.log("Defense:", stats[2].base_stat);
-        console.log("Special Attack:", stats[3].base_stat);
-        console.log("Special Defense:", stats[4].base_stat);
-        console.log("Speed:", stats[5].base_stat);
+        console.log("HP:", data.stats[0].base_stat);
+        console.log("Attack:", data.stats[1].base_stat);
+        console.log("Defense:", data.stats[2].base_stat);
+        console.log("Special Attack:", data.stats[3].base_stat);
+        console.log("Special Defense:", data.stats[4].base_stat);
+        console.log("Speed:", data.stats[5].base_stat);
+  
+        // Accessing the sprites
+        console.log("Front Default Sprite:", data.sprites.front_default);
+        console.log("Front Shiny Sprite:", data.sprites.front_shiny);
+        console.log("Back Default Sprite:", data.sprites.back_default);
+        console.log("Back Shiny Sprite:", data.sprites.back_shiny);
       }
     });
+  
 
     const moveName = 'pound'; // Replace with the move name you want to fetch
 
@@ -120,6 +130,8 @@ function extractMoveInfo(moveData) {
     console.log("Type:", moveType);
   }
 })();
+
+
 
   
 
