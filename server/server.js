@@ -3,7 +3,7 @@ const path = require('path');
 const db = require('./config/connection');
 const { ApolloServer } = require('apollo-server-express');
 const { typeDefs, resolvers } = require('./schemas');
-const { authMiddleware} = require('../pokemon-not-server/utils/auth');
+const { authMiddleware} = require('../server/utils/auth');
 
 const server = new ApolloServer({
   typeDefs,
