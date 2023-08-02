@@ -16,6 +16,9 @@ export default function GameContainer() {
     if (currentPage === "StartMenu") {
       return <StartMenu />;
     }
+    if(currentPage == "MoveList"){  
+        return <MoveList />;
+    }
     // Add other page rendering logic as needed.
   };
 
