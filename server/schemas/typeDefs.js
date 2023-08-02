@@ -9,10 +9,21 @@ const typeDefs = gql`
     savedPokemons: [Pokemon]
   }
   
+  type Ability {
+    id: ID!
+    name: String!
+  }
+
+  type Move {
+    id: ID!
+    name: String!
+  }
 
   type Pokemon {
     number: String
     name: String
+    moves: [Move!]!
+    abilities: [Ability!]!
     type: [String!]!
     pokemonId: ID!
     title: String!

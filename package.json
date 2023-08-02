@@ -17,6 +17,9 @@
     "build": "cd client && npm run build",
     "seed": "cd server && npm run seed"
   },
+  "devDependencies": {
+    "concurrently": "^5.3.0"
+  },
   "browserslist": {
     "production": [
       ">0.2%",
