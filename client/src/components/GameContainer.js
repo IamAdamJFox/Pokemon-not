@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import StartMenu from "../pages/StartMenu";
 import MoveList from "../pages/MoveList";
 import Login from "../components/signup";
+import Attack from "../pages/Attack";
 // import { Link } from "react-router-dom";
 
 export default function GameContainer() {
@@ -29,17 +30,14 @@ export default function GameContainer() {
     if(currentPage == "Login"){
         return <Login />;
     }
+    if(currentPage == "Attack"){
+        return <Attack />;
+    }
     // Add other page rendering logic as needed.
   };
 
   return (
     <div>
-      <div>
-        {/* Buttons to change pages */}
-        <button onClick={() => handlePageChange("StartMenu")}>Start Menu</button>
-        <button onClick={() => handlePageChange("MoveList")}>Move List</button>
-        <button onClick={() => handlePageChange("Login")}>Login</button>
-      </div>
       <div>{renderPage()}</div>
     </div>
   );

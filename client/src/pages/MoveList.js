@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom"; // Import useParams to access route parameters
+import React, { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom"; // Import useParams to access route parameters
 
 // Sample Pokémon data
 const pokemonData = [
@@ -20,18 +20,34 @@ export default function MoveList() {
   if (!selectedPokemon) {
     return <div>Pokémon not found.</div>;
   }
-  
+
+  // Local storage key to store selected moves
+  const localStorageKey = `selectedMoves_${selectedPokemon.name}`;
+
   const [selectedMoves, setSelectedMoves] = useState([]); // State to store selected moves
   
+  useEffect(() => {
+    // Load selected moves from local storage
+    const selectedMoves = JSON.parse(localStorage.getItem("selectedMoves")) || [];
+    console.log("localStorage selectedMoves:", selectedMoves);
+    // Update the state
+    setSelectedMoves(selectedMoves);
+  }, [localStorageKey]);  // Add localStorageKey as a dependency
+
+  // Function to handle move selection
   const handleMoveSelect = (move) => {
+    // Check if the move is already selected
     if (!selectedMoves.includes(move)) {
+      // Add the move to the list of selected moves
       const updatedMoves = [...selectedMoves, move];
+      // Update the state
       setSelectedMoves(updatedMoves);
-      localStorage.setItem("selectedMoves", JSON.stringify(updatedMoves));
+      // Save the updated list of moves to local storage
+      localStorage.setItem(localStorageKey, JSON.stringify(updatedMoves));
       console.log(updatedMoves);
     }
   };
-  
+
 
   return (
     <div>
@@ -57,6 +73,19 @@ export default function MoveList() {
           </li>
         ))}
       </ul>
+      {console.log("Passing Moves to Attack:", selectedMoves)} {/* Add this line */} 
+      <Link
+        to={{
+          // Pass the selected moves to the Attack component
+          pathname: "/Attack/",
+          state: {
+            // Pass the selected moves to the Attack component
+            selectedMoves: [...selectedMoves, ...selectedPokemon.moves],
+          },
+        }}
+      >
+        <button>Attack</button>
+      </Link>
     </div>
   );
 }
