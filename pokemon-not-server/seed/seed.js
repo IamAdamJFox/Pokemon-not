@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Book = require('../models/Books'); // Assuming you have a Book model defined
+const Pokemon = require('../models/Pokemon'); // Assuming you have a Book model defined
 const db = require('../config/connection');
 
 // Step 2: Read the seed data from the JSON file
@@ -12,7 +12,7 @@ async function seedDatabase() {
     await db.once('open', async () => {
       console.log('Connected to the database.');
       // Seed the data into the database
-      await Book.insertMany(seedData);
+      await Pokemon.insertMany(seedData);
       console.log('Database seeded successfully.');
       // Close the database connection after seeding
       db.close();

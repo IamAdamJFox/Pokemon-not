@@ -1,33 +1,35 @@
 {
-    "name": "current-project",
-    "version": "0.1.0",
-    "private": true,
-    "dependencies": {
-      "eslint": "^6.1.0",
-      "axios": "^0.19.0",
-      "react": "^16.9.0",
-      "react-dom": "^16.9.0",
-      "react-scripts": "3.1.1"
-    },
-    "scripts": {
-      "start": "react-scripts start",
-      "build": "react-scripts build",
-      "test": "react-scripts test",
-      "eject": "react-scripts eject"
-    },
-    "eslintConfig": {
-      "extends": "react-app"
-    },
-    "browserslist": {
-      "production": [
-        ">0.2%",
-        "not dead",
-        "not op_mini all"
-      ],
-      "development": [
-        "last 1 chrome version",
-        "last 1 firefox version",
-        "last 1 safari version"
-      ]
-    }
+  "name": "current-project",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.19.0",
+    "eslint": "^6.1.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-scripts": "3.1.1",
+    "recent": "^0.1.0"
+  },
+  "scripts": {
+    "start": "node pokemon-not-server/server.js",
+    "develop": "concurrently \"cd pokemon-not-server && npm run watch\" \"cd pokemon-not && npm start\"",
+    "install": "cd pokemon-not-server && npm i && cd ../pokemon-not && npm i",
+    "build": "cd pokemon-not && npm run build",
+    "seed": "cd pokemon-not-server && npm run seed"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
+}
