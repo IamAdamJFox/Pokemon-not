@@ -9,5 +9,13 @@ export const CREATE_POKEMON = gql`
     }
   }
 `;
+export const ADD_SELECTED_MOVE = gql`
+mutation AddSelectedMove($pokemonId: ID!, $moveName: String!) {
+  addSelectedMove(pokemonId: $pokemonId, moveName: $moveName) {
+    id
+    moveName
+  }
+}
+`;
 
 // Define other mutations below and export them similarly

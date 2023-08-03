@@ -1,0 +1,39 @@
+html{
+    background-color: rgb(34, 32, 32);
+}
+.pokemon-list {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    flex-wrap: wrap; /* Allow items to wrap to the next line */
+  }
+  
+.pokemon-container{
+    display: inline-block;
+    margin: 10px;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  .pokemon-container img{
+    width: 200px;
+    height: 200px;
+  }
+  
+  .pokemon-container img:hover {
+    opacity: .5;
+  }
+  @font-face {
+    font-family: 'Pokemon Solid';
+    src: url('./font/PocketMonk-15ze.ttf'); 
+  }
+  .startHeader {
+    font-family: 'Pokemon Solid';
+    font-size: 50px;
+    color: #ffcb05;
+    text-shadow:
+      -1px -1px 0 #000,
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+      1px 1px 0 #000,
+      2px 2px 4px #2a75bb, -2px -2px 4px #ff4d4d;
+    text-align: center;
+  }

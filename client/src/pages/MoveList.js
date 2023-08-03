@@ -1,53 +1,44 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom"; // Import useParams to access route parameters
-
-// Sample Pokémon data
-const pokemonData = [
-  { id: 1, name: "Bulbasaur", moves: ["Tackle", "Vine Whip", 'test'] },
-  { id: 2, name: "Charmander", moves: ["Scratch", "Ember"] },
-  { id: 3, name: "Squirtle", moves: ["Tackle", "Water Gun"] },
-  { id: 4, name: "Pikachu", moves: ["Quick Attack", "Thunder Shock"] },
-];
+import { useParams, Link } from "react-router-dom";
+import { useMutation } from "@apollo/client"; // Import the useMutation hook
+import { ADD_SELECTED_MOVE } from "../utils/mutations"; // Import your mutation query
 
 export default function MoveList() {
-  const { pokemonId } = useParams(); // Get the 'pokemonId' parameter from the URL
+  const { pokemonId } = useParams();
 
-  // Find the selected Pokémon based on the ID
-  const selectedPokemon = pokemonData.find(
-    (pokemon) => pokemon.id === parseInt(pokemonId)
-  );
-
-  if (!selectedPokemon) {
-    return <div>Pokémon not found.</div>;
-  }
-
-  // Local storage key to store selected moves
-  const localStorageKey = `selectedMoves_${selectedPokemon.name}`;
-
-  const [selectedMoves, setSelectedMoves] = useState([]); // State to store selected moves
+  const [selectedPokemon, setSelectedPokemon] = useState(null);
+  const [selectedMoves, setSelectedMoves] = useState([]);
+  
+  // Define the addSelectedMove mutation
+  const [addSelectedMove] = useMutation(ADD_SELECTED_MOVE);
 
   useEffect(() => {
-    // Load selected moves from local storage
-    const selectedMoves = JSON.parse(localStorage.getItem("selectedMoves")) || [];
-    console.log("localStorage selectedMoves:", selectedMoves);
-    // Update the state
-    setSelectedMoves(selectedMoves);
-  }, [localStorageKey]);  // Add localStorageKey as a dependency
+    async function fetchSelectedPokemon() {
+      try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
+        const data = await response.json();
+        setSelectedPokemon(data);
+      } catch (error) {
+        console.error("Error fetching selected Pokémon:", error);
+      }
+    }
 
-  // Function to handle move selection
-  const handleMoveSelect = (move) => {
-    // Check if the move is already selected
+    fetchSelectedPokemon();
+  }, [pokemonId]);
+
+  const handleMoveSelect = async (move) => {
     if (!selectedMoves.includes(move)) {
-      // Add the move to the list of selected moves
       const updatedMoves = [...selectedMoves, move];
-      // Update the state
       setSelectedMoves(updatedMoves);
-      // Save the updated list of moves to local storage
-      localStorage.setItem(localStorageKey, JSON.stringify(updatedMoves));
-      console.log(updatedMoves);
+
+      // Save the move in the database using the addSelectedMove mutation
+      await addSelectedMove({ variables: { pokemonId: selectedPokemon.id, moveName: move } });
     }
   };
 
+  if (!selectedPokemon) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
@@ -63,22 +54,23 @@ export default function MoveList() {
       </ul>
       <h3>All Moves:</h3>
       <ul>
-        {selectedPokemon.moves.map((move, index) => (
+        {selectedPokemon.moves.slice(0, 6).map((move, index) => (
           <li
             key={index}
-            className={selectedMoves.includes(move) ? "selected-move" : ""}
-            onClick={() => handleMoveSelect(move)}
+            className={selectedMoves.includes(move.move.name) ? "selected-move" : ""}
+            onClick={() => handleMoveSelect(move.move.name)}
           >
-            {move}
+            {move.move.name}
           </li>
         ))}
       </ul>
-      {console.log("Passing Moves to Attack:", selectedMoves)}
-      <Link
-        to={`/Attack/${encodeURIComponent(JSON.stringify(selectedMoves))}`}
-      >
-        <button>Attack</button>
-      </Link>
+      {selectedMoves.length === 4 ? (
+        <Link to={`/Attack/${encodeURIComponent(JSON.stringify(selectedMoves))}`}>
+          <button>Attack</button>
+        </Link>
+      ) : (
+        <button disabled>Attack</button>
+      )}
     </div>
   );
-}
+  }  
