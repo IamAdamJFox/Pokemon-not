@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
-import { GET_POKEMON_BY_ID } from '../queries';
+import { GET_POKEMON_BY_ID } from '../utils/queries';
 
 function PokemonDetails({ match }) {
   const pokemonId = match.params.id;
