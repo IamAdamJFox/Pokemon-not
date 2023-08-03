@@ -37,6 +37,9 @@ export default function StartMenu() {
 
   const handlePokemonSelect = (pokemon) => {
     setSelectedPokemon(pokemon);
+
+    const clickedContainer = document.getElementById(`pokemon-${pokemon.id}`);
+    clickedContainer.classList.toggle("selected");
   };
 
   const handlePokemonSubmit = () => {
@@ -45,6 +48,7 @@ export default function StartMenu() {
       navigate(`/MoveList/${selectedPokemon.id}`);
     } else {
       console.log("No Pokemon selected");
+      
     }
   };
 
@@ -55,18 +59,19 @@ export default function StartMenu() {
       </div>
       <h2>Select your Pokemon</h2>
       <ul className="pokemon-list">
-        {pokemonList.map((pokemon) => (
-          <div
-            key={pokemon.id}
-            className="pokemon-container"
-            onClick={() => handlePokemonSelect(pokemon)}
-          >
-            <img
-              src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
-              alt={pokemon.name}
-            />
-          </div>
-        ))}
+     {pokemonList.map((pokemon) => (
+    <div
+      key={pokemon.id}
+      id={`pokemon-${pokemon.id}`}
+      className={`pokemon-container ${selectedPokemon === pokemon ? "selected" : ""}`}
+      onClick={() => handlePokemonSelect(pokemon)}
+    >
+      <img
+        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
+        alt={pokemon.name}
+      />
+    </div>
+  ))}
       </ul>
       <div className="startBtn">
         <Link to={selectedPokemon ? `/MoveList/${selectedPokemon.id}` : "#"}>
