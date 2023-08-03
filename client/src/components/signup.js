@@ -6,19 +6,19 @@ export default function SignUpAndLogin() {
     password: "",
     email: "",
   });
-
-  const Signup = () => {
-    // set initial form state
-    const [userFormData, setUserFormData] = useState({
-      username: "",
-      email: "",
-      password: "",
-    });
+//example for hieu
+  // const Signup = () => {
+  //   // set initial form state
+  //   const [userFormData, setUserFormData] = useState({
+  //     username: "",
+  //     email: "",
+  //     password: "",
+  //   });
   
-    // set state for form validation
-    const [validated] = useState(false);
-    // set state for alert
-    const [showAlert, setShowAlert] = useState(false);
+  //   // set state for form validation
+  //   const [validated] = useState(false);
+  //   // set state for alert
+  //   const [showAlert, setShowAlert] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
