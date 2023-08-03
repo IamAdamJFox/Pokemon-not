@@ -17,10 +17,20 @@ html{
     width: 200px;
     height: 200px;
   }
+  .pokemon-container:hover {
+    transform: translateY(-5px); /* Move container up slightly on hover */
+  }
   
   .pokemon-container img:hover {
     opacity: .5;
   }
+ 
+
+    .pokemon-container.selected {
+        transform: translateY(-3em);
+    }
+
+  
   @font-face {
     font-family: 'Pokemon Solid';
     src: url('./font/PocketMonk-15ze.ttf'); 
