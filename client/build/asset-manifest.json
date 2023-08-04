@@ -1,10 +1,14 @@
 {
   "files": {
-    "main.js": "/static/js/main.d0650d95.js",
+    "main.css": "/static/css/main.591e90fe.css",
+    "main.js": "/static/js/main.7bfb8f4e.js",
+    "static/media/PocketMonk-15ze.ttf": "/static/media/PocketMonk-15ze.09d09837f1b6dec50403.ttf",
     "index.html": "/index.html",
-    "main.d0650d95.js.map": "/static/js/main.d0650d95.js.map"
+    "main.591e90fe.css.map": "/static/css/main.591e90fe.css.map",
+    "main.7bfb8f4e.js.map": "/static/js/main.7bfb8f4e.js.map"
   },
   "entrypoints": [
-    "static/js/main.d0650d95.js"
+    "static/css/main.591e90fe.css",
+    "static/js/main.7bfb8f4e.js"
   ]
 }

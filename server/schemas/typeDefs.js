@@ -48,7 +48,9 @@ const typeDefs = gql`
 
   type Query {
     me: User
+    getPokemonsByIds(ids: [ID!]!): [Pokemon]!
     getPokemonById(id: ID!): Pokemon
+    getMovesByPokemonId(pokemonId: ID!): [Move]!
   }
 
   type Mutation {
