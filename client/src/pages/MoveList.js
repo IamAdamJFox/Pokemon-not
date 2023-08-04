@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useMutation } from "@apollo/client"; // Import the useMutation hook
-import { ADD_SELECTED_MOVE } from "../utils/mutations"; // Import your mutation query
+// import { ADD_SELECTED_MOVE } from "../utils/mutations"; // Import your mutation query
 
 export default function MoveList() {
   const { pokemonId } = useParams();
@@ -10,7 +10,7 @@ export default function MoveList() {
   const [selectedMoves, setSelectedMoves] = useState([]);
   
   // Define the addSelectedMove mutation
-  const [addSelectedMove] = useMutation(ADD_SELECTED_MOVE);
+  // const [addSelectedMove] = useMutation(ADD_SELECTED_MOVE);
 
   useEffect(() => {
     async function fetchSelectedPokemon() {
@@ -32,7 +32,7 @@ export default function MoveList() {
       setSelectedMoves(updatedMoves);
 
       // Save the move in the database using the addSelectedMove mutation
-      await addSelectedMove({ variables: { pokemonId: selectedPokemon.id, moveName: move } });
+      // await addSelectedMove({ variables: { pokemonId: selectedPokemon.id, moveName: move } });
     }
   };
 
