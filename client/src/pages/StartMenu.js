@@ -15,6 +15,8 @@ export default function StartMenu() {
     variables: { ids: [1, 4, 7, 25] },
   });
 
+  console.log("data in StartMenu: ", data);
+
   const [savePokemon] = useMutation(SAVE_POKEMON);
 
   const handlePokemonSelect = (pokemon) => {
@@ -23,12 +25,12 @@ export default function StartMenu() {
 
   const handlePokemonSubmit = async () => {
     if (selectedPokemon) {
-      console.log("Selected Pokemon ID for navigation: ", selectedPokemon.id);
+      console.log("Selected Pokemon ID for navigation: ", selectedPokemon.number);
   
       try {
         await savePokemon({ variables: { input: { ...selectedPokemon } } });
         // After saving, navigate to the MoveList page with the selected Pokemon's id as parameter
-        navigate(`/MoveList/${selectedPokemon.id}`);
+        navigate(`/MoveList/${selectedPokemon.number}`);
       } catch (error) {
         console.error("Error saving Pokemon:", error);
       }
@@ -64,11 +66,9 @@ export default function StartMenu() {
         ))}
       </ul>
       <div className="startBtn">
-        <Link to={selectedPokemon ? `/MoveList/${selectedPokemon.id}` : "#"}>
           <button onClick={handlePokemonSubmit} disabled={!selectedPokemon}>
             Start
           </button>
-        </Link>
       </div>
     </div>
   );
