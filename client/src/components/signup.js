@@ -1,98 +1,114 @@
-import React, { useState } from "react";
+import { useMutation } from '@apollo/client';
+import { ADD_USER } from '../utils/mutations';
+import React, { useState } from 'react';
+import { Form, Button, Alert } from 'react-bootstrap';
 
-export default function SignUpAndLogin() {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-    email: "",
-  });
-//example for hieu
-  // const Signup = () => {
-  //   // set initial form state
-  //   const [userFormData, setUserFormData] = useState({
-  //     username: "",
-  //     email: "",
-  //     password: "",
-  //   });
-  
-  //   // set state for form validation
-  //   const [validated] = useState(false);
-  //   // set state for alert
-  //   const [showAlert, setShowAlert] = useState(false);
+import { createUser } from '../utils/API';
+import Auth from '../utils/auth';
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+const SignupForm = () => {
+  // set initial form state
+  const [userFormData, setUserFormData] = useState({ username: '', email: '', password: '' });
+  // set state for form validation
+  const [validated] = useState(false);
+  // const [validated, setValidated] = useState(false); can change styling of form based on validation
+  // set state for alert
+  const [showAlert, setShowAlert] = useState(false);
+
+  // initialize ADD_USER mutation
+  const [addUser, { error }] = useMutation(ADD_USER);
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setUserFormData({ ...userFormData, [name]: value });
   };
 
-  const handleSignUpSubmit = (e) => {
-    e.preventDefault();
-    console.log("Sign Up Form Data: ", formData);
-    // Add logic to submit sign-up data to backend or perform desired action
-  };
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
 
-  const handleLoginSubmit = (e) => {
-    e.preventDefault();
-    console.log("Login Form Data: ", formData);
-    // Add logic to submit login data to backend or perform desired action
+    // check if form has everything (as per react-bootstrap docs)
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }  
+    //  setValidated(true); // added this line move up if changing styling based on validation
+    //  else {
+    try {
+      // execute ADD_USER mutation
+      const { data } = await addUser({
+        variables: { ...userFormData }
+      });
+      
+      Auth.login(data.addUser.token);
+    } catch (err) {
+      console.error(err);
+      setShowAlert(true);
+    }
+
+    setUserFormData({
+      username: '',
+      email: '',
+      password: '',
+    });
   };
 
   return (
-    <div>
-      <div className="signUpForm">
-        <h2>Sign Up</h2>
-        <form onSubmit={handleSignUpSubmit}>
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            value={formData.username}
+    <>
+      {/* This is needed for the validation functionality above */}
+      <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
+        {/* show alert if server response is bad */}
+        <Alert dismissible onClose={() => setShowAlert(false)} show={showAlert} variant='danger'>
+          Something went wrong with your signup!
+        </Alert>
+
+        <Form.Group className='mb-3'>
+          <Form.Label htmlFor='username'>Username</Form.Label>
+          <Form.Control
+            type='text'
+            placeholder='Your username'
+            name='username'
             onChange={handleInputChange}
+            value={userFormData.username}
+            required
           />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
+          <Form.Control.Feedback type='invalid'>Username is required!</Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group className='mb-3'>
+          <Form.Label htmlFor='email'>Email</Form.Label>
+          <Form.Control
+            type='email'
+            placeholder='Your email address'
+            name='email'
             onChange={handleInputChange}
+            value={userFormData.email}
+            required
           />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
+          <Form.Control.Feedback type='invalid'>Email is required!</Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group className='mb-3'>
+          <Form.Label htmlFor='password'>Password</Form.Label>
+          <Form.Control
+            type='password'
+            placeholder='Your password'
+            name='password'
             onChange={handleInputChange}
+            value={userFormData.password}
+            required
           />
-          <button type="submit" className="btn btn-primary">
-            Sign Up
-          </button>
-        </form>
-      </div>
-      <div className="loginForm">
-        <h2>Login</h2>
-        <form onSubmit={handleLoginSubmit}>
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            value={formData.username}
-            onChange={handleInputChange}
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleInputChange}
-          />
-          <button type="submit" className="btn btn-primary">
-            Login
-          </button>
-        </form>
-      </div>
-    </div>
+          <Form.Control.Feedback type='invalid'>Password is required!</Form.Control.Feedback>
+        </Form.Group>
+        <Button
+          disabled={!(userFormData.username && userFormData.email && userFormData.password)}
+          type='submit'
+          variant='success'>
+          Submit
+        </Button>
+      </Form>
+    </>
   );
-}
+};
+
+export default SignupForm;
