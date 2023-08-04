@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+const axios = require('axios');
 import { useParams, Link } from "react-router-dom";
 import { useMutation } from "@apollo/client"; // Import the useMutation hook
 import { ADD_SELECTED_MOVE } from "../utils/mutations"; // Import your mutation query
@@ -8,6 +9,7 @@ export default function MoveList() {
 
   const [selectedPokemon, setSelectedPokemon] = useState(null);
   const [selectedMoves, setSelectedMoves] = useState([]);
+  const [selectedMoveData, setSelectedMoveData] = useState(null);
   
   // Define the addSelectedMove mutation
   const [addSelectedMove] = useMutation(ADD_SELECTED_MOVE);
@@ -25,6 +27,22 @@ export default function MoveList() {
 
     fetchSelectedPokemon();
   }, [pokemonId]);
+
+    useEffect(() => {
+    async function fetchSelectedMove() {
+      const requests = selectedMoves.map(move =>axios.get(`https://pokeapi.co/api/v2/move/${move}`));
+          try {
+        // const response = await fetch(`https://pokeapi.co/api/v2/move/${selectedMoves}`);
+        const response = await Promise.all(requests);
+        const data = await response.map(res => res.data);
+        setSelectedMoveData(data);
+        } catch (error) {
+        console.error("Error fetching selected Move:", error);
+      }
+    }
+
+    fetchSelectedMove();
+    }, [selectedMoves]);
 
   const handleMoveSelect = async (move) => {
     if (!selectedMoves.includes(move)) {
@@ -64,7 +82,7 @@ export default function MoveList() {
           </li>
         ))}
       </ul>
-      {selectedMoves.length === 4 ? (
+        {selectedMoves.length === 4 ? (
         <Link to={`/Attack/${encodeURIComponent(JSON.stringify(selectedMoves))}`}>
           <button>Attack</button>
         </Link>
