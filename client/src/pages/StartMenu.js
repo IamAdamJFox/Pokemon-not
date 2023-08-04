@@ -4,7 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_POKEMONS_BY_IDS } from '../utils/queries';
 import { SAVE_POKEMON } from '../utils/mutations';
-import '../assets/startmenu.css'
+import '../assets/startmenu.css';
+
 
 export default function StartMenu() {
   const { pokemonId } = useParams(); 
@@ -51,7 +52,9 @@ export default function StartMenu() {
       <div className="startHeader">
         <h1>Pokemon Not</h1>
       </div>
+      <div className="selectPrompt">
       <h2>Select your Pokemon</h2>
+      </div>
       <ul className="pokemon-list">
         {pokemonList.map((pokemon) => (
           <div

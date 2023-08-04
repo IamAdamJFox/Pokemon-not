@@ -1,5 +1,14 @@
 html{
-    background-color: rgb(34, 32, 32);
+  background: linear-gradient(to bottom, #453498, #2f609c);
+}
+
+@font-face {
+  font-family: 'Pokemon Solid';
+  src: url('./font/PocketMonk-15ze.ttf'); 
+}
+@font-face{
+  font-family: 'Pixel Pokemon';
+  src: url('./font/PokemonGb-RAeo.ttf');
 }
 .pokemon-list {
     display: flex;
@@ -29,12 +38,48 @@ html{
     .pokemon-container.selected {
         transform: translateY(-3em);
     }
+    .startBtn{
+        display: flex;
+        justify-content: center;
+    }
+     h2{
+      font-family: pixel pokemon;
+        display: flex;
+        justify-content: center;
+        font-size: 20px;
+        color: #ffcb05;
+        text-shadow:
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000,
+        -1px -1.5px 4px #e91c1c;
+  
+    }
+    .startBtn button {
+      display: flex;
+      justify-content: center;
+      align-items: center; /* Align text vertically within the button */
+      font-family: "pixel pokemon", sans-serif;
+      font-size: 20px;
+      color: #fdfdfd;
+      background: linear-gradient(to bottom, #db3131, #611b1b); /* Replace these colors with your desired gradient */
+      border-radius: 10px;
+      border: 2px solid #000000;
+      height: 1.75em;
+      text-shadow:-1px -1px 0 #000,
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+      1px 1px 0 #000;
+      text-align: center; /* Center text horizontally within the button */
+    }
+    
+    .startBtn a {
+      text-decoration: none; /* Remove underline */
+     
+    }
 
   
-  @font-face {
-    font-family: 'Pokemon Solid';
-    src: url('./font/PocketMonk-15ze.ttf'); 
-  }
   .startHeader {
     font-family: 'Pokemon Solid';
     font-size: 50px;
