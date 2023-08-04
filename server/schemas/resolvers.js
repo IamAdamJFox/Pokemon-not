@@ -1,3 +1,4 @@
+//includes getPokemonsByIds, getMovesByPokemonId, getPokemonById, getAbilityByIdOrName, getMoveByIdOrName
 const { User, Pokemon } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { signToken } = require('../utils/auth');
@@ -11,9 +12,20 @@ const resolvers = {
       }
       throw new AuthenticationError('You need to be logged in!');
     },
+    getPokemonsByIds: async (_, { ids }, { dataSources }) => {
+      const pokemons = [];
+      for (const id of ids) {
+        const pokemon = await dataSources.pokemonAPI.getPokemonById(id);
+        pokemons.push(pokemon);
+      }
+      return pokemons;
+    },
     getPokemonById: async (_, { id }, { dataSources }) => {
       return dataSources.pokemonAPI.getPokemonById(id);
-    }
+    },
+    getMovesByPokemonId: async (_, { pokemonId }, { dataSources }) => { // Add this resolver
+      return dataSources.pokemonAPI.getMovesByPokemonId(pokemonId);
+    },
   },
 
   Mutation: {
