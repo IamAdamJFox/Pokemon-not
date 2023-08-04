@@ -1,57 +1,51 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { useQuery } from '@apollo/client';
-import { GET_POKEMON_BY_ID } from '../utils/queries';
+import { useNavigate, useParams } from "react-router-dom";
+import { useQuery, useMutation } from '@apollo/client';
+import { GET_POKEMONS_BY_IDS } from '../utils/queries';
+import { SAVE_POKEMON } from '../utils/mutations';
 import '../assets/startmenu.css'
 
-
 export default function StartMenu() {
-  const [selectedPokemon, setSelectedPokemon] = useState("");
-  const [pokemonList, setPokemonList] = useState([]);
+  const { pokemonId } = useParams(); 
+  const [selectedPokemon, setSelectedPokemon] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    async function fetchPokemonList() {
-      try {
-        const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
-        const data = await response.json();
-        const fetchedPokemonList = data.results.map((pokemon, index) => ({
-          id: index + 1,
-          name: pokemon.name,
-        }));
+  const { loading, error, data } = useQuery(GET_POKEMONS_BY_IDS, {
+    variables: { ids: [1, 4, 7, 25] },
+  });
 
-        // Filter the list to include only Pikachu, Charmander, Bulbasaur, and Squirtle
-        const selectedPokemons = fetchedPokemonList.filter(
-          (pokemon) =>
-            ["pikachu", "charmander", "bulbasaur", "squirtle"].includes(pokemon.name.toLowerCase())
-        );
-        setPokemonList(selectedPokemons);
-      } catch (error) {
-        console.error("Error fetching Pokémon list:", error);
-      }
-    }
-    fetchPokemonList();
-  }, []);
-
+  const [savePokemon] = useMutation(SAVE_POKEMON);
 
   const handlePokemonSelect = (pokemon) => {
     setSelectedPokemon(pokemon);
-
-    const clickedContainer = document.getElementById(`pokemon-${pokemon.id}`);
-    clickedContainer.classList.toggle("selected");
   };
 
-  const handlePokemonSubmit = () => {
+  const handlePokemonSubmit = async () => {
     if (selectedPokemon) {
-      console.log("Pokemon selected: ", selectedPokemon);
-      navigate(`/MoveList/${selectedPokemon.id}`);
-    } else {
-      console.log("No Pokemon selected");
-      
+      console.log("Selected Pokemon ID for navigation: ", selectedPokemon.id);
+  
+      try {
+        await savePokemon({ variables: { input: { ...selectedPokemon } } });
+        // After saving, navigate to the MoveList page with the selected Pokemon's id as parameter
+        navigate(`/MoveList/${selectedPokemon.id}`);
+      } catch (error) {
+        console.error("Error saving Pokemon:", error);
+      }
     }
   };
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error fetching Pokémon list: {error.message}</div>;
+  }
+  
+  const pokemonList = data.getPokemonsByIds;
+
+  console.log("pokemonId in MoveList: ", pokemonId);
   return (
     <div>
       <div className="startHeader">
@@ -59,19 +53,15 @@ export default function StartMenu() {
       </div>
       <h2>Select your Pokemon</h2>
       <ul className="pokemon-list">
-     {pokemonList.map((pokemon) => (
-    <div
-      key={pokemon.id}
-      id={`pokemon-${pokemon.id}`}
-      className={`pokemon-container ${selectedPokemon === pokemon ? "selected" : ""}`}
-      onClick={() => handlePokemonSelect(pokemon)}
-    >
-      <img
-        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
-        alt={pokemon.name}
-      />
-    </div>
-  ))}
+        {pokemonList.map((pokemon) => (
+          <div
+            key={pokemon.id}
+            className={`pokemon-container ${selectedPokemon === pokemon ? "selected" : ""}`}
+            onClick={() => handlePokemonSelect(pokemon)}
+          >
+            <img src={pokemon.image} alt={pokemon.name} className="pokemon-sprite" />
+          </div>
+        ))}
       </ul>
       <div className="startBtn">
         <Link to={selectedPokemon ? `/MoveList/${selectedPokemon.id}` : "#"}>
