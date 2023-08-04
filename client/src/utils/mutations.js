@@ -36,19 +36,9 @@ export const CREATE_POKEMON = gql`
       }
 
     }
-  }
+
 `;
-export const ADD_USER = gql`
-  mutation addUser($username: String!, $email: String!, $password: String!) {
-    addUser(username: $username, email: $email, password: $password) {
-      token
-      user {
-        username
-        email
-      }
-    }
-  }
-`;
+
 export const SAVE_POKEMON = gql`
   mutation savePokemon($input: PokemonInput!) {
     savePokemon(input: $input) {
