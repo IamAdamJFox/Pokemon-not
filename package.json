@@ -9,6 +9,7 @@
     "eslint": "^6.1.0",
     "graphql": "^16.7.1",
     "jsonwebtoken": "^9.0.1",
+    "navigate": "^0.3.6",
     "react": "^16.9.0",
     "react-bootstrap": "^2.8.0",
     "react-dom": "^16.9.0",
