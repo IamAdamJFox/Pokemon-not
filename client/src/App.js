@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes, Link, Navigate } from "react-router-dom";
 import StartMenu from "./pages/StartMenu";
 import MoveList from "./pages/MoveList";
 import Login from "./components/LoginForm";
+import SignupForm from "./components/signup";
 import Attack from "./pages/Attack";
 import PokemonDetails from './components/PokemonDetails';
 import Auth from "./utils/auth";
@@ -25,6 +26,7 @@ const App = () => {
           </>
         )}
         <Route path="/login" element={isUserAuthenticated ? <Navigate to="/" /> : <Login />} />
+        <Route path="/signup" element={isUserAuthenticated ? <Navigate to="/" /> : <SignupForm />} />
       </Routes>
     </BrowserRouter>
   );
