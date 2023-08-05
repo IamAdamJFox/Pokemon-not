@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { Form, Button, Alert, Container, Row, Col } from "react-bootstrap";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../utils/mutations";
@@ -90,6 +91,14 @@ const Login = () => {
               disabled={loading || !(userFormData.email && userFormData.password)}
             >
               {loading ? "Logging in..." : "Submit"}
+            </Button>
+            <Button
+              as={Link}
+              to="/signup"
+              variant="outline-primary"
+              className="ml-2"
+            >
+              Sign Up
             </Button>
           </Form>
         </Col>
