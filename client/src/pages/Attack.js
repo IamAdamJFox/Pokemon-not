@@ -1,18 +1,18 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export default function Attack() {
-  const { selectedMoves } = useParams();
-  const movesArray = JSON.parse(decodeURIComponent(selectedMoves));
-  console.log(movesArray);
+  const location = useLocation();
+  const { selectedMoves } = location.state;
+  console.log(selectedMoves);
 
   return (
     <div>
       <h1>Attack Page</h1>
       <h2>Selected Moves:</h2>
       <ul>
-        {movesArray.map((move, index) => (
-          <li >{move}</li>
+        {selectedMoves.map((move, index) => (
+          <li key={index}>{move}</li>
         ))}
       </ul>
       {/* Rest of your Attack component code */}

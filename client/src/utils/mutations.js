@@ -67,4 +67,13 @@ export const REMOVE_POKEMON = gql`
     }
   }
 `;
+export const ADD_SELECTED_MOVE = gql`
+  mutation addSelectedMove($pokemonId: ID!, $moveName: String!) {
+    addSelectedMove(pokemonId: $pokemonId, moveName: $moveName) {
+      _id
+      name
+      image
+    }
+  }
+`;
 // Define other mutations below and export them similarly

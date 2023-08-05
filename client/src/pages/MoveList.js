@@ -1,62 +1,40 @@
-import React, { useEffect, useState } from "react";
-const axios = require('axios');
-import { useParams, Link } from "react-router-dom";
-import { useMutation } from "@apollo/client"; // Import the useMutation hook
-// import { ADD_SELECTED_MOVE } from "../utils/mutations"; // Import your mutation query
+import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_POKEMON_BY_ID, GET_MOVES_BY_POKEMON_ID } from "../utils/queries";
+import { ADD_SELECTED_MOVE } from "../utils/mutations";
 
 export default function MoveList() {
   const { pokemonId } = useParams();
-
-  const [selectedPokemon, setSelectedPokemon] = useState(null);
   const [selectedMoves, setSelectedMoves] = useState([]);
-  const [selectedMoveData, setSelectedMoveData] = useState(null);
-  
-  // Define the addSelectedMove mutation
-  // const [addSelectedMove] = useMutation(ADD_SELECTED_MOVE);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    async function fetchSelectedPokemon() {
-      try {
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
-        const data = await response.json();
-        setSelectedPokemon(data);
-      } catch (error) {
-        console.error("Error fetching selected Pokémon:", error);
-      }
-    }
+  const { loading: loadingPokemon, error: errorPokemon, data: dataPokemon } = useQuery(GET_POKEMON_BY_ID, {
+    variables: { id: pokemonId },
+  });
 
-    fetchSelectedPokemon();
-  }, [pokemonId]);
+  const { loading: loadingMoves, error: errorMoves, data: dataMoves } = useQuery(GET_MOVES_BY_POKEMON_ID, {
+    variables: { pokemonId },
+  });
 
-    useEffect(() => {
-    async function fetchSelectedMove() {
-      const requests = selectedMoves.map(move =>axios.get(`https://pokeapi.co/api/v2/move/${move}`));
-          try {
-        // const response = await fetch(`https://pokeapi.co/api/v2/move/${selectedMoves}`);
-        const response = await Promise.all(requests);
-        const data = await response.map(res => res.data);
-        setSelectedMoveData(data);
-        } catch (error) {
-        console.error("Error fetching selected Move:", error);
-      }
-    }
-
-    fetchSelectedMove();
-    }, [selectedMoves]);
+  const [addSelectedMove] = useMutation(ADD_SELECTED_MOVE);
 
   const handleMoveSelect = async (move) => {
-    if (!selectedMoves.includes(move)) {
+    if (selectedMoves.length < 4 && !selectedMoves.includes(move)) {
       const updatedMoves = [...selectedMoves, move];
       setSelectedMoves(updatedMoves);
-
-      // Save the move in the database using the addSelectedMove mutation
-      // await addSelectedMove({ variables: { pokemonId: selectedPokemon.id, moveName: move } });
     }
-  };
+  }
 
-  if (!selectedPokemon) {
+  if (loadingPokemon || loadingMoves) {
     return <div>Loading...</div>;
   }
+
+  if (errorPokemon || errorMoves) {
+    return <div>Error: {errorPokemon?.message || errorMoves?.message}</div>;
+  }
+
+  const selectedPokemon = dataPokemon.getPokemonById;
 
   return (
     <div>
@@ -64,31 +42,44 @@ export default function MoveList() {
         <h1>Pokemon Not</h1>
       </div>
       <h2>{selectedPokemon.name}</h2>
-      <h3>Selected Moves:</h3>
-      <ul>
-        {selectedMoves.map((move, index) => (
-          <li key={index}>{move}</li>
-        ))}
-      </ul>
+      <div className="selected-pokemon">
+        <img src={selectedPokemon.image} alt={selectedPokemon.name} />
+      </div>
+
       <h3>All Moves:</h3>
-      <ul>
-        {selectedPokemon.moves.slice(0, 6).map((move, index) => (
-          <li
+      <div className="moves-container">
+        {dataMoves.getMovesByPokemonId.slice(0, 6).map((move, index) => (
+          <button
             key={index}
-            className={selectedMoves.includes(move.move.name) ? "selected-move" : ""}
-            onClick={() => handleMoveSelect(move.move.name)}
+            className={`move-button ${selectedMoves.includes(move.name) ? "selected-move" : ""}`}
+            onClick={() => handleMoveSelect(move.name)}
+            disabled={selectedMoves.includes(move.name) || selectedMoves.length >= 4}
           >
-            {move.move.name}
-          </li>
+            {move.name}
+          </button>
         ))}
-      </ul>
-        {selectedMoves.length === 4 ? (
-        <Link to={`/Attack/${encodeURIComponent(JSON.stringify(selectedMoves))}`}>
-          <button>Attack</button>
-        </Link>
+      </div>
+
+      <h3>Selected Moves:</h3>
+      <div className="selected-moves-container">
+        {selectedMoves.map((move, index) => (
+          <button key={index} className="selected-move-button">
+            {move}
+          </button>
+        ))}
+      </div>
+
+      {selectedMoves.length === 4 ? (
+        <button
+          onClick={() => {
+            navigate("/Attack", { state: { selectedMoves } });
+          }}
+        >
+          Attack
+        </button>
       ) : (
         <button disabled>Attack</button>
       )}
     </div>
   );
-  }  
+}
