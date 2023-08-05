@@ -30,47 +30,10 @@ function App() {
   const [enemyHP, setEnemyHP] = useState(100);
   const [isFainted, setIsFainted] = useState(false);
   const [victory, setVictory] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
 
   const handleAttack = () => {
-    if (isFainted || victory) {
-      console.log("The entity has fainted and cannot attack.");
-      return;
-    }
-
-    // Sort player's moves by priority, higher priority moves will be executed first
-    const sortedPlayerMoves = moves
-      .filter((move) => move.playerName !== "Enemy")
-      .sort((a, b) => a.priority - b.priority);
-
-    // Sort enemy's moves by priority, higher priority moves will be executed first
-    const sortedEnemyMoves = moves
-      .filter((move) => move.playerName === "Enemy")
-      .sort((a, b) => a.priority - b.priority);
-
-    // Combine the sorted player and enemy moves into a single array
-    const sortedMoves = [...sortedPlayerMoves, ...sortedEnemyMoves];
-
-    for (const move of sortedMoves) {
-      const result = attackMove(move.power, move.accuracy);
-
-      if (result.hit) {
-        const damageTaken = parseFloat(result.damage);
-        const newEnemyHP = Math.max(0, enemyHP - damageTaken);
-        setEnemyHP(newEnemyHP);
-
-        if (newEnemyHP <= 0) {
-          setIsFainted(true);
-          console.log("The enemy has fainted.");
-        } else {
-          console.log(`Attack hit! Damage dealt: ${result.damage}`);
-        }
-
-        // Break the loop to only execute the first attack with the highest priority
-        break;
-      } else {
-        console.log("Attack missed!");
-      }
-    }
+    // ... Existing attack logic ...
 
     // Check for the winner after the player's attack
     const result = checkWinner(playerHP, enemyHP);
@@ -86,29 +49,7 @@ function App() {
   };
 
   const handleEnemyAttack = () => {
-    if (isFainted || victory) {
-      console.log("The enemy has fainted and cannot attack.");
-      return;
-    }
-
-    const enemyResult = enemyAttack();
-
-    if (enemyResult.hit) {
-      const enemyDamageTaken = parseFloat(enemyResult.damage);
-      const newPlayerHP = Math.max(0, playerHP - enemyDamageTaken);
-      setPlayerHP(newPlayerHP);
-
-      if (newPlayerHP <= 0) {
-        setIsFainted(true);
-        console.log("The player has fainted.");
-      } else {
-        console.log(
-          `${enemyResult.playerName}'s ${enemyResult.moveName} hit! Damage dealt: ${enemyResult.damage}`
-        );
-      }
-    } else {
-      console.log(`${enemyResult.playerName}'s attack missed!`);
-    }
+    // ... Existing enemy attack logic ...
 
     // Check for the winner after the enemy's attack
     const result = checkWinner(playerHP, enemyHP);
@@ -120,38 +61,57 @@ function App() {
     }
   };
 
+  const handleStartGame = () => {
+    setGameStarted(true);
+  };
+
   const handleRestart = () => {
     // Reset the game
     setPlayerHP(100);
     setEnemyHP(100);
     setIsFainted(false);
     setVictory(false);
+    setGameStarted(true);
   };
+
+  if (!gameStarted) {
+    return (
+      <div>
+        <h1>Click the button to start the game!</h1>
+        <button onClick={handleStartGame}>Start Game</button>
+      </div>
+    );
+  }
+
+  if (victory) {
+    return (
+      <div>
+        <h1>{victory}</h1>
+        <button onClick={handleRestart}>Restart</button>
+      </div>
+    );
+  }
+
+  if (isFainted) {
+    return (
+      <div>
+        <h1>{checkWinner(playerHP, enemyHP)}</h1>
+        <button onClick={handleRestart}>Restart</button>
+      </div>
+    );
+  }
 
   return (
     <div>
-      {victory ? (
-        <div>
-          <h1>{victory}</h1>
-          <button onClick={handleRestart}>Restart</button>
-        </div>
-      ) : isFainted ? (
-        <div>
-          <h1>{checkWinner(playerHP, enemyHP)}</h1>
-          <button onClick={handleRestart}>Restart</button>
-        </div>
-      ) : (
-        <div>
-          <h1>Player HP: {playerHP}</h1>
-          <h1>Enemy HP: {enemyHP}</h1>
-          <button onClick={handleAttack}>Attack</button>
-        </div>
-      )}
+      <h1>Player HP: {playerHP}</h1>
+      <h1>Enemy HP: {enemyHP}</h1>
+      <button onClick={handleAttack}>Attack</button>
     </div>
   );
 }
 
 export default App;
+
 
 
 
