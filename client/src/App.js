@@ -15,7 +15,7 @@ const App = () => (
       <Route path="/" element={<StartMenu />} />
       <Route path="/MoveList/:pokemonId" element={<MoveList />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/Attack/:selectedMoves" element={<Attack />} />
+      <Route path="/Attack" element={<Attack />} /> {/* Define the AttackPage route */}
       <Route path="/pokemon/:id" element={<PokemonDetails />} />
     </Routes>
   </BrowserRouter>
