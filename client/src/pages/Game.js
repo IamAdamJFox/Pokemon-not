@@ -1,43 +1,48 @@
-for (let i = 1; i <= 4; i++) {
-    document.getElementById(`button${i}`).addEventListener('click', function() {
-      alert(`Button ${i} clicked`);
-    });
-  }
+import React, { useState } from "react";
 
-  function attackMove(power, accuracy) {
-    // Generate a random number between 0 and 1
-    const randomValue = Math.random();
+function attackMove(power, accuracy) {
   
-    if (randomValue <= accuracy) {
-      // Attack hit
-      const damage = power * (Math.random() + 0.5); // Add some randomness to the damage
-      return { hit: true, damage: damage.toFixed(2) };
-    } else {
-      // Attack missed
-      return { hit: false, damage: 0 };
+}
+
+function App() {
+  const [currentHP, setCurrentHP] = useState(100);
+  const [isFainted, setIsFainted] = useState(false);
+
+  const handleAttack = () => {
+    if (isFainted) {
+      console.log("The entity has fainted and cannot attack.");
+      return;
     }
-  }
-  
-  const power = 50;     // The power of the attack move
-  const accuracy = 0.8; // The accuracy of the attack move (0 to 1)
-  
-  const result = attackMove(power, accuracy);
-  
-  if (result.hit) {
-    console.log(`Attack hit! Damage dealt: ${result.damage}`);
-  } else {
-    console.log("Attack missed!");
-  }
-  
-  function takeDamage(currentHP, damage) {
-    const newHP = Math.max(0, currentHP - damage);
-    return newHP;
-  }
-  
-  let currentHP = 100; // Current HP before taking damage
-  const damageTaken = 25; // Amount of damage taken
-  
-  currentHP = takeDamage(currentHP, damageTaken);
-  
-  console.log(`Current HP: ${currentHP}`);
+
+    const result = attackMove();
+    if (result.hit) {
+      const damageTaken = parseFloat(result.damage);
+      const newHP = Math.max(0, currentHP - damageTaken);
+      setCurrentHP(newHP);
+
+      if (newHP <= 0) {
+        setIsFainted(true);
+        console.log("The entity has fainted.");
+      } else {
+        console.log(`Attack hit! Damage dealt: ${result.damage}`);
+      }
+    } else {
+      console.log("Attack missed!");
+    }
+  };
+
+  return (
+    <div>
+      <h1>Current HP: {currentHP}</h1>
+      <button onClick={handleAttack} disabled={isFainted}>
+        Attack
+      </button>
+    </div>
+  );
+}
+
+export default App;
+
+
+
   
