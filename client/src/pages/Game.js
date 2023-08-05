@@ -18,9 +18,9 @@ function checkWinner(playerHP, enemyHP) {
   if (playerHP <= 0 && enemyHP <= 0) {
     return "It's a tie!";
   } else if (playerHP <= 0) {
-    return "Enemy wins!";
+    return "Defeat!";
   } else if (enemyHP <= 0) {
-    return "Player wins!";
+    return "Victory!";
   }
   return null;
 }
@@ -29,9 +29,10 @@ function App() {
   const [playerHP, setPlayerHP] = useState(100);
   const [enemyHP, setEnemyHP] = useState(100);
   const [isFainted, setIsFainted] = useState(false);
+  const [victory, setVictory] = useState(false);
 
   const handleAttack = () => {
-    if (isFainted) {
+    if (isFainted || victory) {
       console.log("The entity has fainted and cannot attack.");
       return;
     }
@@ -72,9 +73,12 @@ function App() {
     }
 
     // Check for the winner after the player's attack
-    const winner = checkWinner(playerHP, enemyHP);
-    if (winner) {
-      console.log(winner);
+    const result = checkWinner(playerHP, enemyHP);
+    if (result) {
+      console.log(result);
+      if (result === "Victory!") {
+        setVictory(true);
+      }
     } else {
       // After the player's attack, trigger the enemy's turn with a slight delay
       setTimeout(handleEnemyAttack, 1000);
@@ -82,7 +86,7 @@ function App() {
   };
 
   const handleEnemyAttack = () => {
-    if (isFainted) {
+    if (isFainted || victory) {
       console.log("The enemy has fainted and cannot attack.");
       return;
     }
@@ -107,24 +111,48 @@ function App() {
     }
 
     // Check for the winner after the enemy's attack
-    const winner = checkWinner(playerHP, enemyHP);
-    if (winner) {
-      console.log(winner);
+    const result = checkWinner(playerHP, enemyHP);
+    if (result) {
+      console.log(result);
+      if (result === "Defeat!") {
+        setVictory(true);
+      }
     }
+  };
+
+  const handleRestart = () => {
+    // Reset the game
+    setPlayerHP(100);
+    setEnemyHP(100);
+    setIsFainted(false);
+    setVictory(false);
   };
 
   return (
     <div>
-      <h1>Player HP: {playerHP}</h1>
-      <h1>Enemy HP: {enemyHP}</h1>
-      <button onClick={handleAttack} disabled={isFainted}>
-        Attack
-      </button>
+      {victory ? (
+        <div>
+          <h1>{victory}</h1>
+          <button onClick={handleRestart}>Restart</button>
+        </div>
+      ) : isFainted ? (
+        <div>
+          <h1>{checkWinner(playerHP, enemyHP)}</h1>
+          <button onClick={handleRestart}>Restart</button>
+        </div>
+      ) : (
+        <div>
+          <h1>Player HP: {playerHP}</h1>
+          <h1>Enemy HP: {enemyHP}</h1>
+          <button onClick={handleAttack}>Attack</button>
+        </div>
+      )}
     </div>
   );
 }
 
 export default App;
+
 
 
 
