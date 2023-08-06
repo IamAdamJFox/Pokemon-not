@@ -1,0 +1,16 @@
+.player-section, .enemy-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+  }
+  
+  .sprite-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .player-section img, .enemy-section img {
+    width: 200px; /* Adjust as necessary */
+    height: 200px; /* Adjust as necessary */
+}

@@ -5,6 +5,8 @@ import MoveList from "./pages/MoveList";
 import Login from "./components/LoginForm";
 import SignupForm from "./components/signup";
 import Attack from "./pages/Attack";
+//*TESTING* adding BattlePage.js//
+import Battle from "./pages/BattleScreen";
 import PokemonDetails from './components/PokemonDetails';
 import Auth from "./utils/auth";
 
@@ -23,6 +25,7 @@ const App = () => {
             <Route path="/MoveList/:pokemonId" element={<MoveList />} />
             <Route path="/Attack" element={<Attack />} />
             <Route path="/pokemon/:id" element={<PokemonDetails />} />
+            <Route path="/Battle" element={<Battle/>} />
           </>
         )}
         <Route path="/login" element={isUserAuthenticated ? <Navigate to="/" /> : <Login />} />
