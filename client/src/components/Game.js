@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-export default function Game() {
+export default function Game({ selectedMoves }) {
   const BattleStates = {
     START: "Start",
     PLAYER_TURN: "PlayerTurn",
@@ -14,8 +14,10 @@ export default function Game() {
     // Add more moves as needed
   ];
 
-  let playerHP = 100;
-  let enemyHP = 100;
+  const [playerHP, setPlayerHP] = useState(100);
+  const [enemyHP, setEnemyHP] = useState(100);
+  const [battleState, setBattleState] = useState(BattleStates.START);
+  const [turn, setTurn] = useState("player"); // Use state to control the turn
 
   const attackMove = (power, accuracy) => {
     const randomAccuracy = Math.floor(Math.random() * 100) + 1;
@@ -35,11 +37,30 @@ export default function Game() {
   };
 
   const enemyAttack = () => {
-    const enemyName = "Enemy";
     const enemyMove = moves[Math.floor(Math.random() * moves.length)];
     const result = attackMove(enemyMove.power, enemyMove.accuracy);
 
-    return { ...result, moveName: enemyMove.name, playerName: enemyName, priority: enemyMove.priority };
+    if (result.hit) {
+      setPlayerHP((prevHP) => prevHP - result.damage);
+    }
+
+    console.log(`Enemy used ${enemyMove.name}.`);
+    if (result.hit) {
+      console.log(`It hit you for ${result.damage} damage.`);
+    } else {
+      console.log("But it missed!");
+    }
+
+    console.log(`Player HP: ${playerHP}, Enemy HP: ${enemyHP}`);
+
+    const winner = checkWinner();
+    if (winner) {
+      console.log(winner);
+      handleGameOver(); // Handle the end of the game
+    } else {
+      // After the enemy's turn, set the turn to "player" for the next iteration
+      setTurn("player");
+    }
   };
 
   const checkWinner = () => {
@@ -53,50 +74,55 @@ export default function Game() {
     return null;
   };
 
-  // Add a turn state variable and set it to "player" initially
-  let turn = "player";
-
-  const playerTurn = () => {
-    const playerMove = moves[Math.floor(Math.random() * moves.length)];
-    const result = attackMove(playerMove.power, playerMove.accuracy);
-
-    if (result.hit) {
-      enemyHP -= result.damage;
-    }
-
-    console.log(`Player used ${playerMove.name}.`);
-    if (result.hit) {
-      console.log(`It hit the enemy for ${result.damage} damage.`);
-    } else {
-      console.log("But it missed!");
-    }
-
-    console.log(`Player HP: ${playerHP}, Enemy HP: ${enemyHP}`);
-
-    const winner = checkWinner();
-    if (winner) {
-      console.log(winner);
-      return;
-    }
-
-    // After the player's turn, set the turn to "enemy" for the next iteration
-    turn = "enemy";
-    enemyTurn();
+  const handleGameOver = () => {
+    console.log("The battle is over!");
+    console.log("Do you want to play again? Press 'Y' to restart.");
+    document.addEventListener("keypress", handleRestart);
   };
 
-  const enemyTurn = () => {
-    // Simulate some delay to make it feel like the enemy is thinking or executing their move.
-    setTimeout(() => {
-      const enemyMove = moves[Math.floor(Math.random() * moves.length)];
-      const result = attackMove(enemyMove.power, enemyMove.accuracy);
+  const handleRestart = (event) => {
+    if (event.key.toLowerCase() === "y") {
+      console.clear(); // Clear the console before restarting
+      setPlayerHP(100); // Reset player HP
+      setEnemyHP(100); // Reset enemy HP
+      setTurn("player"); // Reset the turn to "player"
+
+      // Start the game again
+      console.log("Let the battle begin!");
+      playerTurn();
+    }
+  };
+
+  const playerTurn = () => {
+    // Display available moves for the player to select
+    console.log("Available Moves:");
+    moves.forEach((move, index) => {
+      console.log(`${index + 1}. ${move.name}`);
+    });
+
+    // Prompt the player to select a move
+    console.log("Select a move (1, 2, etc.):");
+
+    // Listen for the player's input
+    document.addEventListener("keypress", handlePlayerMoveSelection);
+  };
+
+  const handlePlayerMoveSelection = (event) => {
+    const selectedMoveIndex = parseInt(event.key) - 1;
+
+    if (isNaN(selectedMoveIndex) || selectedMoveIndex < 0 || selectedMoveIndex >= moves.length) {
+      console.log("Invalid move selection. Please choose a valid move.");
+    } else {
+      const selectedMove = moves[selectedMoveIndex];
+      const result = attackMove(selectedMove.power, selectedMove.accuracy);
 
       if (result.hit) {
-        playerHP -= result.damage;
+        setEnemyHP((prevHP) => prevHP - result.damage);
       }
 
-      console.log(`Enemy used ${enemyMove.name}.`);
+      console.log(`Player used ${selectedMove.name}.`);
       if (result.hit) {
-        console.log(`It hit you for ${result.damage} damage.`);
+        console.log(`It hit the enemy for ${result.damage} damage.`);
       } else {
         console.log("But it missed!");
       }
@@ -106,27 +132,39 @@ export default function Game() {
       const winner = checkWinner();
       if (winner) {
         console.log(winner);
-        return;
+        handleGameOver(); // Handle the end of the game
+      } else {
+        // After the player's turn, set the turn to "enemy" for the next iteration
+        setTurn("enemy");
+        enemyTurn();
       }
-
-      // After the enemy's turn, set the turn to "player" for the next iteration
-      turn = "player";
-      playerTurn();
-    }, 1000); // Add a delay of 1 second to simulate enemy's move.
+    }
   };
 
-  const playGame = () => {
-    console.log("Let the battle begin!");
-    playerTurn();
-  };
-
-  // Start the game when the component mounts
   useEffect(() => {
-    playGame();
+    if (battleState === BattleStates.PLAYER_TURN) {
+      // Player's turn
+      playerTurn();
+    } else if (battleState === BattleStates.ENEMY_TURN) {
+      // Enemy's turn
+      enemyTurn();
+    }
+  }, [battleState]);
+
+  useEffect(() => {
+    // Start the game
+    console.log("Let the battle begin!");
+    setBattleState(BattleStates.PLAYER_TURN);
   }, []);
 
-  return null;
+  return null; // Using empty fragment as the correct syntax in JSX
 }
+
+
+
+
+       
+
 
 
 
