@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { moves } from "./MoveList";
+import { moves } from "../pages/MoveList";
 
 function attackMove(power, accuracy) {
   const randomAccuracy = Math.floor(Math.random() * 100) + 1;
