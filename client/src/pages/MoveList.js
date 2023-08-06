@@ -72,7 +72,13 @@ export default function MoveList() {
       {selectedMoves.length === 4 ? (
         <button
           onClick={() => {
-            navigate("/Attack", { state: { selectedMoves } });
+            navigate("/Attack", {
+              state: { 
+                selectedMoves,
+                selectedPokemonSprite: selectedPokemon.image, 
+                selectedPokemonName: selectedPokemon.name
+              }
+            });
           }}
         >
           Attack
