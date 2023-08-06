@@ -1,56 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { moves } from "../pages/MoveList";
+import React, { useEffect } from "react";
 
-function attackMove(power, accuracy) {
-  const randomAccuracy = Math.floor(Math.random() * 100) + 1;
-  const attackHits = randomAccuracy <= accuracy;
+export default function Game() {
+  const BattleStates = {
+    START: "Start",
+    PLAYER_TURN: "PlayerTurn",
+    ENEMY_TURN: "EnemyTurn",
+    END: "End",
+  };
 
-  if (attackHits) {
-    const damageDealt = Math.floor(power * (Math.random() + 0.5));
-    return {
-      hit: true,
-      damage: damageDealt,
-    };
-  } else {
-    return {
-      hit: false,
-    };
-  }
-}
+  const moves = [
+    { name: "Move 1", power: 20, accuracy: 80, priority: 2 },
+    { name: "Move 2", power: 25, accuracy: 70, priority: 1 },
+    // Add more moves as needed
+  ];
 
-function enemyAttack() {
-  const enemyName = "Enemy";
-  const enemyMove = moves[Math.floor(Math.random() * moves.length)];
-  const result = attackMove(enemyMove.power, enemyMove.accuracy);
-
-  return { ...result, moveName: enemyMove.name, playerName: enemyName };
-}
-
-function App() {
-  const [playerHP, setPlayerHP] = useState(100);
-  const [enemyHP, setEnemyHP] = useState(100);
-  const [isFainted, setIsFainted] = useState(false);
-  const [victory, setVictory] = useState(false);
-  const [gameStarted, setGameStarted] = useState(false);
-  const [playerSelectedMove, setPlayerSelectedMove] = useState(null);
-  const [isPlayerTurn, setIsPlayerTurn] = useState(false);
-
-  useEffect(() => {
-    setGameStarted(true);
-    setIsPlayerTurn(Math.random() < 0.5);
-  }, []);
-
-  useEffect(() => {
-    if (playerHP <= 0 || enemyHP <= 0) {
-      const result = checkWinner(playerHP, enemyHP);
-      console.log(result);
-      if (result === "Victory!") {
-        setVictory(true);
-      } else if (result === "Defeat!") {
-        setIsFainted(true);
-      }
-    }
-  }, [playerHP, enemyHP]);
+  let playerHP = 100;
+  let enemyHP = 100;
 
   const attackMove = (power, accuracy) => {
     const randomAccuracy = Math.floor(Math.random() * 100) + 1;
@@ -69,30 +34,15 @@ function App() {
     }
   };
 
-  const handlePlayerMoveSelection = (move) => {
-    setPlayerSelectedMove(move);
+  const enemyAttack = () => {
+    const enemyName = "Enemy";
+    const enemyMove = moves[Math.floor(Math.random() * moves.length)];
+    const result = attackMove(enemyMove.power, enemyMove.accuracy);
+
+    return { ...result, moveName: enemyMove.name, playerName: enemyName, priority: enemyMove.priority };
   };
 
-  const handleAttack = () => {
-    if (isPlayerTurn && !isFainted && !victory) {
-      if (playerSelectedMove) {
-        performPlayerAttack();
-      } else {
-        console.log("Please select a move!");
-      }
-    }
-  };
-
-  const performPlayerAttack = () => {
-    const playerMove = moves.find((move) => move.name === playerSelectedMove);
-    const playerResult = attackMove(playerMove.power, playerMove.accuracy);
-
-    if (playerResult.hit) {
-      setEnemyHP((prevHP) => prevHP - playerResult.damage);
-    }
-  };
-
-  const checkWinner = (playerHP, enemyHP) => {
+  const checkWinner = () => {
     if (playerHP <= 0 && enemyHP <= 0) {
       return "It's a tie!";
     } else if (playerHP <= 0) {
@@ -103,73 +53,83 @@ function App() {
     return null;
   };
 
-  const handleStartGame = () => {
-    setGameStarted(true);
+  // Add a turn state variable and set it to "player" initially
+  let turn = "player";
+
+  const playerTurn = () => {
+    const playerMove = moves[Math.floor(Math.random() * moves.length)];
+    const result = attackMove(playerMove.power, playerMove.accuracy);
+
+    if (result.hit) {
+      enemyHP -= result.damage;
+    }
+
+    console.log(`Player used ${playerMove.name}.`);
+    if (result.hit) {
+      console.log(`It hit the enemy for ${result.damage} damage.`);
+    } else {
+      console.log("But it missed!");
+    }
+
+    console.log(`Player HP: ${playerHP}, Enemy HP: ${enemyHP}`);
+
+    const winner = checkWinner();
+    if (winner) {
+      console.log(winner);
+      return;
+    }
+
+    // After the player's turn, set the turn to "enemy" for the next iteration
+    turn = "enemy";
+    enemyTurn();
   };
 
-  const handleRestart = () => {
-    setPlayerHP(100);
-    setEnemyHP(100);
-    setIsFainted(false);
-    setVictory(false);
-    setGameStarted(true);
-    setPlayerSelectedMove(null);
-    setIsPlayerTurn(Math.random() < 0.5);
+  const enemyTurn = () => {
+    // Simulate some delay to make it feel like the enemy is thinking or executing their move.
+    setTimeout(() => {
+      const enemyMove = moves[Math.floor(Math.random() * moves.length)];
+      const result = attackMove(enemyMove.power, enemyMove.accuracy);
+
+      if (result.hit) {
+        playerHP -= result.damage;
+      }
+
+      console.log(`Enemy used ${enemyMove.name}.`);
+      if (result.hit) {
+        console.log(`It hit you for ${result.damage} damage.`);
+      } else {
+        console.log("But it missed!");
+      }
+
+      console.log(`Player HP: ${playerHP}, Enemy HP: ${enemyHP}`);
+
+      const winner = checkWinner();
+      if (winner) {
+        console.log(winner);
+        return;
+      }
+
+      // After the enemy's turn, set the turn to "player" for the next iteration
+      turn = "player";
+      playerTurn();
+    }, 1000); // Add a delay of 1 second to simulate enemy's move.
   };
 
-  if (!gameStarted) {
-    return (
-      <div>
-        <h1>Click the button to start the game!</h1>
-        <button onClick={handleStartGame}>Start Game</button>
-      </div>
-    );
-  }
+  const playGame = () => {
+    console.log("Let the battle begin!");
+    playerTurn();
+  };
 
-  if (victory) {
-    return (
-      <div>
-        <h1>{victory}</h1>
-        <button onClick={handleRestart}>Restart</button>
-      </div>
-    );
-  }
+  // Start the game when the component mounts
+  useEffect(() => {
+    playGame();
+  }, []);
 
-  if (isFainted) {
-    return (
-      <div>
-        <h1>{checkWinner(playerHP, enemyHP)}</h1>
-        <button onClick={handleRestart}>Restart</button>
-      </div>
-    );
-  }
-
-  if (!isPlayerTurn) {
-    return (
-      <div>
-        <h1>Player HP: {playerHP}</h1>
-        <h1>Enemy HP: {enemyHP}</h1>
-        <h2>Enemy is attacking...</h2>
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <h1>Player HP: {playerHP}</h1>
-      <h1>Enemy HP: {enemyHP}</h1>
-      <h2>Select a Move:</h2>
-      {moves.map((move) => (
-        <button key={move.name} onClick={() => handlePlayerMoveSelection(move.name)}>
-          {move.name}
-        </button>
-      ))}
-      <button onClick={handleAttack}>Attack</button>
-    </div>
-  );
+  return null;
 }
 
-export default App;
+
+
 
 
 
