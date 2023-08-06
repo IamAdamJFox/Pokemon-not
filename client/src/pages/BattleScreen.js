@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import Game from "../components/Game"; // Import the Game component here
 import "../assets/BattleScreen.css";
 
 export default function BattleScreen() {
@@ -18,27 +19,26 @@ export default function BattleScreen() {
     return Math.floor(Math.random() * 898) + 1; // Assuming the range is 1 to 898.
   };
 
-  const handleMoveClick = (move) => {
-    console.log(`Selected move: ${move}`);
-    // Here, you can initiate the move, play an animation, update HP, etc.
-    // For now, we're just logging the move to the console.
-  };
-
   useEffect(() => {
     // Fetch random pokemon for enemy pokemon
     fetch(`https://pokeapi.co/api/v2/pokemon/${getRandomPokemonId()}`)
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         setEnemyPokemon({
           name: data.name,
           hp: data.stats[0].base_stat,
-          sprite: data.sprites.front_default
+          sprite: data.sprites.front_default,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error fetching the Pokémon data:", error);
       });
   }, []);
+
+  const handleMoveClick = (move) => {
+    // Implement the logic to trigger the player's move here
+    console.log(`Selected move: ${move}`);
+  };
 
   return (
     <div>
@@ -50,7 +50,7 @@ export default function BattleScreen() {
           <img src={playerPokemonImage} alt={`${playerPokemonName} sprite`} />
         </div>
         {/* <p>HP: {selectedPokemon?.hp}</p> Assuming selectedPokemon has an hp property */}
-        {/* willneed to import moves from attack screen */}
+        {/* will need to import moves from attack screen */}
         <p>HP: 100</p>
         {/* ... rest of player section ... */}
         <h3>Selected Moves:</h3>
@@ -71,8 +71,11 @@ export default function BattleScreen() {
         <p>HP: {enemyPokemon.hp}</p>
         {/* ... rest of enemy section ... */}
       </div>
-
-      {/* ... rest of your component ... */}
     </div>
   );
 }
+
+       
+
+
+
