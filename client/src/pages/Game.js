@@ -1,28 +1,29 @@
-import React, { useState } from "react";
-import { moves } from "./moves";
+import React, { useState, useEffect } from "react";
+import { moves } from "./MoveList";
 
 function attackMove(power, accuracy) {
-  // Same attackMove logic as before
+  const randomAccuracy = Math.floor(Math.random() * 100) + 1;
+  const attackHits = randomAccuracy <= accuracy;
+
+  if (attackHits) {
+    const damageDealt = Math.floor(power * (Math.random() + 0.5));
+    return {
+      hit: true,
+      damage: damageDealt,
+    };
+  } else {
+    return {
+      hit: false,
+    };
+  }
 }
 
 function enemyAttack() {
-  // Simulate the enemy's turn here
-  // You can implement your own logic to decide which move the enemy uses
-  const enemyName = "Enemy"; // Set the enemy's name here
+  const enemyName = "Enemy";
   const enemyMove = moves[Math.floor(Math.random() * moves.length)];
   const result = attackMove(enemyMove.power, enemyMove.accuracy);
-  return { ...result, moveName: enemyMove.name, playerName: enemyName };
-}
 
-function checkWinner(playerHP, enemyHP) {
-  if (playerHP <= 0 && enemyHP <= 0) {
-    return "It's a tie!";
-  } else if (playerHP <= 0) {
-    return "Defeat!";
-  } else if (enemyHP <= 0) {
-    return "Victory!";
-  }
-  return null;
+  return { ...result, moveName: enemyMove.name, playerName: enemyName };
 }
 
 function App() {
@@ -31,34 +32,75 @@ function App() {
   const [isFainted, setIsFainted] = useState(false);
   const [victory, setVictory] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [playerSelectedMove, setPlayerSelectedMove] = useState(null);
+  const [isPlayerTurn, setIsPlayerTurn] = useState(false);
 
-  const handleAttack = () => {
-    // ... Existing attack logic ...
+  useEffect(() => {
+    setGameStarted(true);
+    setIsPlayerTurn(Math.random() < 0.5);
+  }, []);
 
-    // Check for the winner after the player's attack
-    const result = checkWinner(playerHP, enemyHP);
-    if (result) {
+  useEffect(() => {
+    if (playerHP <= 0 || enemyHP <= 0) {
+      const result = checkWinner(playerHP, enemyHP);
       console.log(result);
       if (result === "Victory!") {
         setVictory(true);
+      } else if (result === "Defeat!") {
+        setIsFainted(true);
       }
+    }
+  }, [playerHP, enemyHP]);
+
+  const attackMove = (power, accuracy) => {
+    const randomAccuracy = Math.floor(Math.random() * 100) + 1;
+    const attackHits = randomAccuracy <= accuracy;
+
+    if (attackHits) {
+      const damageDealt = Math.floor(power * (Math.random() + 0.5));
+      return {
+        hit: true,
+        damage: damageDealt,
+      };
     } else {
-      // After the player's attack, trigger the enemy's turn with a slight delay
-      setTimeout(handleEnemyAttack, 1000);
+      return {
+        hit: false,
+      };
     }
   };
 
-  const handleEnemyAttack = () => {
-    // ... Existing enemy attack logic ...
+  const handlePlayerMoveSelection = (move) => {
+    setPlayerSelectedMove(move);
+  };
 
-    // Check for the winner after the enemy's attack
-    const result = checkWinner(playerHP, enemyHP);
-    if (result) {
-      console.log(result);
-      if (result === "Defeat!") {
-        setVictory(true);
+  const handleAttack = () => {
+    if (isPlayerTurn && !isFainted && !victory) {
+      if (playerSelectedMove) {
+        performPlayerAttack();
+      } else {
+        console.log("Please select a move!");
       }
     }
+  };
+
+  const performPlayerAttack = () => {
+    const playerMove = moves.find((move) => move.name === playerSelectedMove);
+    const playerResult = attackMove(playerMove.power, playerMove.accuracy);
+
+    if (playerResult.hit) {
+      setEnemyHP((prevHP) => prevHP - playerResult.damage);
+    }
+  };
+
+  const checkWinner = (playerHP, enemyHP) => {
+    if (playerHP <= 0 && enemyHP <= 0) {
+      return "It's a tie!";
+    } else if (playerHP <= 0) {
+      return "Defeat!";
+    } else if (enemyHP <= 0) {
+      return "Victory!";
+    }
+    return null;
   };
 
   const handleStartGame = () => {
@@ -66,12 +108,13 @@ function App() {
   };
 
   const handleRestart = () => {
-    // Reset the game
     setPlayerHP(100);
     setEnemyHP(100);
     setIsFainted(false);
     setVictory(false);
     setGameStarted(true);
+    setPlayerSelectedMove(null);
+    setIsPlayerTurn(Math.random() < 0.5);
   };
 
   if (!gameStarted) {
@@ -101,16 +144,36 @@ function App() {
     );
   }
 
+  if (!isPlayerTurn) {
+    return (
+      <div>
+        <h1>Player HP: {playerHP}</h1>
+        <h1>Enemy HP: {enemyHP}</h1>
+        <h2>Enemy is attacking...</h2>
+      </div>
+    );
+  }
+
   return (
     <div>
       <h1>Player HP: {playerHP}</h1>
       <h1>Enemy HP: {enemyHP}</h1>
+      <h2>Select a Move:</h2>
+      {moves.map((move) => (
+        <button key={move.name} onClick={() => handlePlayerMoveSelection(move.name)}>
+          {move.name}
+        </button>
+      ))}
       <button onClick={handleAttack}>Attack</button>
     </div>
   );
 }
 
 export default App;
+
+
+
+
 
 
 
