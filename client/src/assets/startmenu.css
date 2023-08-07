@@ -10,7 +10,7 @@ html{
   font-family: 'Pixel Pokemon';
   src: url('./font/PokemonGb-RAeo.ttf');
 }
-.pokemon-list {
+.pokemon-list, .selected-pokemon {
     display: flex;
     justify-content: center; /* Center horizontally */
     flex-wrap: wrap; /* Allow items to wrap to the next line */
@@ -22,7 +22,8 @@ html{
     cursor: pointer;
     transition: transform 0.3s;
   }
-  .pokemon-container img{
+  
+  .pokemon-container img, .selected-pokemon img {
     width: 20em;
     height: 20em;
   }
@@ -56,7 +57,7 @@ html{
         -1px -1.5px 4px #e91c1c;
   
     }
-    .startBtn button {
+    .startBtn button, .selected-moves-container button, .moves-container button {
       cursor: pointer;
       display: flex;
       justify-content: center;
@@ -75,6 +76,16 @@ html{
       1px 1px 0 #000;
       text-align: center; /* Center text horizontally within the button */
       
+    }
+    .selected-moves-container, .moves-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2em;
+    }
+    
+    .move-button, .selected-move-button {
+      margin: 0.5em; /* Add spacing between buttons */
     }
     .startBtn button:hover {
       background: linear-gradient(to bottom, #611b1b, #db3131); /* Replace these colors with your desired hover gradient */
