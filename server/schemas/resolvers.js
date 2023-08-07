@@ -72,21 +72,23 @@ const resolvers = {
     },
 
     // Define the removePokemon resolver to remove a Pokemon from the user's account
-    removePokemon: async (parent, { Id }, context) => {
+    removePokemon: async (parent, { input }, context) => {
       if (context.user) {
+        const { pokemonId } = input;
+    
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $pull: { savedPokemons: { PokemonId: Id } } },
+          { $pull: { savedPokemons: { pokemonId: pokemonId } } }, // Notice the property name change from "PokemonId" to "pokemonId"
           { new: true }
         ).populate('savedPokemons');
-
+    
         if (!updatedUser) {
           throw new AuthenticationError(`Couldn't find user with this id: ${context.user._id}`);
         }
-
+    
         return updatedUser;
       }
-
+    
       throw new AuthenticationError('You need to be logged in!');
     },
   },
