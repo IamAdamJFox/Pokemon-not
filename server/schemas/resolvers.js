@@ -97,6 +97,25 @@ const resolvers = {
 
       throw new AuthenticationError('You need to be logged in!');
     },
+    saveCurrentPokemon: async (parent, { input }, context) => {
+      if (context.user) {
+        const { name, sprite, moves } = input;
+    
+        const updatedUser = await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { currentPokemon: { name, sprite, moves } },
+          { new: true }
+        );
+    
+        if (!updatedUser) {
+          throw new Error('Failed to update the user with the current Pokemon.');
+        }
+    
+        return updatedUser;
+      }
+    
+      throw new AuthenticationError('You need to be logged in!');
+    }
   },
 };
 

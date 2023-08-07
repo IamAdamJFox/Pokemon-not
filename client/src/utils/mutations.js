@@ -80,3 +80,14 @@ export const ADD_SELECTED_MOVE = gql`
     }
   }
 `;
+
+export const SAVE_CURRENT_POKEMON = gql`
+  mutation SaveCurrentPokemon($pokemonName: String!, $sprite: String!, $moves: [String!]!) {
+    saveCurrentPokemon(pokemonName: $pokemonName, sprite: $sprite, moves: $moves) {
+      Name
+      sprite
+      moves
+      # Add any other fields you want to return after saving
+    }
+  }
+`;

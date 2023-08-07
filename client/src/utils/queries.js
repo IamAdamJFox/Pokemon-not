@@ -34,4 +34,14 @@ export const GET_MOVES_BY_POKEMON_ID = gql`
     }
   }
 `;
+export const SAVE_CURRENT_POKEMON = gql`
+  mutation SaveCurrentPokemon($pokemonName: String!, $sprite: String!, $moves: [String!]!) {
+    saveCurrentPokemon(pokemonName: $pokemonName, sprite: $sprite, moves: $moves) {
+      name
+      sprite
+      moves
+      
+    }
+  }
+`;
 // Define other queries below and export them similarly
