@@ -2,16 +2,16 @@ import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
+import Auth from '../utils/auth';
 
 // import { createUser } from '../utils/API';
-// import Auth from '../utils/auth';
 
 const SignupForm = () => {
   // set initial form state
   const [userFormData, setUserFormData] = useState({ username: '', email: '', password: '' });
+  const [validated, setValidated] = useState(false);
   // set state for form validation
-  const [validated] = useState(false);
-  // const [validated, setValidated] = useState(false); can change styling of form based on validation
+  // const [validated] = useState(false);
   // set state for alert
   const [showAlert, setShowAlert] = useState(false);
 
@@ -31,9 +31,9 @@ const SignupForm = () => {
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
-    }  
-    //  setValidated(true); // added this line move up if changing styling based on validation
-    //  else {
+      setValidated(true); // added this line move up if changing styling based on validation
+    } else {
+
     try {
       // execute ADD_USER mutation
       const { data } = await addUser({
@@ -51,6 +51,7 @@ const SignupForm = () => {
       email: '',
       password: '',
     });
+   } 
   };
 
   return (

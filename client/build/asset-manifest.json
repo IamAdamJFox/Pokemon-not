@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.cfc4462c.css",
-    "main.js": "/static/js/main.44c0e6b0.js",
+    "main.css": "/static/css/main.487b2ecc.css",
+    "main.js": "/static/js/main.6ec49124.js",
     "static/media/PocketMonk-15ze.ttf": "/static/media/PocketMonk-15ze.09d09837f1b6dec50403.ttf",
     "static/media/PokemonGb-RAeo.ttf": "/static/media/PokemonGb-RAeo.6211ee48ea626f34681e.ttf",
     "index.html": "/index.html",
-    "main.cfc4462c.css.map": "/static/css/main.cfc4462c.css.map",
-    "main.44c0e6b0.js.map": "/static/js/main.44c0e6b0.js.map"
+    "main.487b2ecc.css.map": "/static/css/main.487b2ecc.css.map",
+    "main.6ec49124.js.map": "/static/js/main.6ec49124.js.map"
   },
   "entrypoints": [
-    "static/css/main.cfc4462c.css",
-    "static/js/main.44c0e6b0.js"
+    "static/css/main.487b2ecc.css",
+    "static/js/main.6ec49124.js"
   ]
 }

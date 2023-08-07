@@ -81,19 +81,23 @@ export default function MoveList() {
         ))}
       </div>
 
-      <div className="startBtn">
-        {selectedMoves.length === 4 ? (
-          <button
-            onClick={() => {
-              navigate("/Attack", { state: { selectedMoves } });
-            }}
-          >
-            Attack
-          </button>
-        ) : (
-          <button disabled>Attack</button>
-        )}
-      </div>
+      {selectedMoves.length === 4 ? (
+        <button
+          onClick={() => {
+            navigate("/Attack", {
+              state: { 
+                selectedMoves,
+                selectedPokemonSprite: selectedPokemon.image, 
+                selectedPokemonName: selectedPokemon.name
+              }
+            });
+          }}
+        >
+          Attack
+        </button>
+      ) : (
+        <button disabled>Attack</button>
+      )}
     </div>
   );
 }

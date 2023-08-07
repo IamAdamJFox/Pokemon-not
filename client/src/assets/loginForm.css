@@ -1,0 +1,36 @@
+/* To ensure full height is taken up by the container */
+body, html {
+  height: 100%;
+}
+
+/* Assuming you want some basic visual separation and polish */
+h-100 {
+  min-height: 100vh; /* Ensure the container takes the whole viewport height */
+}
+
+.form-control {
+  box-shadow: none; /* Remove or reduce the default Bootstrap focus shadow if you find it too strong */
+  border-radius: 0.25rem; /* Optional: You can modify the border-radius if desired */
+}
+
+.form-control:focus {
+  border-color: #007bff; /* Can adjust this to change the focus border color */
+}
+
+.btn-success {
+  background-color: #007bff; /* Adjusting primary button color */
+  border-color: #0069d9;
+}
+
+.btn-success:hover, .btn-success:active {
+  background-color: #0056b3; /* Darker shade for hover and active state */
+  border-color: #004085;
+}
+
+/* You can add more styles or adjust these as needed */
+
+
+
+
+
+
