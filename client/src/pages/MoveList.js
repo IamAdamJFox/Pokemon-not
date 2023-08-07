@@ -42,70 +42,67 @@ export default function MoveList() {
   const selectedPokemon = dataPokemon.getPokemonById;
 
   return (
-<div className="center-container">
+    <div className="center-container">
       <h2>Choose 4 Moves</h2>
       <div className="selected-pokemon">
         <h2>{selectedPokemon.name}</h2>
         <img src={selectedPokemon.image} alt={selectedPokemon.name} />
       </div>
       <div className="move-list-container">
-        <div className="move-buttons-container">
-          <div className="moves-wrapper">
+        <div className="moves-wrapper">
+          <div className="moves-container-header">
+            <h3>All Moves:</h3>
+          </div>
           <div className="moves-container">
-            <div className="moves-container-header">
-              <h3>All Moves:</h3>
-            </div>
-
-              {dataMoves.getMovesByPokemonId.slice(0, 6).map((move, index) => (
-                <button
-                  key={index}
-                  className={`move-button ${selectedMoves.includes(move.name) ? "selected-move" : ""}`}
-                  onClick={() => handleMoveSelect(move.name)}
-                  disabled={selectedMoves.includes(move.name) || selectedMoves.length >= 4}
-                >
-                  {move.name}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="selected-moves-wrapper">
-        <div className="selected-moves-header">
-          <h3>Your Moves:</h3>
-        </div>
-        <div className="selected-moves-container">
-          {selectedMoves.map((move, index) => (
-            <div key={index} className="selected-move">
-              <button className="selected-move-button">
-                {move}
-              </button>
+            {dataMoves.getMovesByPokemonId.slice(0, 6).map((move, index) => (
               <button
-                className="remove-move-button"
-                onClick={() => handleMoveRemove(move)}
+                key={index}
+                className={`move-button ${selectedMoves.includes(move.name) ? "selected-move" : ""}`}
+                onClick={() => handleMoveSelect(move.name)}
+                disabled={selectedMoves.includes(move.name) || selectedMoves.length >= 4}
               >
-                -
+                {move.name}
               </button>
-            </div>
-              ))}
-            </div>
+            ))}
           </div>
         </div>
-        {selectedMoves.length === 4 ? (
-          <button
-            onClick={() => {
-              navigate("/Attack", {
-                state: {
-                  selectedMoves,
-                  selectedPokemonSprite: selectedPokemon.image,
-                  selectedPokemonName: selectedPokemon.name
-                }
-              });
-            }}
-          >
-            Attack
-          </button>
-        ) : (
-          <button disabled>Attack</button>
-        )}
+        <div className="selected-moves-wrapper">
+          <div className="selected-moves-header">
+            <h3>Your Moves:</h3>
+          </div>
+          <div className="selected-moves-container">
+            {selectedMoves.map((move, index) => (
+              <div key={index} className="selected-move">
+                <button className="selected-move-button">
+                  {move}
+                </button>
+                <button
+                  className="remove-move-button"
+                  onClick={() => handleMoveRemove(move)}
+                >
+                  -
+                </button>
+              </div>
+            ))}
+          </div>
+          {selectedMoves.length === 4 ? (
+            <button
+              onClick={() => {
+                navigate("/Attack", {
+                  state: {
+                    selectedMoves,
+                    selectedPokemonSprite: selectedPokemon.image,
+                    selectedPokemonName: selectedPokemon.name
+                  }
+                });
+              }}
+            >
+              Attack
+            </button>
+          ) : (
+            <button disabled>Attack</button>
+          )}
+        </div>
       </div>
     </div>
   );
