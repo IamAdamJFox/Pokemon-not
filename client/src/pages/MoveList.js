@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_POKEMON_BY_ID, GET_MOVES_BY_POKEMON_ID } from "../utils/queries";
 import { ADD_SELECTED_MOVE } from "../utils/mutations";
-import '../assets/startmenu.css';
+import '../assets/movelist.css';
 
 export default function MoveList() {
   const { pokemonId } = useParams();
@@ -26,7 +26,7 @@ export default function MoveList() {
       setSelectedMoves(updatedMoves);
     }
   }
-    const handleMoveRemove = (moveToRemove) => {
+  const handleMoveRemove = (moveToRemove) => {
     const updatedMoves = selectedMoves.filter(move => move !== moveToRemove);
     setSelectedMoves(updatedMoves);
   }
@@ -42,62 +42,71 @@ export default function MoveList() {
   const selectedPokemon = dataPokemon.getPokemonById;
 
   return (
-    <div>
+<div className="center-container">
       <h2>Choose 4 Moves</h2>
-      <h2>{selectedPokemon.name}</h2>
       <div className="selected-pokemon">
+        <h2>{selectedPokemon.name}</h2>
         <img src={selectedPokemon.image} alt={selectedPokemon.name} />
       </div>
+      <div className="move-list-container">
+        <div className="move-buttons-container">
+          <div className="moves-wrapper">
+          <div className="moves-container">
+            <div className="moves-container-header">
+              <h3>All Moves:</h3>
+            </div>
 
-      <h3>All Moves:</h3>
-      <div className="moves-container">
-        {dataMoves.getMovesByPokemonId.slice(0, 6).map((move, index) => (
-          <button
-            key={index}
-            className={`move-button ${selectedMoves.includes(move.name) ? "selected-move" : ""}`}
-            onClick={() => handleMoveSelect(move.name)}
-            disabled={selectedMoves.includes(move.name) || selectedMoves.length >= 4}
-          >
-            {move.name}
-          </button>
-        ))}
-      </div>
-
-      
-      <h3>Your Moves:</h3>
-      <div className="selected-moves-container">
-        {selectedMoves.map((move, index) => (
-          <div key={index} className="selected-move">
-            <button className="selected-move-button">
-              {move}
-            </button>
-            <button
-              className="remove-move-button"
-              onClick={() => handleMoveRemove(move)}
-            >
-              Remove
-            </button>
+              {dataMoves.getMovesByPokemonId.slice(0, 6).map((move, index) => (
+                <button
+                  key={index}
+                  className={`move-button ${selectedMoves.includes(move.name) ? "selected-move" : ""}`}
+                  onClick={() => handleMoveSelect(move.name)}
+                  disabled={selectedMoves.includes(move.name) || selectedMoves.length >= 4}
+                >
+                  {move.name}
+                </button>
+              ))}
+            </div>
           </div>
-        ))}
+          <div className="selected-moves-wrapper">
+        <div className="selected-moves-header">
+          <h3>Your Moves:</h3>
+        </div>
+        <div className="selected-moves-container">
+          {selectedMoves.map((move, index) => (
+            <div key={index} className="selected-move">
+              <button className="selected-move-button">
+                {move}
+              </button>
+              <button
+                className="remove-move-button"
+                onClick={() => handleMoveRemove(move)}
+              >
+                -
+              </button>
+            </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        {selectedMoves.length === 4 ? (
+          <button
+            onClick={() => {
+              navigate("/Attack", {
+                state: {
+                  selectedMoves,
+                  selectedPokemonSprite: selectedPokemon.image,
+                  selectedPokemonName: selectedPokemon.name
+                }
+              });
+            }}
+          >
+            Attack
+          </button>
+        ) : (
+          <button disabled>Attack</button>
+        )}
       </div>
-
-      {selectedMoves.length === 4 ? (
-        <button
-          onClick={() => {
-            navigate("/Attack", {
-              state: { 
-                selectedMoves,
-                selectedPokemonSprite: selectedPokemon.image, 
-                selectedPokemonName: selectedPokemon.name
-              }
-            });
-          }}
-        >
-          Attack
-        </button>
-      ) : (
-        <button disabled>Attack</button>
-      )}
     </div>
   );
 }

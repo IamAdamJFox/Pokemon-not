@@ -1,0 +1,140 @@
+html, body{
+    background:  #2f609c;
+}
+@font-face {
+    font-family: 'Pokemon Solid';
+    src: url('./font/PocketMonk-15ze.ttf'); 
+  }
+  @font-face{
+    font-family: 'Pixel Pokemon';
+    src: url('./font/PokemonGb-RAeo.ttf');
+    }
+    .center-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Horizontal center alignment */
+        justify-content: center; /* Vertical center alignment */
+        height: 100vh; /* Adjust this based on your layout */
+      }
+      
+      .selected-pokemon {
+        margin-top: 20px; /* Add spacing between header and selected-pokemon */
+        text-align: center; /* Center-align text and image within selected-pokemon */
+      }
+      
+.selected-moves-container button,
+.moves-container button {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "pixel pokemon", sans-serif;
+  color: #fdfdfd;
+  background: linear-gradient(to bottom, #db3131, #611b1b);
+  border-radius: 10px;
+  border: 2px solid #000000;
+  font-size: 24px; /* Increase font size for larger screens */
+  height: 3em; /* Increase height for larger screens */
+  width: 15em;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  text-align: center;
+  margin: 5px; /* Adjust margin */
+}
+
+  
+.move-button,
+.selected-move-button {
+  margin: 10px; /* Adjust margin */
+}
+.selected-moves-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2em; /* Add margin to center vertically */
+  }
+  .moves-container-header, .selected-moves-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1em; /* Add margin at the bottom */
+    font-family: pixel pokemon;
+    display: flex;
+    justify-content: center;
+    font-size: 1.5em;
+    color: #ffcb05;
+    text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000,
+    -1px -1.5px 4px #e91c1c;
+  }
+  .selected-moves-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center; /* Center horizontally */
+    margin-top: 1em; /* Add margin to center vertically */
+  }
+  .selected-move {
+    display: flex;
+    align-items: center;
+    margin: 0.5em;
+    position: relative; /* Add relative positioning to the selected move container */
+  }
+  
+  .selected-moves-container .remove-move-button {
+    color: #c3c3c3;
+    border: 1px solid #000000;
+    padding: 0.2em 0.4em;
+    font-size: 0.8em;
+    background-color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1.5em;
+    height: 1.5em;
+    cursor: pointer;
+    position: absolute; /* Add absolute positioning to the remove button */
+    top: 0; /* Position at the top */
+    right: 0; /* Position at the right */
+    transform: translate(50%, -50%); /* Center the button at the top right corner */
+  }
+  
+  
+  .moves-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap to a new line */
+    justify-content: center;
+    align-items: center;
+    gap: 1em; /* Add some spacing between the buttons */
+    padding: 2em;
+  }
+  
+
+/* Responsive adjustments for smaller screens */
+@media screen and (max-width: 600px) {
+  .selected-moves-container button,
+  .moves-container button {
+    font-size: 16px; /* Adjust font size for smaller screens */
+    border: 1px solid #000000;
+    height: 40px; /* Adjust height for smaller screens */
+    width: 120px; /* Adjust width for smaller screens */
+  }
+
+  .selected-moves-container {
+    padding: 20px; /* Adjust padding */
+  }
+
+  .selected-move {
+    margin: 20px; /* Adjust margin */
+  }
+
+  .selected-moves-container .remove-move-button {
+    padding: 5px 10px; /* Adjust padding */
+    font-size: 12px; /* Adjust font size for smaller screens */
+    margin-left:0;
+  }
+}
