@@ -16,13 +16,23 @@ const pokemonSchema = new Schema({
     type: String,
     required: true,
   },
-  type: {
+  type: [{
     type: String,
-    required: true,
-  },
+    required: true
+  }],
   pokemonId: {
     type: String,
     required: true,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+  },
+  link: {
+    type: String,
   }
 });
 

@@ -21,8 +21,12 @@ export default function StartMenu() {
   const [savePokemon] = useMutation(SAVE_POKEMON);
 
   const handlePokemonSelect = (pokemon) => {
-    console.log("Selected Pokemon:", pokemon); 
-    setSelectedPokemon(pokemon);
+    const { __typename, ...rest } = pokemon; 
+    setSelectedPokemon({
+      ...rest,
+      pokemonId: rest.number,
+      title: rest.name
+    });
   };
   const handlePokemonSubmit = async () => {
     if (selectedPokemon) {

@@ -59,6 +59,12 @@ const resolvers = {
     // Define the savePokemon resolver to save a Pokemon to the user's account
     savePokemon: async (parent, { input }, context) => {
       if (context.user) {
+        // Ensure that the input contains a title
+        if (!input.title) {
+          throw new Error("Title is required for a Pokemon");
+        }
+
+        // Update the user's saved Pokemons with the new Pokemon input
         const updatedPokemons = await User.findOneAndUpdate(
           { _id: context.user._id },
           { $addToSet: { savedPokemons: input } },
@@ -75,20 +81,20 @@ const resolvers = {
     removePokemon: async (parent, { input }, context) => {
       if (context.user) {
         const { pokemonId } = input;
-    
+
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
           { $pull: { savedPokemons: { pokemonId: pokemonId } } }, // Notice the property name change from "PokemonId" to "pokemonId"
           { new: true }
         ).populate('savedPokemons');
-    
+
         if (!updatedUser) {
           throw new AuthenticationError(`Couldn't find user with this id: ${context.user._id}`);
         }
-    
+
         return updatedUser;
       }
-    
+
       throw new AuthenticationError('You need to be logged in!');
     },
   },
