@@ -81,4 +81,22 @@ module.exports = {
     }
     return res.json(updatedUser);
   },
+  
+  async saveCurrentPokemon({ user, body }, res) {
+    try {
+      const updatedUser = await User.findByIdAndUpdate(
+        user._id,
+        { currentPokemon: body },
+        { new: true }
+      );
+      if (!updatedUser) {
+        return res.status(404).json({ message: "Couldn't find user with this id!" });
+      }
+      return res.json(updatedUser);
+    } catch (err) {
+      console.error(err);
+      return res.status(400).json(err);
+    }
+  }
+  
 };

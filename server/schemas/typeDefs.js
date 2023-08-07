@@ -45,6 +45,12 @@ const typeDefs = gql`
     pokemonId: ID!
   }
 
+  input CurrentPokemonInput {
+    name: String!
+    sprite: String!
+    moves: [String!]!
+  }
+
   type Auth {
     token: String!
     user: User
@@ -62,6 +68,7 @@ const typeDefs = gql`
     addUser(username: String!, email: String!, password: String!): Auth
     savePokemon(input: PokemonInput!): User
     removePokemon(input: RemovePokemonInput!): User
+    saveCurrentPokemon(input: CurrentPokemonInput!): User
   }
 `;
 
