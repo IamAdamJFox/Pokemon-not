@@ -1,0 +1,55 @@
+.attack-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .attack-header {
+    font-family: 'Pokemon Solid';
+    font-size: 3em;
+    color: #ffcb05;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  }
+  
+  .displayed-moves-header {
+    font-family: 'Pixel Pokemon';
+    font-size: 1.5em;
+    color: #ffcb05;
+    margin-top: 20px;
+  }
+  
+  .displayed-moves-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .displayed-move {
+    font-family: 'Pixel Pokemon';
+    font-size: 1.2em;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+  }
+  
+  .attack-button-container {
+    margin-top: 20px;
+  }
+  
+  .attack-button {
+    cursor: pointer;
+    font-family: 'Pixel Pokemon', sans-serif;
+    font-size: 20px;
+    color: #fdfdfd;
+    background: linear-gradient(to bottom, #db3131, #611b1b);
+    border-radius: 10px;
+    border: 2px solid #000000;
+    padding: 0.5em 1em;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    margin: 10px;
+  }
+  
+  .attack-button:hover {
+    background: linear-gradient(to bottom, #611b1b, #db3131);
+  }
+  

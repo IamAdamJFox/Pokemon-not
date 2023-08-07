@@ -55,23 +55,18 @@
     }
     .startBtn button {
       cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center; /* Align text vertically within the button */
+      display: block;
       font-family: "pixel pokemon", sans-serif;
-      font-size: 20px;
       color: #fdfdfd;
-      background: linear-gradient(to bottom, #db3131, #611b1b); /* Replace these colors with your desired gradient */
+      background: linear-gradient(to bottom, #db3131,  #611b1b);
       border-radius: 10px;
       border: 2px solid #000000;
-      height: 3em;
-      width: 8em;
-      text-shadow:-1px -1px 0 #000,
-      1px -1px 0 #000,
-      -1px 1px 0 #000,
-      1px 1px 0 #000;
-      text-align: center; /* Center text horizontally within the button */
-      
+      font-size: 30px;
+      padding: 0.5em 1em;
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+      text-align: center;
+      margin: 0.3em 0;
+      position: relative;
     }
 
     
