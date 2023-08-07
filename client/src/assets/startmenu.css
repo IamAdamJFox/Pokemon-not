@@ -32,10 +32,9 @@
     opacity: .5;
   }
  
-
-    .pokemon-container.selected {
-        transform: translateY(-3em);
-    }
+  .pokemon-container.selected {
+    transform: translateY(-10em); /* Apply hover effect for selected Pokemon */
+  }
     .startBtn{
         display: flex;
         justify-content: center;

@@ -25,7 +25,7 @@ export const ADD_USER = gql`
 `;
 
 export const CREATE_POKEMON = gql`
-  mutation createPokemon($name: String!, $type: String!) {
+  mutation createPokemon($name: String!, $type: [String!]!) {
     createPokemon(name: $name, type: $type) {
       number
       name
@@ -46,6 +46,9 @@ export const SAVE_POKEMON = gql`
       username
       email
       savedPokemons {
+        number
+        title
+        image
         pokemonId
         name
         type
@@ -77,4 +80,3 @@ export const ADD_SELECTED_MOVE = gql`
     }
   }
 `;
-// Define other mutations below and export them similarly

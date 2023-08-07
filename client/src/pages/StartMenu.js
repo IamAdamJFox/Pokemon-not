@@ -21,8 +21,12 @@ export default function StartMenu() {
   const [savePokemon] = useMutation(SAVE_POKEMON);
 
   const handlePokemonSelect = (pokemon) => {
-    console.log("Selected Pokemon:", pokemon); 
-    setSelectedPokemon(pokemon);
+    const { __typename, ...rest } = pokemon; 
+    setSelectedPokemon({
+      ...rest,
+      pokemonId: rest.number,
+      title: rest.name
+    });
   };
   const handlePokemonSubmit = async () => {
     if (selectedPokemon) {
@@ -57,7 +61,7 @@ export default function StartMenu() {
         <h1>Pokemon Not</h1>
       </div>
       <div className="selectPrompt">
-      <h2>Select your Pokemon</h2>
+        <h2>Select your Pokemon</h2>
       </div>
       <ul className="pokemon-list">
         {pokemonList.map((pokemon) => (
@@ -71,8 +75,7 @@ export default function StartMenu() {
         ))}
       </ul>
       <div className="startBtn">
-        
-      <Link to={selectedPokemon ? `/MoveList/${selectedPokemon.number}` : "#"}>
+        <Link to={selectedPokemon ? `/MoveList/${selectedPokemon.number}` : "#"}>
           <button onClick={handlePokemonSubmit} disabled={!selectedPokemon}>
             Start
           </button>

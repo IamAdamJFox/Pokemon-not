@@ -1,12 +1,32 @@
 import React from "react";
 import ReactDOM from 'react-dom';
 import App from './App';
-import { ApolloProvider } from '@apollo/client';
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 
+// Create an http link to your server
+const httpLink = createHttpLink({
+  uri: 'http://localhost:3001/graphql'
+});
+
+// Middleware to set the auth token for every request
+const authLink = setContext((_, { headers }) => {
+  // Get the token from local storage (or wherever you've stored it)
+  const token = localStorage.getItem('id_token');
+  
+  // Attach it to headers
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    }
+  };
+});
+
+// Create the Apollo Client instance using the link with middleware and cache
 const client = new ApolloClient({
-  uri: 'http://localhost:3001/graphql', // replace with your server's URI
-  cache: new InMemoryCache()
+  link: authLink.concat(httpLink), // Chain the middleware link with the http link
+  cache: new InMemoryCache(),
 });
 
 ReactDOM.render(
