@@ -17,6 +17,8 @@ const typeDefs = gql`
   type Move {
     id: ID!
     name: String!
+    power: Int
+    accuracy: Int
   }
 
   type Pokemon {
