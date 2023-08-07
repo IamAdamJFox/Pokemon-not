@@ -3,6 +3,8 @@ import { useLocation } from "react-router-dom";
 import Game from "../components/Game"; // Import the Game component here
 import "../assets/BattleScreen.css";
 
+const  movePower = [40,6080,100];
+
 export default function BattleScreen() {
   const location = useLocation();
   const { selectedMoves, selectedPokemon } = location.state;
@@ -35,9 +37,15 @@ export default function BattleScreen() {
       });
   }, []);
 
-  const handleMoveClick = (move) => {
+  const handleMoveClick = (move,power) => {
     // Implement the logic to trigger the player's move here
     console.log(`Selected move: ${move}`);
+    console.log(`damage done: ${power}`);
+
+    const damageDone = Math.floor(power * (Math.random() + 0.5));
+    console.log(`damage done: ${damageDone}`);
+    setEnemyPokemon((prevHP) => prevHP - damageDone);
+    console.log(`Enemy HP: ${enemyPokemon.hp}`);
   };
 
   return (
@@ -56,7 +64,7 @@ export default function BattleScreen() {
         <h3>Selected Moves:</h3>
         <ul>
           {selectedMoves.map((move, index) => (
-            <button key={index} onClick={() => handleMoveClick(move)}>
+            <button key={index} onClick={() => handleMoveClick(move, movePower[index])}>
               {move}
             </button>
           ))}

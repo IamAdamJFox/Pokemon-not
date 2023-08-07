@@ -27,6 +27,8 @@ export const GET_MOVES_BY_POKEMON_ID = gql`
     getMovesByPokemonId(pokemonId: $pokemonId) {
       id
       name
+      power
+      accuracy
       #... other fields related to the move
     }
   }

@@ -68,11 +68,12 @@ export const REMOVE_POKEMON = gql`
   }
 `;
 export const ADD_SELECTED_MOVE = gql`
-  mutation addSelectedMove($pokemonId: ID!, $moveName: String!) {
-    addSelectedMove(pokemonId: $pokemonId, moveName: $moveName) {
+  mutation addSelectedMove($pokemonId: ID!, $moveName: String!, $power: Int!) {
+    addSelectedMove(pokemonId: $pokemonId, moveName: $moveName, power: $power) {
       _id
       name
       image
+      power
     }
   }
 `;
