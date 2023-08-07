@@ -43,15 +43,16 @@ export default function MoveList() {
 
   return (
     <div className="center-container">
+      <h1 className="move-header">Pokemon Not</h1>
       <h2>Choose 4 Moves</h2>
       <div className="selected-pokemon">
-        <h2>{selectedPokemon.name}</h2>
+        <h2>{selectedPokemon.name.charAt(0).toUpperCase() + selectedPokemon.name.slice(1)}</h2>
         <img src={selectedPokemon.image} alt={selectedPokemon.name} />
       </div>
       <div className="move-list-container">
         <div className="moves-wrapper">
           <div className="moves-container-header">
-            <h3>All Moves:</h3>
+            <h3 className="move-select-title">All Moves:</h3>
           </div>
           <div className="moves-container">
             {dataMoves.getMovesByPokemonId.slice(0, 6).map((move, index) => (
@@ -68,7 +69,7 @@ export default function MoveList() {
         </div>
         <div className="selected-moves-wrapper">
           <div className="selected-moves-header">
-            <h3>Your Moves:</h3>
+            <h3 className="move-select-title">Your Moves:</h3>
           </div>
           <div className="selected-moves-container">
             {selectedMoves.map((move, index) => (
@@ -85,24 +86,32 @@ export default function MoveList() {
               </div>
             ))}
           </div>
-          {selectedMoves.length === 4 ? (
-            <button
-              onClick={() => {
-                navigate("/Attack", {
-                  state: {
-                    selectedMoves,
-                    selectedPokemonSprite: selectedPokemon.image,
-                    selectedPokemonName: selectedPokemon.name
-                  }
-                });
-              }}
-            >
-              Attack
-            </button>
-          ) : (
-            <button disabled>Attack</button>
-          )}
         </div>
+      </div>
+      <div className="attack-button-container">
+        {selectedMoves.length === 4 ? (
+          <button
+            className={`button attack-button ${
+              selectedMoves.length === 4 ? "attack-button-enabled" : "attack-button-disabled"
+            }`}
+            onClick={() => {
+              navigate("/Attack", {
+                state: {
+                  selectedMoves,
+                  selectedPokemonSprite: selectedPokemon.image,
+                  selectedPokemonName: selectedPokemon.name,
+                },
+              });
+            }}
+            disabled={selectedMoves.length !== 4}
+          >
+            Attack
+          </button>
+        ) : (
+          <button className="button attack-button-disabled" disabled>
+            Attack
+          </button>
+        )}
       </div>
     </div>
   );
