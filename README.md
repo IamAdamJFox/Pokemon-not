@@ -10,19 +10,33 @@
 
 ## Description
 
-Pokemon battler with capability of selecting teams and saving to a database.
+Hello! welcome to Pokemon Not a simple fun project to have a pokemon battle with
 
--[Live-Application](https://pokemon-not-bda447895737.herokuapp.com/)
+- Once you have signed in please select a pokemon
+
+![Alt Text](https://giphy.com/gifs/SsP4yrYfIu19kYQvkV.gif)
+
+- [Live-Application](https://pokemon-not-bda447895737.herokuapp.com/)
 
 ## Contributers
 
-- [Adam-Fox](https://github.com/IamAdamJFox)
-- [Shannon-Hogeboom](https://github.com/SilverFae)
-- [Hieu-Trans](https://github.com/TheColorHieu)
-- [David-Flores](https://github.com/GGDave)
+- [Adam Fox](https://github.com/IamAdamJFox)
+- [ShannonHogeboom](https://github.com/SilverFae)
+- [Hieu Trans](https://github.com/TheColorHieu)
+- [David Flores](https://github.com/GGDave)
 
 
 ## Future Implemantation
+
+- The ability to select any pokemon
+- Simple animations during battle 
+- Having a team of 6 pokemon to be swapped into by switching out or when a pokemon faints
+- Expanding the move pool to include all moves
+- Implement Attack, Defense, Special Attack, Special Defense, and Speed stats
+- A saving function to save your teams you build
+- Adding support moves logic
+- Improving enemy logic
+- Player vs Player functionality 
 
 ## Resources
  
@@ -57,4 +71,14 @@ Pokemon battler with capability of selecting teams and saving to a database.
 
 ## Links
 
-Example code: https://github.com/smogon/pokemon-showdown
+- [Poke Api](https://pokeapi.co/)
+
+- [Pokemon Not Github Repo](https://github.com/IamAdamJFox/Pokemon-not)
+
+For more information about this application please contact us through github at
+
+- Adam Fox: (https://github.com/IamAdamJFox)
+- ShannonHogeboom: (https://github.com/SilverFae)
+- Hieu Trans: (https://github.com/TheColorHieu)
+- David Flores: (https://github.com/GGDave)
+
