@@ -76,6 +76,7 @@ export const ADD_SELECTED_MOVE = gql`
       _id
       name
       image
+    
     }
   }
 `;

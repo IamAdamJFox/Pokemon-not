@@ -3,6 +3,8 @@ import { useLocation } from "react-router-dom";
 import Game from "../components/Game"; // Import the Game component here
 import "../assets/BattleScreen.css";
 
+const  movePower = [40,60,80,100];
+
 export default function BattleScreen() {
   const location = useLocation();
   const { selectedMoves, selectedPokemon } = location.state;
@@ -14,6 +16,9 @@ export default function BattleScreen() {
     hp: 100,
     sprite: "URL_to_enemy_sprite_here", // Placeholder until data is fetched
   });
+
+  //adding a state to track battle status 
+  const [isBattleOver, setIsBattleOver] = useState(false);
 
   const getRandomPokemonId = () => {
     return Math.floor(Math.random() * 898) + 1; // Assuming the range is 1 to 898.
@@ -35,9 +40,35 @@ export default function BattleScreen() {
       });
   }, []);
 
-  const handleMoveClick = (move) => {
+  const handleMoveClick = (move,power) => {
+    if (isBattleOver) {
+      return;
+    }
     // Implement the logic to trigger the player's move here
     console.log(`Selected move: ${move}`);
+    console.log(`damage done: ${power}`);
+
+    const damageDone = Math.floor(power * (Math.random() + 0.5));
+    console.log(`damage done: ${damageDone}`);
+    setEnemyPokemon((prevEnemyPokemon) => ({
+    ...prevEnemyPokemon,
+    hp: Math.max(prevEnemyPokemon.hp - damageDone, 0),
+  }));
+  if (enemyPokemon.hp <= 0) {
+    setIsBattleOver(true);
+  };
+  };
+
+  //adding a redo 
+  const handleRedoBattle = () => {
+    //here were resetting the enemy pokemon
+    setEnemyPokemon({
+      name: "Loading...",
+      hp: 100,
+      sprite: "URL_to_enemy_sprite_here", // Placeholder until data is fetched
+    });
+    //here were resetting the battle status
+    setIsBattleOver(false);
   };
 
   return (
@@ -56,7 +87,7 @@ export default function BattleScreen() {
         <h3>Selected Moves:</h3>
         <ul>
           {selectedMoves.map((move, index) => (
-            <button key={index} onClick={() => handleMoveClick(move)}>
+            <button key={index} onClick={() => handleMoveClick(move, movePower[index])}>
               {move}
             </button>
           ))}
@@ -70,6 +101,9 @@ export default function BattleScreen() {
         </div>
         <p>HP: {enemyPokemon.hp}</p>
         {/* ... rest of enemy section ... */}
+        {isBattleOver && (
+          <button onClick={handleRedoBattle}>Redo Battle</button>
+        )}
       </div>
     </div>
   );
