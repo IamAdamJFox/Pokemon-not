@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import "../assets/BattleScreen.css";
 import ReactConfetti from "react-confetti";
 
-const movePower = [20, 30, 40, 50];
+const movePower = [20, 30, 40, 70];
 
 export default function BattleScreen() {
   const location = useLocation();
@@ -19,7 +19,8 @@ export default function BattleScreen() {
 
   const [enemyPokemon, setEnemyPokemon] = useState({
     name: "Loading...",
-    hp: 100,
+    currentHp: 100,
+    originalHp: 100,  // new field
     sprite: "URL_to_enemy_sprite_here",
   });
 
@@ -35,7 +36,8 @@ export default function BattleScreen() {
       .then((data) => {
         setEnemyPokemon({
           name: data.name,
-          hp: data.stats[0].base_stat,
+          currentHp: data.stats[0].base_stat,
+          originalHp: data.stats[0].base_stat,
           sprite: data.sprites.front_default,
         });
       })
@@ -79,13 +81,13 @@ export default function BattleScreen() {
     setBattleMessage(`Your ${playerPokemonName} used ${move}!`);
     console.log(`Selected move: ${move}`);
     const damageDone = Math.floor(power * (Math.random() + 0.5));
-    let newEnemyHP = Math.max(enemyPokemon.hp - damageDone, 0);
+    let newEnemyHP = Math.max(enemyPokemon.currentHp - damageDone, 0);
     setPlayerIsAttacking(true);
     setTimeout(() => setPlayerIsAttacking(false), 500);
 
     setEnemyPokemon(prevEnemyPokemon => ({
       ...prevEnemyPokemon,
-      hp: newEnemyHP
+      currentHp: newEnemyHP
     }));
 
     if (newEnemyHP <= 0) {
@@ -132,7 +134,10 @@ export default function BattleScreen() {
             </div>
 
           </div>
-          <p>HP: {playerHP}</p>
+          <div className="hp-bar-container">
+            <div className="hp-bar" style={{ width: `${(playerHP / 100) * 100}%` }}></div>
+            <span className="hp-text">{playerHP}</span>
+          </div>
           <h3>Selected Moves:</h3>
           <ul>
             {selectedMoves.map((move, index) => (
@@ -150,7 +155,10 @@ export default function BattleScreen() {
               <img src={enemyPokemon.sprite} alt={`${enemyPokemon.name} sprite`} />
             </div>
           </div>
-          <p>HP: {enemyPokemon.hp}</p>
+          <div className="hp-bar-container">
+            <div className="hp-bar" style={{ width: `${(enemyPokemon.currentHp / enemyPokemon.originalHp) * 100}%` }}></div>
+            <span className="hp-text">{enemyPokemon.currentHp}</span>
+          </div>
           {isBattleOver && (
             <button onClick={handleRedoBattle}>Rematch</button>
           )}
