@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import "../assets/BattleScreen.css";
 import ReactConfetti from "react-confetti";
 
-const movePower = [40, 60, 80, 100];
+const movePower = [20,30,40,50];
 
 export default function BattleScreen() {
   const location = useLocation();
