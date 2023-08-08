@@ -119,7 +119,7 @@ export default function BattleScreen() {
           // Delay the enemy's turn by 2 seconds so the player can read the message.
           setTimeout(() => {
             executeEnemyTurn();
-          }, 2000);
+          }, 50);
         }
     }, 2000);
 };
