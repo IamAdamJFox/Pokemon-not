@@ -1,39 +1,155 @@
-.player-section, .enemy-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    
-  }
-  
-  .sprite-container {
-    display: flex;
-    justify-content: center;
-  }
-
-  .player-section img, .enemy-section img {
-    width: 200px; /* Adjust as necessary */
-    height: 200px; /* Adjust as necessary */
+/* Pokémon Battle Simulation */
+@font-face {
+  font-family: "Pokemon Solid";
+  src: url("./font/PocketMonk-15ze.ttf");
+}
+@font-face {
+  font-family: "Pixel Pokemon";
+  src: url("./font/PokemonGb-RAeo.ttf");
 }
 
+
+/* Battle Screen Container */
+.battle-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 80%;
+  height: 80vh;
+  font-family: Pixel Pokemon; 
+  color: #ffcb05;
+}
+.battle-header{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 10vh;
+  font-family: Pixel Pokemon;
+  color: #ffcb05;
+  font-size: 3em;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000, -1px -1.5px 4px #e91c1c;
+}
+
+/* Wrapper for the player and enemy sections */
+.battle-arena {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 5px;
+  background-color: rgba(248, 248, 248, 0.367); /* Using rgba with opacity */
+}
+
+/* Player's Pokémon Section */
+.player-section,
+.enemy-section {
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sprite-container img {
+  width: 400px;
+  height: 400px;
+}
+.enemy-sprite-container img {
+  width: 400px;
+  height: 400px;
+}
+
+.player-section {
+  margin-right: 10px;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  color: #d04a4a;
+}
+
+.enemy-section {
+  margin-left: 10px;
+}
+
+.player-section h2,
+.enemy-section h2 {
+  font-size: 1.5em;
+  margin-bottom: 5px;
+  text-align: center;
+  color: #ffcb05;
+}
+
+.player-section p,
+.enemy-section p {
+  font-size: 1.2em;
+  margin: 5px 0;
+  color: #ffcb05;
+}
+
+.player-section ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.player-section button{
+  cursor: pointer;
+  display: block;
+  font-family: "pixel pokemon", sans-serif;
+  color: #fdfdfd;
+  background: linear-gradient(to bottom, #db3131, #611b1b);
+  border-radius: 10px;
+  border: 2px solid #000000;
+  font-size: 20px;
+  padding: 0.5em 1em;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  text-align: center;
+  margin: 0.3em;
+  position: relative;
+}
+
+/* Enemy's Pokémon Section */
+.enemy-section {
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.enemy-section button {
+  cursor: pointer;
+  display: block;
+  font-family: "pixel pokemon", sans-serif;
+  color: #fdfdfd;
+  background: linear-gradient(to bottom, #db3131, #611b1b);
+  border-radius: 10px;
+  border: 2px solid #000000;
+  font-size: 20px;
+  padding: 0.5em 1em;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  text-align: center;
+  margin: 0.3em 0;
+  position: relative;
+}
+
+/* Victory Message Display */
 .victory-message {
-  position: fixed;
-  top: 50%;
+  position: absolute;
+  top: calc(50% + 60px);
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 20px 40px;
-  font-size: 3rem;
-  font-weight: bold;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  animation: flashVictory 0.5s 4;  /* flash 4 times over 2 seconds */
+  font-size: 3em;
+  color:  #e1ff00;
+  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+  animation: flashVictory 1s infinite;
 }
 
+/* Victory Animation */
 @keyframes flashVictory {
   0%, 100% {
-      opacity: 1;
+    opacity: 1;
   }
   50% {
-      opacity: 0;
+    opacity: 0;
   }
 }
