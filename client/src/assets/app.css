@@ -1,4 +1,4 @@
-.home-btn, .logout-btn{
+.home-btn, .logout-btn, .login-btn{
   cursor: pointer;
   display: block;
   font-family: "pixel pokemon", sans-serif;
@@ -17,7 +17,7 @@
 .home-btn{
   margin-right: auto;
 }
-.logout-btn{
+.logout-btn, .login-btn{
   margin-left: auto;
 }
 .home-btn:hover, .logout-btn:hover{
