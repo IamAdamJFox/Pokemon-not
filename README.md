@@ -14,7 +14,7 @@ Hello! welcome to Pokemon Not a simple fun project to have a pokemon battle with
 
 - Once you have signed in please select a pokemon
 
-![Alt Text](https://giphy.com/gifs/SsP4yrYfIu19kYQvkV.gif)
+![Alt Text](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExY2Y1YWV5NzZsa2Uya2t1YzY2NjRmY20xODRnZmFpM2lvZmVuenhsOSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/SsP4yrYfIu19kYQvkV/giphy.gif)
 
 - [Live-Application](https://pokemon-not-bda447895737.herokuapp.com/)
 
