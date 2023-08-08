@@ -19,7 +19,7 @@ Hello! welcome to Pokemon Not a simple fun project to have a pokemon battle with
 
 - After Logging in Signing up select your moves from the move pool
 
-![Alt Text](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeTFocGp1ZHlzbTM1NmlxcWd2aHI0a2JlamkxbGttYWpvN2RmMjV1cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/dhf0RQ2xoOwbjw6BrA/giphy.gif)
+<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeTFocGp1ZHlzbTM1NmlxcWd2aHI0a2JlamkxbGttYWpvN2RmMjV1cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/dhf0RQ2xoOwbjw6BrA/giphy.gif">
 
 - Once Satisfied now FIGHT!
 
