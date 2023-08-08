@@ -62,10 +62,11 @@ export default function BattleScreen() {
     // Randomly select a move for the enemy
     const randomMoveIndex = Math.floor(Math.random() * enemyMoves.length);
     const selectedMove = enemyMoves[randomMoveIndex];
+    const damageDone = Math.floor(selectedMove.power * (Math.random() + 0.5));
 
-    setBattleLog((prevLog) => [...prevLog, { source: "enemy", move: "Tackle", damage: damageDealt }]);
+    setBattleLog((prevLog) => [...prevLog, { source: "enemy", move: "Tackle", damage: damageDone }]);
 
-    setPlayerHP((prevHP) => Math.max(prevHP - damageDealt, 0));
+    setPlayerHP((prevHP) => Math.max(prevHP - damageDone, 0));
 
     if (playerHP <= 0) {
       setIsBattleOver(true);
