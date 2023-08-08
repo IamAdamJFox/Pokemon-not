@@ -36,12 +36,28 @@ export default function Game({ selectedMoves }) {
     }
   };
 
-  const enemyTurn = async () => {
-    // Simulate thinking time for the bot
-    console.log("Enemy is thinking...");
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 seconds delay
+  const calculateMovePriority = (move) => {
+    // Define move priorities based on certain conditions (e.g., move power and player's HP)
+    const priority = move.priority + (100 - playerHP) * 0.1;
+    return priority;
+  };
+
+  const [isPlayerTurn, setIsPlayerTurn] = useState(true);
   
-    const enemyMove = moves[Math.floor(Math.random() * moves.length)];
+  const enemyMoveSelection = () => {
+    // Calculate priorities for each move and sort them in descending order
+    const movesWithPriorities = moves.map((move) => ({ ...move, priority: calculateMovePriority(move) }));
+    movesWithPriorities.sort((a, b) => b.priority - a.priority);
+  
+    // Choose the move with the highest priority
+    const enemyMove = movesWithPriorities[0];
+    return enemyMove;
+  };
+
+  const enemyTurn = () => {
+    // Disable player input during the enemy's turn
+    setIsPlayerTurn(false);
+    const enemyMove = enemyMoveSelection();
     const result = attackMove(enemyMove.power, enemyMove.accuracy);
   
     if (result.hit) {
