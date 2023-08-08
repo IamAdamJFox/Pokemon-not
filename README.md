@@ -23,7 +23,7 @@ Hello! welcome to Pokemon Not a simple fun project to have a pokemon battle with
 
 - Once Satisfied now FIGHT!
 
-![Alt Text](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdzVpa3MwdXUwd2tuZmswbWxsY21teDI1eHh4bXlhZW8yeHQ4a3B0dCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aQy0bLKrmXoNUJEScu/giphy.gif)
+![Alt Text](https://media.giphy.com/media/aQy0bLKrmXoNUJEScu/giphy-downsized.gif)
 
 
 - [Live-Application](https://pokemon-not-bda447895737.herokuapp.com/)
