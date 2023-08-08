@@ -23,9 +23,9 @@ export default function BattleScreen() {
     originalHp: 100,  // new field
     sprite: "URL_to_enemy_sprite_here",
   });
+  const [battleLog, setBattleLog] = useState([]); // New battle log state
 
   const [isBattleOver, setIsBattleOver] = useState(false);
-
   const getRandomPokemonId = () => {
     return Math.floor(Math.random() * 898) + 1;
   };
@@ -63,12 +63,10 @@ export default function BattleScreen() {
     const randomMoveIndex = Math.floor(Math.random() * enemyMoves.length);
     const selectedMove = enemyMoves[randomMoveIndex];
 
-    const damageDealt = Math.floor(selectedMove.power * (Math.random() + 0.5));
+    setBattleLog((prevLog) => [...prevLog, { source: "enemy", move: "Tackle", damage: damageDealt }]);
 
-    setBattleMessage(`Enemy ${enemyPokemon.name} used ${selectedMove.name}.`);
     setPlayerHP((prevHP) => Math.max(prevHP - damageDealt, 0));
 
-    console.log(`Enemy used ${selectedMove.name}.`);
     if (playerHP <= 0) {
       setIsBattleOver(true);
     }
@@ -78,27 +76,23 @@ export default function BattleScreen() {
     if (isBattleOver) {
       return;
     }
-    setBattleMessage(`Your ${playerPokemonName} used ${move}!`);
     console.log(`Selected move: ${move}`);
     const damageDone = Math.floor(power * (Math.random() + 0.5));
     let newEnemyHP = Math.max(enemyPokemon.currentHp - damageDone, 0);
     setPlayerIsAttacking(true);
     setTimeout(() => setPlayerIsAttacking(false), 500);
 
-    setEnemyPokemon(prevEnemyPokemon => ({
+    setBattleLog((prevLog) => [...prevLog, { source: "player", move, damage: damageDone }]);
+
+    setEnemyPokemon((prevEnemyPokemon) => ({
       ...prevEnemyPokemon,
       currentHp: newEnemyHP
     }));
 
     if (newEnemyHP <= 0) {
       setIsBattleOver(true);
-      setBattleMessage("You Win!!! select rematch to continue!"); // This is the change!
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 5000);
+      setShowConfetti(true); 
       setShowVictoryMessage(true);
-      setTimeout(() => {
-        setShowVictoryMessage(false);
-      }, 2000);
     } else {
       // Delay the enemy's turn by 2 seconds so the player can read the message.
       setTimeout(() => {
@@ -116,7 +110,9 @@ export default function BattleScreen() {
     setPlayerHP(100);
     setIsBattleOver(false);
     fetchNewEnemyPokemon();
-    setBattleMessage("");
+    setBattleLog([]);
+    setShowConfetti(false);
+    setShowVictoryMessage(false);
   };
 
   return (
@@ -129,10 +125,7 @@ export default function BattleScreen() {
         <div className="player-section">
           <h2>Your Pokémon: {playerPokemonName}</h2>
           <div className="sprite-container">
-            <div className={playerIsAttacking ? "shake" : ""}>
-              <img src={playerPokemonImage} alt={`${playerPokemonName} sprite`} className="flip-image" />
-            </div>
-
+            <img src={playerPokemonImage} alt={`${playerPokemonName} sprite`} className="flip-image" />
           </div>
           <div className="hp-bar-container">
             <div className="hp-bar" style={{ width: `${(playerHP / 100) * 100}%` }}></div>
@@ -164,8 +157,23 @@ export default function BattleScreen() {
           )}
         </div>
       </div>
-      <div className="battle-message-box">
-        {battleMessage}
+      <div className="battle-log-container">
+        <h3 className="battle-log-title">Battle Log:</h3>
+        <ul className="battle-log-list">
+          {battleLog.map((entry, index) => (
+            <li
+              key={index}
+              className={`battle-log-entry ${entry.source === "player" ? "player" : "enemy"}`}
+            >
+              <span className="log-source">{entry.source === "player" ? "Player" : "Enemy"}</span>{" "}
+              <span className="log-action">used</span>{" "}
+              <span className="log-move">{entry.move}</span>{" "}
+              {entry.damage !== undefined && (
+                <span className="log-damage">and dealt {entry.damage} damage.</span>
+              )}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

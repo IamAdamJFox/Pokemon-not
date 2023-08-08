@@ -59,6 +59,9 @@ export default function Game({ selectedMoves }) {
     setIsPlayerTurn(false);
     const enemyMove = enemyMoveSelection();
     const result = attackMove(enemyMove.power, enemyMove.accuracy);
+    const enemyLogEntry = { source: "enemy", move: enemyMove.name, damage: result.damage };
+    setBattleLog((prevLog) => [...prevLog, enemyLogEntry]);
+
   
     if (result.hit) {
       setPlayerHP((prevHP) => prevHP - result.damage);
@@ -125,6 +128,8 @@ export default function Game({ selectedMoves }) {
 
   const handlePlayerMoveSelection = (event) => {
     const selectedMoveIndex = parseInt(event.key) - 1;
+    const playerLogEntry = { source: "player", move: selectedMove.name, damage: result.damage };
+    setBattleLog((prevLog) => [...prevLog, playerLogEntry]);
 
     if (isNaN(selectedMoveIndex) || selectedMoveIndex < 0 || selectedMoveIndex >= moves.length) {
       console.log("Invalid move selection. Please choose a valid move.");
@@ -180,5 +185,16 @@ export default function Game({ selectedMoves }) {
     setBattleState(BattleStates.PLAYER_TURN);
   }, []);
 
-  return null; // Using empty fragment as the correct syntax in JSX
+return(
+  <div className="battle-log">
+  <h3>Battle Log:</h3>
+  <ul>
+    {battleLog.map((entry, index) => (
+      <li key={index}>
+        {entry.source === "player" ? "Player" : "Enemy"} used {entry.move} and dealt {entry.damage} damage.
+      </li>
+    ))}
+  </ul>
+</div>
+)
 }
