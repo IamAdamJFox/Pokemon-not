@@ -102,38 +102,38 @@ export default function BattleScreen() {
     <div>
       {showVictoryMessage && <div className="victory-message">VICTORY!</div>}
       {showConfetti && <ReactConfetti width={window.innerWidth} height={window.innerHeight} />}
-      <h1>Battle Screen</h1>
+      <h1 className="battle-header">FIGHT</h1>
 
-      <div className="player-section">
-        <h2>Your Pokémon: {playerPokemonName}</h2>
-        <div className="sprite-container">
-          <img src={playerPokemonImage} alt={`${playerPokemonName} sprite`} />
+      <div className="battle-arena">
+        <div className="player-section">
+          <h2>Your Pokémon: {playerPokemonName}</h2>
+          <div className="sprite-container">
+            <img src={playerPokemonImage} alt={`${playerPokemonName} sprite`} />
+          </div>
+          <p>HP: {playerHP}</p>
+          <h3>Selected Moves:</h3>
+          <ul>
+            {selectedMoves.map((move, index) => (
+              <button key={index} onClick={() => handleMoveClick(move, movePower[index])}>
+                {move}
+              </button>
+            ))}
+          </ul>
         </div>
-        <p>HP: {playerHP}</p>
-        <h3>Selected Moves:</h3>
-        <ul>
-          {selectedMoves.map((move, index) => (
-            <button key={index} onClick={() => handleMoveClick(move, movePower[index])}>
-              {move}
-            </button>
-          ))}
-        </ul>
-      </div>
 
-      <div className="enemy-section">
-        <h2>Enemy Pokémon: {enemyPokemon.name}</h2>
-        <div className="sprite-container">
-          <img src={enemyPokemon.sprite} alt={`${enemyPokemon.name} sprite`} />
+        <div className="enemy-section">
+          <h2>Enemy Pokémon: {enemyPokemon.name}</h2>
+          <div className="enemy-sprite-container">
+            <img src={enemyPokemon.sprite} alt={`${enemyPokemon.name} sprite`} />
+          </div>
+          <p>HP: {enemyPokemon.hp}</p>
+          {isBattleOver && (
+            <button onClick={handleRedoBattle}>Redo Battle</button>
+          )}
         </div>
-        <p>HP: {enemyPokemon.hp}</p>
-        {isBattleOver && (
-          <button onClick={handleRedoBattle}>Redo Battle</button>
-        )}
       </div>
     </div>
   );
 }
-
-
 
 

@@ -37,7 +37,6 @@
   border-radius: 5px;
   margin: 10px 0; /* Adjusted margin to 10px top and bottom, 0 on the sides */
   width: 100%; /* Make inputs take up full width */
-  font-family: Pokemon Solid, sans-serif; /* Apply custom font */
 }
 /* loginForm.css */
 .login-container {
