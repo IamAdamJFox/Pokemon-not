@@ -153,3 +153,7 @@
     opacity: 0;
   }
 }
+
+.flip-image {
+  transform: scaleX(-1);
+}

@@ -108,7 +108,7 @@ export default function BattleScreen() {
         <div className="player-section">
           <h2>Your Pokémon: {playerPokemonName}</h2>
           <div className="sprite-container">
-            <img src={playerPokemonImage} alt={`${playerPokemonName} sprite`} />
+          <img src={playerPokemonImage} alt={`${playerPokemonName} sprite`} className="flip-image" />
           </div>
           <p>HP: {playerHP}</p>
           <h3>Selected Moves:</h3>
