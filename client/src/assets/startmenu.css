@@ -33,7 +33,7 @@
 }
 
 .pokemon-container.selected {
-  transform: translateY(-10em) !important; /* Apply hover effect for selected Pokemon */
+  transform: translateY(-5em) !important; /* Apply hover effect for selected Pokemon */
 }
 .startBtn {
   display: flex;
