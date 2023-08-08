@@ -182,27 +182,3 @@ export default function Game({ selectedMoves }) {
 
   return null; // Using empty fragment as the correct syntax in JSX
 }
-
-
-
-
-       
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  

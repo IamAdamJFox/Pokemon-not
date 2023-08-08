@@ -1,4 +1,13 @@
 /* Reset default styles */
+
+@font-face {
+  font-family: 'Pokemon Solid';
+  src: url('./font/PocketMonk-15ze.ttf'); 
+}
+@font-face{
+  font-family: 'Pixel Pokemon';
+  src: url('./font/PokemonGb-RAeo.ttf');
+}
 html, body {
   margin: 0;
   padding: 0;
@@ -10,8 +19,8 @@ body {
   background-size: cover;
 }
 .move-header{
-  font-family: 'Pokemon Solid';
-    font-size:10em;
+  font-family: 'Pixel Pokemon';
+    font-size:8em;
     color: #ffcb05;
     text-shadow:
       -1px -1px 0 #000,

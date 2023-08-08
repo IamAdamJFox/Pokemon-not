@@ -5,15 +5,16 @@ import { useQuery, useMutation } from '@apollo/client';
 import { GET_POKEMONS_BY_IDS } from '../utils/queries';
 import { SAVE_POKEMON } from '../utils/mutations';
 import '../assets/startmenu.css';
+import Auth from '../utils/auth';
 
 
 export default function StartMenu() {
-  const { pokemonId } = useParams(); 
+  const { pokemonId } = useParams();
   const [selectedPokemon, setSelectedPokemon] = useState(null);
   const navigate = useNavigate();
 
   const { loading, error, data } = useQuery(GET_POKEMONS_BY_IDS, {
-    variables: { ids: [1, 4, 7, 25] },
+    variables: { ids: [1, 4, 7, 25, 133] },
   });
 
   console.log("data in StartMenu: ", data);
@@ -21,7 +22,7 @@ export default function StartMenu() {
   const [savePokemon] = useMutation(SAVE_POKEMON);
 
   const handlePokemonSelect = (pokemon) => {
-    const { __typename, ...rest } = pokemon; 
+    const { __typename, ...rest } = pokemon;
     setSelectedPokemon({
       ...rest,
       pokemonId: rest.number,
@@ -30,16 +31,19 @@ export default function StartMenu() {
   };
   const handlePokemonSubmit = async () => {
     if (selectedPokemon) {
-      console.log("Navigating to MoveList with Pokemon ID:", selectedPokemon.number);
+      // Check if the user is authenticated first
+      if (Auth.loggedIn()) {
+        console.log("Navigating to MoveList with Pokemon ID:", selectedPokemon.number);
   
-      try {
-        await savePokemon({ variables: { input: { ...selectedPokemon } } });
-        // After saving, navigate to the MoveList page with the selected Pokemon's id as parameter
-        // navigate(`/moveList/${selectedPokemon.number}`);
-        // for future debugging
-
-      } catch (error) {
-        console.error("Error saving Pokemon:", error);
+        try {
+          await savePokemon({ variables: { input: { ...selectedPokemon } } });
+          navigate(`/MoveList/${selectedPokemon.number}`);
+        } catch (error) {
+          console.error("Error saving Pokemon:", error);
+        }
+      } else {
+        console.log("User is not logged in. Redirecting to login.");
+        navigate("/login");
       }
     }
   };
@@ -51,10 +55,10 @@ export default function StartMenu() {
   if (error) {
     return <div>Error fetching Pokémon list: {error.message}</div>;
   }
-  
+
   const pokemonList = data.getPokemonsByIds;
 
-  
+
   return (
     <div>
       <div className="startHeader">
@@ -67,7 +71,7 @@ export default function StartMenu() {
         {pokemonList.map((pokemon) => (
           <div
             key={pokemon.id}
-            className={`pokemon-container ${selectedPokemon === pokemon ? "selected" : ""}`}
+            className={`pokemon-container ${selectedPokemon?.number === pokemon.number? "selected" : ""}`}
             onClick={() => handlePokemonSelect(pokemon)}
           >
             <img src={pokemon.image} alt={pokemon.name} className="pokemon-sprite" />
@@ -75,11 +79,9 @@ export default function StartMenu() {
         ))}
       </ul>
       <div className="startBtn">
-        <Link to={selectedPokemon ? `/MoveList/${selectedPokemon.number}` : "#"}>
-          <button onClick={handlePokemonSubmit} disabled={!selectedPokemon}>
-            Start
-          </button>
-        </Link>
+        <button onClick={handlePokemonSubmit} disabled={!selectedPokemon}>
+          Start
+        </button>
       </div>
     </div>
   );

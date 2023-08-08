@@ -1,31 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import Game from "../components/Game"; // Import the Game component here
 import "../assets/BattleScreen.css";
+import ReactConfetti from "react-confetti";
 
-const  movePower = [40,60,80,100];
+const movePower = [20,30,40,50];
 
 export default function BattleScreen() {
   const location = useLocation();
   const { selectedMoves, selectedPokemon } = location.state;
   const playerPokemonImage = selectedPokemon?.sprite;
   const playerPokemonName = selectedPokemon?.name;
-
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [showVictoryMessage, setShowVictoryMessage] = useState(false);
+  const [playerHP, setPlayerHP] = useState(100);
   const [enemyPokemon, setEnemyPokemon] = useState({
     name: "Loading...",
     hp: 100,
-    sprite: "URL_to_enemy_sprite_here", // Placeholder until data is fetched
+    sprite: "URL_to_enemy_sprite_here",
   });
 
-  //adding a state to track battle status 
   const [isBattleOver, setIsBattleOver] = useState(false);
 
   const getRandomPokemonId = () => {
-    return Math.floor(Math.random() * 898) + 1; // Assuming the range is 1 to 898.
+    return Math.floor(Math.random() * 898) + 1;
   };
 
-  useEffect(() => {
-    // Fetch random pokemon for enemy pokemon
+  const fetchNewEnemyPokemon = () => {
     fetch(`https://pokeapi.co/api/v2/pokemon/${getRandomPokemonId()}`)
       .then((response) => response.json())
       .then((data) => {
@@ -38,78 +38,102 @@ export default function BattleScreen() {
       .catch((error) => {
         console.error("Error fetching the Pokémon data:", error);
       });
+  };
+
+  useEffect(() => {
+    fetchNewEnemyPokemon();
   }, []);
 
-  const handleMoveClick = (move,power) => {
+  const executeEnemyTurn = () => {
+    const enemyMovePower = 30;
+    const damageDealt = Math.floor(enemyMovePower * (Math.random() + 0.5));
+
+    setPlayerHP((prevHP) => Math.max(prevHP - damageDealt, 0));
+
+    console.log(`Enemy used Tackle. ${damageDealt} damage.`);
+    if (playerHP <= 0) {
+      setIsBattleOver(true);
+    }
+  };
+
+  const handleMoveClick = (move, power) => {
     if (isBattleOver) {
       return;
     }
-    // Implement the logic to trigger the player's move here
     console.log(`Selected move: ${move}`);
-    console.log(`damage done: ${power}`);
-
     const damageDone = Math.floor(power * (Math.random() + 0.5));
-    console.log(`damage done: ${damageDone}`);
-    setEnemyPokemon((prevEnemyPokemon) => ({
-    ...prevEnemyPokemon,
-    hp: Math.max(prevEnemyPokemon.hp - damageDone, 0),
-  }));
-  if (enemyPokemon.hp <= 0) {
-    setIsBattleOver(true);
-  };
+    let newEnemyHP = Math.max(enemyPokemon.hp - damageDone, 0); // Compute the new HP value here
+
+    setEnemyPokemon(prevEnemyPokemon => ({
+      ...prevEnemyPokemon,
+      hp: newEnemyHP
+    }));
+
+    if (newEnemyHP <= 0) {
+      setIsBattleOver(true);
+
+      // Trigger confetti
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 5000); // hide confetti after 5 seconds
+
+      // Show victory message
+      setShowVictoryMessage(true);
+      setTimeout(() => {
+        setShowVictoryMessage(false);
+      }, 2000);  // The victory message will be displayed for 2 seconds.
+
+    } else {
+      executeEnemyTurn();
+    }
   };
 
-  //adding a redo 
   const handleRedoBattle = () => {
-    //here were resetting the enemy pokemon
     setEnemyPokemon({
       name: "Loading...",
       hp: 100,
-      sprite: "URL_to_enemy_sprite_here", // Placeholder until data is fetched
+      sprite: "URL_to_enemy_sprite_here",
     });
-    //here were resetting the battle status
+    setPlayerHP(100);
     setIsBattleOver(false);
+    fetchNewEnemyPokemon();
   };
 
   return (
     <div>
-      <h1>Battle Screen</h1>
+      {showVictoryMessage && <div className="victory-message">VICTORY!</div>}
+      {showConfetti && <ReactConfetti width={window.innerWidth} height={window.innerHeight} />}
+      <h1 className="battle-header">FIGHT</h1>
 
-      <div className="player-section">
-        <h2>Your Pokémon: {playerPokemonName}</h2>
-        <div className="sprite-container">
-          <img src={playerPokemonImage} alt={`${playerPokemonName} sprite`} />
+      <div className="battle-arena">
+        <div className="player-section">
+          <h2>Your Pokémon: {playerPokemonName}</h2>
+          <div className="sprite-container">
+          <img src={playerPokemonImage} alt={`${playerPokemonName} sprite`} className="flip-image" />
+          </div>
+          <p>HP: {playerHP}</p>
+          <h3>Selected Moves:</h3>
+          <ul>
+            {selectedMoves.map((move, index) => (
+              <button key={index} onClick={() => handleMoveClick(move, movePower[index])}>
+                {move}
+              </button>
+            ))}
+          </ul>
         </div>
-        {/* <p>HP: {selectedPokemon?.hp}</p> Assuming selectedPokemon has an hp property */}
-        {/* will need to import moves from attack screen */}
-        <p>HP: 100</p>
-        {/* ... rest of player section ... */}
-        <h3>Selected Moves:</h3>
-        <ul>
-          {selectedMoves.map((move, index) => (
-            <button key={index} onClick={() => handleMoveClick(move, movePower[index])}>
-              {move}
-            </button>
-          ))}
-        </ul>
-      </div>
 
-      <div className="enemy-section">
-        <h2>Enemy Pokémon: {enemyPokemon.name}</h2>
-        <div className="sprite-container">
-          <img src={enemyPokemon.sprite} alt={`${enemyPokemon.name} sprite`} />
+        <div className="enemy-section">
+          <h2>Enemy Pokémon: {enemyPokemon.name}</h2>
+          <div className="enemy-sprite-container">
+            <img src={enemyPokemon.sprite} alt={`${enemyPokemon.name} sprite`} />
+          </div>
+          <p>HP: {enemyPokemon.hp}</p>
+          {isBattleOver && (
+            <button onClick={handleRedoBattle}>Redo Battle</button>
+          )}
         </div>
-        <p>HP: {enemyPokemon.hp}</p>
-        {/* ... rest of enemy section ... */}
-        {isBattleOver && (
-          <button onClick={handleRedoBattle}>Redo Battle</button>
-        )}
       </div>
     </div>
   );
 }
-
-       
-
 
 

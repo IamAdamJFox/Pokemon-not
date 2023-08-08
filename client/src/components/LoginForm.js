@@ -4,7 +4,9 @@ import { Form, Button, Alert, Container, Row, Col } from "react-bootstrap";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../utils/mutations";
 import Auth from "../utils/auth";
-import "../assets/loginForm.css";
+import "../assets/loginForm.css"; // Your original CSS file
+
+import pokemonBackground from "../assets/images/pokemonbackground.webp"; // Replace with actual path
 
 const Login = () => {
   const [userFormData, setUserFormData] = useState({ email: "", password: "" });
@@ -44,66 +46,70 @@ const Login = () => {
   };
 
   return (
-    <Container fluid className="h-100 d-flex justify-content-center align-items-center">
-      <Row className="justify-content-center">
-        <Col xs={12} md={6} lg={4}>
-          <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
-            <Alert
-              dismissible
-              onClose={() => setShowAlert(false)}
-              show={showAlert}
-              variant="danger"
-            >
-              Something went wrong with your login credentials!
-            </Alert>
-            <Form.Group className="mb-3">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Your email"
-                name="email"
-                onChange={handleInputChange}
-                value={userFormData.email}
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                Email is required!
-              </Form.Control.Feedback>
-            </Form.Group>
+    <div
+      className="login-container"
+      style={{ backgroundImage: `url(${pokemonBackground})` }}
+    >
+      <Container>
+        <Row className="justify-content-center">
+          <Col xs={12} md={8} lg={6} className="pokemon-form">
+            <h2 className="mb-4 pokemon-label">Pokémon Trainer Login</h2>
+            <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
+              <Alert
+                dismissible
+                onClose={() => setShowAlert(false)}
+                show={showAlert}
+                variant="danger"
+                className="pokemon-alert"
+              >
+                Something went wrong with your login credentials!
+              </Alert>
+              <Form.Group className="mb-3">
+                <Form.Label className="pokemon-label">Email</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Your email"
+                  name="email"
+                  onChange={handleInputChange}
+                  value={userFormData.email}
+                  required
+                  className="pokemon-input"
+                />
+              </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Your password"
-                name="password"
-                onChange={handleInputChange}
-                value={userFormData.password}
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                Password is required!
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Button
-              type="submit"
-              variant="success"
-              disabled={loading || !(userFormData.email && userFormData.password)}
-            >
-              {loading ? "Logging in..." : "Submit"}
-            </Button>
-            <Button
-              as={Link}
-              to="/signup"
-              variant="outline-primary"
-              className="ml-2"
-            >
-              Sign Up
-            </Button>
-          </Form>
-        </Col>
-      </Row>
-    </Container>
+              <Form.Group className="mb-3">
+                <Form.Label className="pokemon-label">Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Your password"
+                  name="password"
+                  onChange={handleInputChange}
+                  value={userFormData.password}
+                  required
+                  className="pokemon-input"
+                />
+
+              </Form.Group>
+              <Button
+                type="submit"
+                variant="warning"
+                disabled={loading || !(userFormData.email && userFormData.password)}
+                className="pokemon-button"
+              >
+                {loading ? "Logging in..." : "Log In"}
+              </Button>
+
+            </Form>
+            <p className="mt-3">
+              Don't have an account?{" "}
+              <Link to="/signup" className="pokemon-signup-link">
+                Sign Up
+              </Link>
+            </p>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 

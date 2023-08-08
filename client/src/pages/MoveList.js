@@ -42,13 +42,17 @@ export default function MoveList() {
   const selectedPokemon = dataPokemon.getPokemonById;
 
   return (
+    // this is the div that contains the entire page
     <div className="center-container">
-      <h1 className="move-header">Pokemon Not</h1>
-      <h2>Choose 4 Moves</h2>
+      {/* <h1 className="move-header">Pokemon Not</h1> */}
+      <h2 className='move-header'>Choose 4 Moves</h2>
+      {/* this is a div that contains our selected pokemon */}
       <div className="selected-pokemon">
+        {/* making the first letter captial */}
         <h2>{selectedPokemon.name.charAt(0).toUpperCase() + selectedPokemon.name.slice(1)}</h2>
         <img src={selectedPokemon.image} alt={selectedPokemon.name} />
       </div>
+      {/* this is a div that contains our move list */}
       <div className="move-list-container">
         <div className="moves-wrapper">
           <div className="moves-container-header">
@@ -105,11 +109,11 @@ export default function MoveList() {
             }}
             disabled={selectedMoves.length !== 4}
           >
-            Attack
+            View Pokemon
           </button>
         ) : (
           <button className="button attack-button-disabled" disabled>
-            Attack
+            View Pokemon
           </button>
         )}
       </div>
