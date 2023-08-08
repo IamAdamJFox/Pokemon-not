@@ -5,10 +5,10 @@ import MoveList from "./pages/MoveList";
 import Login from "./components/LoginForm";
 import SignupForm from "./components/signup";
 import Attack from "./pages/Attack";
-//*TESTING* adding BattlePage.js//
 import Battle from "./pages/BattleScreen";
 import PokemonDetails from './components/PokemonDetails';
 import Auth from "./utils/auth";
+import LoginLogoutButton from "./components/LoginLogoutButton"; 
 
 const App = () => {
   const isUserAuthenticated = Auth.loggedIn();
@@ -17,6 +17,7 @@ const App = () => {
     <BrowserRouter>
       <header>
         <Link to="/">HOME</Link>
+        <LoginLogoutButton />
       </header>
       <Routes>
         <Route path="/" element={<StartMenu />} />
