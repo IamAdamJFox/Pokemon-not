@@ -51,37 +51,42 @@ export default function BattleScreen() {
   }, []);
 
   const executeEnemyTurn = () => {
+    setEnemyIsAttacking(true);
+
     const enemyMoves = [
       { name: "Tackle", power: 30 },
       { name: "Quick Attack", power: 40 },
       { name: "Slam", power: 50 },
       { name: "Hyper Beam", power: 60 }
     ];
-    setEnemyIsAttacking(true);
-    setTimeout(() => setEnemyIsAttacking(false), 500);
+
     // Randomly select a move for the enemy
     const randomMoveIndex = Math.floor(Math.random() * enemyMoves.length);
     const selectedMove = enemyMoves[randomMoveIndex];
     const damageDone = Math.floor(selectedMove.power * (Math.random() + 0.5));
 
-    setBattleLog((prevLog) => [...prevLog, { source: "enemy", move: "Tackle", damage: damageDone }]);
+    setBattleLog((prevLog) => [...prevLog, { source: "enemy", move: selectedMove.name, damage: damageDone }]);
 
     setPlayerHP((prevHP) => Math.max(prevHP - damageDone, 0));
 
-    if (playerHP <= 0) {
-      setIsBattleOver(true);
-    }
-  };
+    setTimeout(() => {
+        setEnemyIsAttacking(false);
+        
+        if (playerHP <= 0) {
+          setIsBattleOver(true);
+        }
+    }, 100);
+};
 
   const handleMoveClick = (move, power) => {
-    if (isBattleOver) {
+    // If the battle is over, the enemy is currently attacking, or the player is attacking, just return.
+    if (isBattleOver || enemyIsAttacking || playerIsAttacking) {
       return;
     }
-    console.log(`Selected move: ${move}`);
+
+    setPlayerIsAttacking(true);
     const damageDone = Math.floor(power * (Math.random() + 0.5));
     let newEnemyHP = Math.max(enemyPokemon.currentHp - damageDone, 0);
-    setPlayerIsAttacking(true);
-    setTimeout(() => setPlayerIsAttacking(false), 500);
 
     setBattleLog((prevLog) => [...prevLog, { source: "player", move, damage: damageDone }]);
 
@@ -90,17 +95,22 @@ export default function BattleScreen() {
       currentHp: newEnemyHP
     }));
 
-    if (newEnemyHP <= 0) {
-      setIsBattleOver(true);
-      setShowConfetti(true); 
-      setShowVictoryMessage(true);
-    } else {
-      // Delay the enemy's turn by 2 seconds so the player can read the message.
-      setTimeout(() => {
-        executeEnemyTurn();
-      }, 2000);
-    }
-  };
+    setTimeout(() => {
+        setPlayerIsAttacking(false);
+        
+        if (newEnemyHP <= 0) {
+          setIsBattleOver(true);
+          setShowConfetti(true);
+          setShowVictoryMessage(true);
+        } else {
+          // Delay the enemy's turn by 2 seconds so the player can read the message.
+          setTimeout(() => {
+            executeEnemyTurn();
+          }, 2000);
+        }
+    }, 2000);
+};
+
 
   const handleRedoBattle = () => {
     setEnemyPokemon({
@@ -135,7 +145,8 @@ export default function BattleScreen() {
           <h3>Selected Moves:</h3>
           <ul>
             {selectedMoves.map((move, index) => (
-              <button key={index} onClick={() => handleMoveClick(move, movePower[index])}>
+              <button key={index} onClick={() => handleMoveClick(move, movePower[index])}
+                disabled={enemyIsAttacking || playerIsAttacking || isBattleOver}>
                 {move}
               </button>
             ))}
