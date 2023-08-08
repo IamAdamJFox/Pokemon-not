@@ -153,3 +153,39 @@
     opacity: 0;
   }
 }
+@media (max-width: 768px) {
+  .battle-container {
+    flex-direction: column; /* Stack items vertically */
+    align-items: center;
+    height: auto; /* Adjust height as needed */
+  }
+  
+  .battle-header {
+    font-size: 2em; /* Decrease font size */
+  }
+  
+  .battle-arena {
+    flex-direction: column; /* Stack player and enemy sections vertically */
+    align-items: center;
+  }
+  
+  .sprite-container img,
+  .enemy-sprite-container img {
+    width: 300px; /* Decrease image size */
+    height: 300px;
+  }
+  .player-section ul {
+    flex-direction: column; /* Stack buttons in a column */
+    align-items: center; /* Center buttons horizontally */
+  }
+  
+  .enemy-section ul {
+    flex-direction: column; /* Stack buttons in a column */
+    align-items: center; /* Center buttons horizontally */
+  }
+  .player-section button,
+  .enemy-section button {
+    font-size: 16px; /* Decrease button font size */
+    padding: 0.3em 0.8em; /* Adjust button padding */
+  }
+}
