@@ -14,10 +14,14 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <button onClick={() => window.location.href = "/"} className="home-btn">HOME</button>
+    <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <button onClick={() => window.location.href = "/"} className="home-btn">HOME</button>
+    {Auth.loggedIn() ? (
         <button onClick={() => Auth.logout()} className="logout-btn">LOGOUT</button>
-      </header>
+    ) : (
+        <button onClick={() => Auth.login()} className="login-btn">LOGIN</button>
+    )}
+</header>
       <Routes>
         <Route path="/" element={<StartMenu />} />
 
