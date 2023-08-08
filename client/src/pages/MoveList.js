@@ -109,11 +109,11 @@ export default function MoveList() {
             }}
             disabled={selectedMoves.length !== 4}
           >
-            Attack
+            View Pokemon
           </button>
         ) : (
           <button className="button attack-button-disabled" disabled>
-            Attack
+            View Pokemon
           </button>
         )}
       </div>

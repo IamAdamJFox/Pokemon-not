@@ -39,6 +39,7 @@ export default function Attack() {
       }
     });
   };
+
   
   return (
     <div className="attack-container">
@@ -49,7 +50,7 @@ export default function Attack() {
       <h2 className="displayed-moves-container">Selected Moves:</h2>
       <ul className="displayed-moves-list">
         {selectedMoves.map((move, index) => (
-          <li key={index} className="displayed-move">{move}</li>
+          <div key={index} className="displayed-move">{move}</div>
         ))}
       </ul>
       <div className="attack-button-container">
