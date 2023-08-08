@@ -153,6 +153,10 @@
     opacity: 0;
   }
 }
+
+.flip-image {
+  transform: scaleX(-1);
+
 @media (max-width: 768px) {
   .battle-container {
     flex-direction: column; /* Stack items vertically */
