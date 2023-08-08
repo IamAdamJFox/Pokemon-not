@@ -19,15 +19,18 @@ const App = () => {
         <Link to="/">HOME</Link>
       </header>
       <Routes>
-        <Route path="/" element={isUserAuthenticated ? <StartMenu /> : <Navigate to="/login" />} />
-        {isUserAuthenticated && (
-          <>
-            <Route path="/MoveList/:pokemonId" element={<MoveList />} />
-            <Route path="/Attack" element={<Attack />} />
-            <Route path="/pokemon/:id" element={<PokemonDetails />} />
-            <Route path="/Battle" element={<Battle/>} />
-          </>
-        )}
+        <Route path="/" element={<StartMenu />} />
+
+        <>
+          <Route path="/" element={<StartMenu />} />
+          <Route path="/MoveList/:pokemonId" element={<MoveList />} />
+          <Route path="/Attack" element={<Attack />} />
+          <Route path="/pokemon/:id" element={<PokemonDetails />} />
+          <Route path="/Battle" element={<Battle />} />
+          <Route path="/login" element={isUserAuthenticated ? <Navigate to="/" /> : <Login />} />
+          <Route path="/signup" element={isUserAuthenticated ? <Navigate to="/" /> : <SignupForm />} />
+        </>
+
         <Route path="/login" element={isUserAuthenticated ? <Navigate to="/" /> : <Login />} />
         <Route path="/signup" element={isUserAuthenticated ? <Navigate to="/" /> : <SignupForm />} />
       </Routes>
