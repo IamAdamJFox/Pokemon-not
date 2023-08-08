@@ -17,6 +17,19 @@ export default function BattleScreen() {
   const [playerIsAttacking, setPlayerIsAttacking] = useState(false);
   const [enemyIsAttacking, setEnemyIsAttacking] = useState(false);
 
+  const getHpBarColor = (currentHp, originalHp) => {
+    const percentage = (currentHp / originalHp) * 100;
+
+    if (percentage >= 50) {
+      return "green";
+    } else if (percentage >= 25) {
+      return "yellow";
+    } else {
+      return "red";
+    }
+  };
+
+
   const [enemyPokemon, setEnemyPokemon] = useState({
     name: "Loading...",
     currentHp: 100,
@@ -92,7 +105,7 @@ export default function BattleScreen() {
 
     if (newEnemyHP <= 0) {
       setIsBattleOver(true);
-      setShowConfetti(true); 
+      setShowConfetti(true);
       setShowVictoryMessage(true);
     } else {
       // Delay the enemy's turn by 2 seconds so the player can read the message.
@@ -115,6 +128,8 @@ export default function BattleScreen() {
     setShowConfetti(false);
     setShowVictoryMessage(false);
   };
+  const playerHpColor = getHpBarColor(playerHP, 100);
+  const enemyHpColor = getHpBarColor(enemyPokemon.currentHp, enemyPokemon.originalHp);
 
   return (
     <div>
@@ -125,11 +140,11 @@ export default function BattleScreen() {
       <div className="battle-arena">
         <div className="player-section">
           <h2>Your Pokémon: {playerPokemonName}</h2>
-          <div className="sprite-container">
+          <div className={`sprite-container ${playerIsAttacking ? "shake" : ""}`}>
             <img src={playerPokemonImage} alt={`${playerPokemonName} sprite`} className="flip-image" />
           </div>
           <div className="hp-bar-container">
-            <div className="hp-bar" style={{ width: `${(playerHP / 100) * 100}%` }}></div>
+            <div className={`hp-bar ${playerHpColor}`} style={{ width: `${(playerHP / 100) * 100}%` }}></div>
             <span className="hp-text">{playerHP}</span>
           </div>
           <h3>Selected Moves:</h3>
@@ -150,7 +165,7 @@ export default function BattleScreen() {
             </div>
           </div>
           <div className="hp-bar-container">
-            <div className="hp-bar" style={{ width: `${(enemyPokemon.currentHp / enemyPokemon.originalHp) * 100}%` }}></div>
+            <div className={`hp-bar ${enemyHpColor}`} style={{ width: `${(enemyPokemon.currentHp / enemyPokemon.originalHp) * 100}%` }}></div>
             <span className="hp-text">{enemyPokemon.currentHp}</span>
           </div>
           {isBattleOver && (
