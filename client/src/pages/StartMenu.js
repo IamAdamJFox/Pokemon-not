@@ -71,7 +71,7 @@ export default function StartMenu() {
         {pokemonList.map((pokemon) => (
           <div
             key={pokemon.id}
-            className={`pokemon-container ${selectedPokemon.number === pokemon.number? "selected" : ""}`}
+            className={`pokemon-container ${selectedPokemon?.number === pokemon.number? "selected" : ""}`}
             onClick={() => handlePokemonSelect(pokemon)}
           >
             <img src={pokemon.image} alt={pokemon.name} className="pokemon-sprite" />
