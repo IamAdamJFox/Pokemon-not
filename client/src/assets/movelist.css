@@ -90,6 +90,9 @@ body {
 }
 
 /* Button styles */
+.selected-moves-container button{
+  background: linear-gradient(to bottom, #db3131, #611b1b) !important;
+}
 .selected-moves-container button,
 .moves-container button{
   cursor: pointer;
