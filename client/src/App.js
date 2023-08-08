@@ -5,7 +5,6 @@ import MoveList from "./pages/MoveList";
 import Login from "./components/LoginForm";
 import SignupForm from "./components/signup";
 import Attack from "./pages/Attack";
-//*TESTING* adding BattlePage.js//
 import Battle from "./pages/BattleScreen";
 import PokemonDetails from './components/PokemonDetails';
 import Auth from "./utils/auth";
