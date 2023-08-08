@@ -4,6 +4,7 @@
 
 - [Desription](#description)
 - [Contributers](#contributers)
+- [Challenges](#challenges)
 - [Future Implemantation](#future-implemantation)
 - [Resources](#Resources)
 - [Links](#links)
@@ -12,9 +13,18 @@
 
 Hello! welcome to Pokemon Not a simple fun project to have a pokemon battle with
 
-- Once you have signed in please select a pokemon
+- To start please select your pokemon
 
 ![Alt Text](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExY2Y1YWV5NzZsa2Uya2t1YzY2NjRmY20xODRnZmFpM2lvZmVuenhsOSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/SsP4yrYfIu19kYQvkV/giphy.gif)
+
+- After Logging in Signing up select your moves from the move pool
+
+![Alt Text](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeTFocGp1ZHlzbTM1NmlxcWd2aHI0a2JlamkxbGttYWpvN2RmMjV1cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/dhf0RQ2xoOwbjw6BrA/giphy-downsized-large.gif)
+
+- Once Satisfied now FIGHT!
+
+![Alt Text](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdzVpa3MwdXUwd2tuZmswbWxsY21teDI1eHh4bXlhZW8yeHQ4a3B0dCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aQy0bLKrmXoNUJEScu/giphy-downsized-large.gif)
+
 
 - [Live-Application](https://pokemon-not-bda447895737.herokuapp.com/)
 
@@ -24,6 +34,14 @@ Hello! welcome to Pokemon Not a simple fun project to have a pokemon battle with
 - [ShannonHogeboom](https://github.com/SilverFae)
 - [Hieu Trans](https://github.com/TheColorHieu)
 - [David Flores](https://github.com/GGDave)
+
+## Challenges
+
+This project had a few challenges for us to work through
+
+- Transferring API data along from front end through back end
+- Developing proper game logic
+- Working with react, when this was developed it was still new to us
 
 
 ## Future Implemantation
