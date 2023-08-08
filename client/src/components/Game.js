@@ -36,23 +36,27 @@ export default function Game({ selectedMoves }) {
     }
   };
 
-  const enemyAttack = () => {
+  const enemyTurn = async () => {
+    // Simulate thinking time for the bot
+    console.log("Enemy is thinking...");
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 seconds delay
+  
     const enemyMove = moves[Math.floor(Math.random() * moves.length)];
     const result = attackMove(enemyMove.power, enemyMove.accuracy);
-
+  
     if (result.hit) {
       setPlayerHP((prevHP) => prevHP - result.damage);
     }
-
+  
     console.log(`Enemy used ${enemyMove.name}.`);
     if (result.hit) {
       console.log(`It hit you for ${result.damage} damage.`);
     } else {
       console.log("But it missed!");
     }
-
+  
     console.log(`Player HP: ${playerHP}, Enemy HP: ${enemyHP}`);
-
+  
     const winner = checkWinner();
     if (winner) {
       console.log(winner);
@@ -61,17 +65,6 @@ export default function Game({ selectedMoves }) {
       // After the enemy's turn, set the turn to "player" for the next iteration
       setTurn("player");
     }
-  };
-
-  const checkWinner = () => {
-    if (playerHP <= 0 && enemyHP <= 0) {
-      return "It's a tie!";
-    } else if (playerHP <= 0) {
-      return "Defeat!";
-    } else if (enemyHP <= 0) {
-      return "Victory!";
-    }
-    return null;
   };
 
   const handleGameOver = () => {
@@ -106,6 +99,13 @@ export default function Game({ selectedMoves }) {
     // Listen for the player's input
     document.addEventListener("keypress", handlePlayerMoveSelection);
   };
+
+  
+  const enemyAttackBack = () => {
+    setTimeout(() => {
+      enemyTurn();
+  }, 1000); // 1 second delay before enemy attacks back
+};
 
   const handlePlayerMoveSelection = (event) => {
     const selectedMoveIndex = parseInt(event.key) - 1;
@@ -142,12 +142,19 @@ export default function Game({ selectedMoves }) {
   };
 
   useEffect(() => {
-    if (battleState === BattleStates.PLAYER_TURN) {
-      // Player's turn
-      playerTurn();
-    } else if (battleState === BattleStates.ENEMY_TURN) {
-      // Enemy's turn
-      enemyTurn();
+    const handleBattleTurn = async () => {
+      if (battleState === BattleStates.PLAYER_TURN) {
+        // Player's turn
+        playerTurn();
+      } else if (battleState === BattleStates.ENEMY_TURN) {
+        // Enemy's turn
+        await enemyTurn();
+        setBattleState(BattleStates.PLAYER_TURN); // Switch back to player's turn after the enemy's move
+      }
+    };
+  
+    if (battleState !== BattleStates.END) {
+      handleBattleTurn();
     }
   }, [battleState]);
 
