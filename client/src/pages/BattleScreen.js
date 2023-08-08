@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import Game from "../components/Game"; // Import the Game component here
 import "../assets/BattleScreen.css";
 
-const  movePower = [40,60,80,100];
+const movePower = [40, 60, 80, 100];
 
 export default function BattleScreen() {
   const location = useLocation();
@@ -11,21 +10,21 @@ export default function BattleScreen() {
   const playerPokemonImage = selectedPokemon?.sprite;
   const playerPokemonName = selectedPokemon?.name;
 
+  const [playerHP, setPlayerHP] = useState(100);
   const [enemyPokemon, setEnemyPokemon] = useState({
     name: "Loading...",
     hp: 100,
-    sprite: "URL_to_enemy_sprite_here", // Placeholder until data is fetched
+    sprite: "URL_to_enemy_sprite_here",
   });
 
-  //adding a state to track battle status 
+  // adding a state to track battle status 
   const [isBattleOver, setIsBattleOver] = useState(false);
 
   const getRandomPokemonId = () => {
-    return Math.floor(Math.random() * 898) + 1; // Assuming the range is 1 to 898.
+    return Math.floor(Math.random() * 898) + 1;
   };
 
   useEffect(() => {
-    // Fetch random pokemon for enemy pokemon
     fetch(`https://pokeapi.co/api/v2/pokemon/${getRandomPokemonId()}`)
       .then((response) => response.json())
       .then((data) => {
@@ -40,34 +39,66 @@ export default function BattleScreen() {
       });
   }, []);
 
-  const handleMoveClick = (move,power) => {
+  const executeEnemyTurn = () => {
+    const enemyMovePower = 30; // Hard-coded power for the generic move
+    const damageDealt = Math.floor(enemyMovePower * (Math.random() + 0.5));
+    
+    setPlayerHP((prevHP) => Math.max(prevHP - damageDealt, 0));
+  
+    console.log(`Enemy used Tackle ${damageDealt} damage.`);
+    if (playerHP <= 0) {
+      setIsBattleOver(true);
+    }
+  };
+  // const executeEnemyTurn = () => {
+  //   const moves = [
+  //     { name: "Move 1", power: 20, accuracy: 80 },
+  //     { name: "Move 2", power: 25, accuracy: 70 },
+  //   ];
+  //   const enemyMove = moves[Math.floor(Math.random() * moves.length)];
+  //   const randomAccuracy = Math.floor(Math.random() * 100) + 1;
+  //   const attackHits = randomAccuracy <= enemyMove.accuracy;
+  //   if (attackHits) {
+  //     const damageDealt = Math.floor(enemyMove.power * (Math.random() + 0.5));
+  //     setPlayerHP((prevHP) => Math.max(prevHP - damageDealt, 0));
+  //   }
+
+  //   console.log(`Enemy used ${enemyMove.name}.`);
+  //   if (attackHits) {
+  //     console.log(`It hit you.`);
+  //   } else {
+  //     console.log("But it missed!");
+  //   }
+
+  //   if (playerHP <= 0) {
+  //     setIsBattleOver(true);
+  //   }
+  // };
+
+  const handleMoveClick = (move, power) => {
     if (isBattleOver) {
       return;
     }
-    // Implement the logic to trigger the player's move here
     console.log(`Selected move: ${move}`);
-    console.log(`damage done: ${power}`);
-
     const damageDone = Math.floor(power * (Math.random() + 0.5));
-    console.log(`damage done: ${damageDone}`);
     setEnemyPokemon((prevEnemyPokemon) => ({
-    ...prevEnemyPokemon,
-    hp: Math.max(prevEnemyPokemon.hp - damageDone, 0),
-  }));
-  if (enemyPokemon.hp <= 0) {
-    setIsBattleOver(true);
-  };
+      ...prevEnemyPokemon,
+      hp: Math.max(prevEnemyPokemon.hp - damageDone, 0),
+    }));
+    if (enemyPokemon.hp <= 0) {
+      setIsBattleOver(true);
+    } else {
+      executeEnemyTurn();
+    }
   };
 
-  //adding a redo 
   const handleRedoBattle = () => {
-    //here were resetting the enemy pokemon
     setEnemyPokemon({
       name: "Loading...",
       hp: 100,
-      sprite: "URL_to_enemy_sprite_here", // Placeholder until data is fetched
+      sprite: "URL_to_enemy_sprite_here",
     });
-    //here were resetting the battle status
+    setPlayerHP(100);
     setIsBattleOver(false);
   };
 
@@ -82,7 +113,7 @@ export default function BattleScreen() {
         </div>
         {/* <p>HP: {selectedPokemon?.hp}</p> Assuming selectedPokemon has an hp property */}
         {/* will need to import moves from attack screen */}
-        <p>HP: 100</p>
+        <p>HP: {playerHP}</p>
         {/* ... rest of player section ... */}
         <h3>Selected Moves:</h3>
         <ul>
@@ -109,7 +140,7 @@ export default function BattleScreen() {
   );
 }
 
-       
+
 
 
 
