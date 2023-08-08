@@ -1,4 +1,13 @@
 /* Reset default styles */
+
+@font-face {
+  font-family: 'Pokemon Solid';
+  src: url('./font/PocketMonk-15ze.ttf'); 
+}
+@font-face{
+  font-family: 'Pixel Pokemon';
+  src: url('./font/PokemonGb-RAeo.ttf');
+}
 html, body {
   margin: 0;
   padding: 0;

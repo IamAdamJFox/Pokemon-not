@@ -36,23 +36,43 @@ export default function Game({ selectedMoves }) {
     }
   };
 
-  const enemyAttack = () => {
-    const enemyMove = moves[Math.floor(Math.random() * moves.length)];
-    const result = attackMove(enemyMove.power, enemyMove.accuracy);
+  const calculateMovePriority = (move) => {
+    // Define move priorities based on certain conditions (e.g., move power and player's HP)
+    const priority = move.priority + (100 - playerHP) * 0.1;
+    return priority;
+  };
 
+  const [isPlayerTurn, setIsPlayerTurn] = useState(true);
+  
+  const enemyMoveSelection = () => {
+    // Calculate priorities for each move and sort them in descending order
+    const movesWithPriorities = moves.map((move) => ({ ...move, priority: calculateMovePriority(move) }));
+    movesWithPriorities.sort((a, b) => b.priority - a.priority);
+  
+    // Choose the move with the highest priority
+    const enemyMove = movesWithPriorities[0];
+    return enemyMove;
+  };
+
+  const enemyTurn = () => {
+    // Disable player input during the enemy's turn
+    setIsPlayerTurn(false);
+    const enemyMove = enemyMoveSelection();
+    const result = attackMove(enemyMove.power, enemyMove.accuracy);
+  
     if (result.hit) {
       setPlayerHP((prevHP) => prevHP - result.damage);
     }
-
+  
     console.log(`Enemy used ${enemyMove.name}.`);
     if (result.hit) {
       console.log(`It hit you for ${result.damage} damage.`);
     } else {
       console.log("But it missed!");
     }
-
+  
     console.log(`Player HP: ${playerHP}, Enemy HP: ${enemyHP}`);
-
+  
     const winner = checkWinner();
     if (winner) {
       console.log(winner);
@@ -61,17 +81,6 @@ export default function Game({ selectedMoves }) {
       // After the enemy's turn, set the turn to "player" for the next iteration
       setTurn("player");
     }
-  };
-
-  const checkWinner = () => {
-    if (playerHP <= 0 && enemyHP <= 0) {
-      return "It's a tie!";
-    } else if (playerHP <= 0) {
-      return "Defeat!";
-    } else if (enemyHP <= 0) {
-      return "Victory!";
-    }
-    return null;
   };
 
   const handleGameOver = () => {
@@ -106,6 +115,13 @@ export default function Game({ selectedMoves }) {
     // Listen for the player's input
     document.addEventListener("keypress", handlePlayerMoveSelection);
   };
+
+  
+  const enemyAttackBack = () => {
+    setTimeout(() => {
+      enemyTurn();
+  }, 1000); // 1 second delay before enemy attacks back
+};
 
   const handlePlayerMoveSelection = (event) => {
     const selectedMoveIndex = parseInt(event.key) - 1;
@@ -142,12 +158,19 @@ export default function Game({ selectedMoves }) {
   };
 
   useEffect(() => {
-    if (battleState === BattleStates.PLAYER_TURN) {
-      // Player's turn
-      playerTurn();
-    } else if (battleState === BattleStates.ENEMY_TURN) {
-      // Enemy's turn
-      enemyTurn();
+    const handleBattleTurn = async () => {
+      if (battleState === BattleStates.PLAYER_TURN) {
+        // Player's turn
+        playerTurn();
+      } else if (battleState === BattleStates.ENEMY_TURN) {
+        // Enemy's turn
+        await enemyTurn();
+        setBattleState(BattleStates.PLAYER_TURN); // Switch back to player's turn after the enemy's move
+      }
+    };
+  
+    if (battleState !== BattleStates.END) {
+      handleBattleTurn();
     }
   }, [battleState]);
 

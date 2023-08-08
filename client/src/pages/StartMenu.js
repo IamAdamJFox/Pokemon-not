@@ -13,7 +13,7 @@ export default function StartMenu() {
   const navigate = useNavigate();
 
   const { loading, error, data } = useQuery(GET_POKEMONS_BY_IDS, {
-    variables: { ids: [1, 4, 7, 25] },
+    variables: { ids: [1, 4, 7, 25, 133] },
   });
 
   console.log("data in StartMenu: ", data);
