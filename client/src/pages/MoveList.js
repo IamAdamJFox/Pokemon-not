@@ -44,8 +44,8 @@ export default function MoveList() {
   return (
     // this is the div that contains the entire page
     <div className="center-container">
-      <h1 className="move-header">Pokemon Not</h1>
-      <h2>Choose 4 Moves</h2>
+      {/* <h1 className="move-header">Pokemon Not</h1> */}
+      <h2 className='move-header'>Choose 4 Moves</h2>
       {/* this is a div that contains our selected pokemon */}
       <div className="selected-pokemon">
         {/* making the first letter captial */}
