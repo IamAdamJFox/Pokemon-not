@@ -1,100 +1,89 @@
-
 @font-face {
-  font-family: 'Pokemon Solid';
-  src: url('./font/PocketMonk-15ze.ttf'); 
+  font-family: "Pokemon Solid";
+  src: url("./font/PocketMonk-15ze.ttf");
 }
-@font-face{
-  font-family: 'Pixel Pokemon';
-  src: url('./font/PokemonGb-RAeo.ttf');
+@font-face {
+  font-family: "Pixel Pokemon";
+  src: url("./font/PokemonGb-RAeo.ttf");
 }
-.pokemon-list, .selected-pokemon {
-    display: flex;
-    justify-content: center; /* Center horizontally */
-    flex-wrap: wrap; /* Allow items to wrap to the next line */
-  }
-  
-.pokemon-container{
-    display: inline-block;
-    margin: 10px;
-    cursor: pointer;
-    transition: transform 0.3s;
-  }
-  
-  .pokemon-container img, .selected-pokemon img {
-    width: 20em;
-    height: 20em;
-  }
-  .pokemon-container:hover {
-    transform: translateY(-5px); /* Move container up slightly on hover */
-  }
-  
-  .pokemon-container img:hover {
-    opacity: .5;
-  }
- 
-  .pokemon-container.selected {
-    transform: translateY(-10em); /* Apply hover effect for selected Pokemon */
-  }
-    .startBtn{
-        display: flex;
-        justify-content: center;
-    }
-     h2{
-      font-family: pixel pokemon;
-        display: flex;
-        justify-content: center;
-        font-size: 2.5em;
-        color: #ffcb05;
-        text-shadow:
-        -1px -1px 0 #000,
-        1px -1px 0 #000,
-        -1px 1px 0 #000,
-        1px 1px 0 #000,
-        -1px -1.5px 4px #e91c1c;
-  
-    }
-    .startBtn button {
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center; /* Align text vertically within the button */
-      font-family: "pixel pokemon", sans-serif;
-      font-size: 20px;
-      color: #fdfdfd;
-      background: linear-gradient(to bottom, #db3131, #611b1b); /* Replace these colors with your desired gradient */
-      border-radius: 10px;
-      border: 2px solid #000000;
-      height: 3em;
-      width: 8em;
-      text-shadow:-1px -1px 0 #000,
-      1px -1px 0 #000,
-      -1px 1px 0 #000,
-      1px 1px 0 #000;
-      text-align: center; /* Center text horizontally within the button */
-      
-    }
+.pokemon-list,
+.selected-pokemon {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  flex-wrap: wrap; /* Allow items to wrap to the next line */
+}
 
-    
-  
-    .startBtn button:hover {
-      background: linear-gradient(to bottom, #611b1b, #db3131); /* Replace these colors with your desired hover gradient */
-    }
-    
-    .startBtn a {
-      text-decoration: none; /* Remove underline */
-      
-    }
+.pokemon-container {
+  display: inline-block;
+  margin: 10px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
 
-  
-  .startHeader {
-    font-family: 'Pokemon Solid';
-    font-size: 5.5em;
-    color: #ffcb05;
-    text-shadow:
-      -1px -1px 0 #000,
-      1px -1px 0 #000,
-      -1px 1px 0 #000,
-      1px 1px 0 #000,
-      2px 2px 4px #2a75bb, -2px -2px 4px #ff4d4d;
-    text-align: center;
-  }
+.pokemon-container img,
+.selected-pokemon img {
+  width: 20em;
+  height: 20em;
+}
+.pokemon-container:hover {
+  transform: translateY(-5em); /* Move container up slightly on hover */
+}
+.pokemon-container img:hover {
+  opacity: 0.5;
+}
+
+.pokemon-container.selected {
+  transform: translateY(-10em) !important; /* Apply hover effect for selected Pokemon */
+}
+.startBtn {
+  display: flex;
+  justify-content: center;
+}
+
+h2 {
+  font-family: pixel pokemon;
+  display: flex;
+  justify-content: center;
+  font-size: 2.5em;
+  color: #ffcb05;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000, -1px -1.5px 4px #e91c1c;
+}
+
+.startBtn button {
+  cursor: pointer;
+  display: block;
+  font-family: "pixel pokemon", sans-serif;
+  color: #fdfdfd;
+  background: linear-gradient(to bottom, #db3131, #611b1b);
+  border-radius: 10px;
+  border: 2px solid #000000;
+  font-size: 30px;
+  padding: 0.5em 1em;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+  text-align: center;
+  margin: 0.3em 0;
+  position: relative;
+}
+
+.startBtn button:hover {
+  background: linear-gradient(
+    to bottom,
+    #611b1b,
+    #db3131
+  ); /* Replace these colors with your desired hover gradient */
+}
+
+.startBtn a {
+  text-decoration: none; /* Remove underline */
+}
+
+.startHeader {
+  font-family: "Pokemon Solid";
+  font-size: 5.5em;
+  color: #ffcb05;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000, 2px 2px 4px #2a75bb, -2px -2px 4px #ff4d4d;
+  text-align: center;
+}
