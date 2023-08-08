@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "../assets/BattleScreen.css";
+import ReactConfetti from "react-confetti";
 
 const movePower = [40, 60, 80, 100];
 
@@ -9,7 +10,8 @@ export default function BattleScreen() {
   const { selectedMoves, selectedPokemon } = location.state;
   const playerPokemonImage = selectedPokemon?.sprite;
   const playerPokemonName = selectedPokemon?.name;
-
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [showVictoryMessage, setShowVictoryMessage] = useState(false);
   const [playerHP, setPlayerHP] = useState(100);
   const [enemyPokemon, setEnemyPokemon] = useState({
     name: "Loading...",
@@ -17,14 +19,13 @@ export default function BattleScreen() {
     sprite: "URL_to_enemy_sprite_here",
   });
 
-  // adding a state to track battle status 
   const [isBattleOver, setIsBattleOver] = useState(false);
 
   const getRandomPokemonId = () => {
     return Math.floor(Math.random() * 898) + 1;
   };
 
-  useEffect(() => {
+  const fetchNewEnemyPokemon = () => {
     fetch(`https://pokeapi.co/api/v2/pokemon/${getRandomPokemonId()}`)
       .then((response) => response.json())
       .then((data) => {
@@ -37,43 +38,23 @@ export default function BattleScreen() {
       .catch((error) => {
         console.error("Error fetching the Pokémon data:", error);
       });
+  };
+
+  useEffect(() => {
+    fetchNewEnemyPokemon();
   }, []);
 
   const executeEnemyTurn = () => {
-    const enemyMovePower = 30; // Hard-coded power for the generic move
+    const enemyMovePower = 30;
     const damageDealt = Math.floor(enemyMovePower * (Math.random() + 0.5));
-    
+
     setPlayerHP((prevHP) => Math.max(prevHP - damageDealt, 0));
-  
-    console.log(`Enemy used Tackle ${damageDealt} damage.`);
+
+    console.log(`Enemy used Tackle. ${damageDealt} damage.`);
     if (playerHP <= 0) {
       setIsBattleOver(true);
     }
   };
-  // const executeEnemyTurn = () => {
-  //   const moves = [
-  //     { name: "Move 1", power: 20, accuracy: 80 },
-  //     { name: "Move 2", power: 25, accuracy: 70 },
-  //   ];
-  //   const enemyMove = moves[Math.floor(Math.random() * moves.length)];
-  //   const randomAccuracy = Math.floor(Math.random() * 100) + 1;
-  //   const attackHits = randomAccuracy <= enemyMove.accuracy;
-  //   if (attackHits) {
-  //     const damageDealt = Math.floor(enemyMove.power * (Math.random() + 0.5));
-  //     setPlayerHP((prevHP) => Math.max(prevHP - damageDealt, 0));
-  //   }
-
-  //   console.log(`Enemy used ${enemyMove.name}.`);
-  //   if (attackHits) {
-  //     console.log(`It hit you.`);
-  //   } else {
-  //     console.log("But it missed!");
-  //   }
-
-  //   if (playerHP <= 0) {
-  //     setIsBattleOver(true);
-  //   }
-  // };
 
   const handleMoveClick = (move, power) => {
     if (isBattleOver) {
@@ -81,12 +62,26 @@ export default function BattleScreen() {
     }
     console.log(`Selected move: ${move}`);
     const damageDone = Math.floor(power * (Math.random() + 0.5));
-    setEnemyPokemon((prevEnemyPokemon) => ({
+    let newEnemyHP = Math.max(enemyPokemon.hp - damageDone, 0); // Compute the new HP value here
+
+    setEnemyPokemon(prevEnemyPokemon => ({
       ...prevEnemyPokemon,
-      hp: Math.max(prevEnemyPokemon.hp - damageDone, 0),
+      hp: newEnemyHP
     }));
-    if (enemyPokemon.hp <= 0) {
+
+    if (newEnemyHP <= 0) {
       setIsBattleOver(true);
+
+      // Trigger confetti
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 5000); // hide confetti after 5 seconds
+
+      // Show victory message
+      setShowVictoryMessage(true);
+      setTimeout(() => {
+        setShowVictoryMessage(false);
+      }, 2000);  // The victory message will be displayed for 2 seconds.
+
     } else {
       executeEnemyTurn();
     }
@@ -100,10 +95,13 @@ export default function BattleScreen() {
     });
     setPlayerHP(100);
     setIsBattleOver(false);
+    fetchNewEnemyPokemon();
   };
 
   return (
     <div>
+      {showVictoryMessage && <div className="victory-message">VICTORY!</div>}
+      {showConfetti && <ReactConfetti width={window.innerWidth} height={window.innerHeight} />}
       <h1>Battle Screen</h1>
 
       <div className="player-section">
@@ -111,10 +109,7 @@ export default function BattleScreen() {
         <div className="sprite-container">
           <img src={playerPokemonImage} alt={`${playerPokemonName} sprite`} />
         </div>
-        {/* <p>HP: {selectedPokemon?.hp}</p> Assuming selectedPokemon has an hp property */}
-        {/* will need to import moves from attack screen */}
         <p>HP: {playerHP}</p>
-        {/* ... rest of player section ... */}
         <h3>Selected Moves:</h3>
         <ul>
           {selectedMoves.map((move, index) => (
@@ -131,7 +126,6 @@ export default function BattleScreen() {
           <img src={enemyPokemon.sprite} alt={`${enemyPokemon.name} sprite`} />
         </div>
         <p>HP: {enemyPokemon.hp}</p>
-        {/* ... rest of enemy section ... */}
         {isBattleOver && (
           <button onClick={handleRedoBattle}>Redo Battle</button>
         )}
@@ -139,7 +133,6 @@ export default function BattleScreen() {
     </div>
   );
 }
-
 
 
 

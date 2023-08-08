@@ -14,3 +14,26 @@
     width: 200px; /* Adjust as necessary */
     height: 200px; /* Adjust as necessary */
 }
+
+.victory-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px 40px;
+  font-size: 3rem;
+  font-weight: bold;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  animation: flashVictory 0.5s 4;  /* flash 4 times over 2 seconds */
+}
+
+@keyframes flashVictory {
+  0%, 100% {
+      opacity: 1;
+  }
+  50% {
+      opacity: 0;
+  }
+}
