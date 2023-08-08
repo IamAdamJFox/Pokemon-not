@@ -18,6 +18,7 @@
   height: 80vh;
   font-family: Pixel Pokemon; 
   color: #ffcb05;
+  padding-bottom: 50%
 }
 .battle-header{
   display: flex;
@@ -139,7 +140,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 3em;
-  color:  #e1ff00;
+  color:  #ffcb05;
   text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
   animation: flashVictory 1s infinite;
 }
@@ -152,6 +153,64 @@
   50% {
     opacity: 0;
   }
+}
+.battle-log-container {
+  background-color: rgba(50, 50, 50, 0.85); /* Dark background with some transparency */
+  border: 1px solid rgba(200, 200, 200, 0.5); /* Lighter border for a slight outline */
+  border-radius: 10px; 
+  padding: 10px;
+  margin-top: 20px;
+  width: 35%;  /* Reduce width for more of a square appearance */
+  height: 35%; /* Set a height for more of a square appearance */
+  margin: 0 auto; 
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.4); /* Subtle shadow to elevate the container */
+  overflow-y: auto; /* Add scrollbar when content overflows */
+  margin: 0 auto 30px 30px;  /* Keep the container centered but add 30px space from the bottom and right */
+  position: relative;
+  top: auto; /* Resetting the top value */
+  left: 50%;
+  transform: translate(-50%, 0); /* Only centering horizontally */
+  margin-top: 50px; 
+}
+.battle-log-title {
+  font-size: 14px; /* Slightly smaller font */
+  margin-bottom: 10px;
+  color: #ffcb05; /* Light gray color */
+}
+
+.battle-log-list {
+  list-style: none;
+  padding: 0;
+  margin: 0; /* Remove default margin */
+}
+
+.battle-log-entry {
+  margin-bottom: 3px;
+  font-size: 12px; /* More compact font size */
+  padding: 3px 0; /* Compact padding */
+  color: #ddd; /* General light gray color for text */
+}
+
+.battle-log-entry:nth-child(odd) {
+  background-color: rgba(255, 255, 255, 0.05); /* Subtle striping with transparency */
+}
+
+.battle-log-entry.player {
+  color: #89a7ff; /* Light blue shade for player */
+  font-weight: normal;
+}
+
+.battle-log-entry.enemy {
+  color: #ff8f8f; /* Light red shade for enemy */
+  font-weight: normal;
+}
+
+.log-source, .log-move {
+  font-weight: bold;
+}
+
+.log-damage {
+  color: #999; /* Slightly darker shade for damage to not draw too much attention */
 }
 
 .flip-image {
@@ -194,3 +253,4 @@
     padding: 0.3em 0.8em; /* Adjust button padding */
   }
 }
+ 

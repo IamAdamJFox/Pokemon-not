@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import "../assets/BattleScreen.css";
 import ReactConfetti from "react-confetti";
 
-const movePower = [20,30,40,50];
+const movePower = [20, 30, 40, 50];
 
 export default function BattleScreen() {
   const location = useLocation();
@@ -18,9 +18,9 @@ export default function BattleScreen() {
     hp: 100,
     sprite: "URL_to_enemy_sprite_here",
   });
+  const [battleLog, setBattleLog] = useState([]); // New battle log state
 
   const [isBattleOver, setIsBattleOver] = useState(false);
-
   const getRandomPokemonId = () => {
     return Math.floor(Math.random() * 898) + 1;
   };
@@ -48,9 +48,10 @@ export default function BattleScreen() {
     const enemyMovePower = 30;
     const damageDealt = Math.floor(enemyMovePower * (Math.random() + 0.5));
 
+    setBattleLog((prevLog) => [...prevLog, { source: "enemy", move: "Tackle", damage: damageDealt }]);
+
     setPlayerHP((prevHP) => Math.max(prevHP - damageDealt, 0));
 
-    console.log(`Enemy used Tackle. ${damageDealt} damage.`);
     if (playerHP <= 0) {
       setIsBattleOver(true);
     }
@@ -60,28 +61,22 @@ export default function BattleScreen() {
     if (isBattleOver) {
       return;
     }
+
     console.log(`Selected move: ${move}`);
     const damageDone = Math.floor(power * (Math.random() + 0.5));
     let newEnemyHP = Math.max(enemyPokemon.hp - damageDone, 0); // Compute the new HP value here
 
-    setEnemyPokemon(prevEnemyPokemon => ({
+    setBattleLog((prevLog) => [...prevLog, { source: "player", move, damage: damageDone }]);
+
+    setEnemyPokemon((prevEnemyPokemon) => ({
       ...prevEnemyPokemon,
-      hp: newEnemyHP
+      hp: newEnemyHP,
     }));
 
     if (newEnemyHP <= 0) {
       setIsBattleOver(true);
-
-      // Trigger confetti
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 5000); // hide confetti after 5 seconds
-
-      // Show victory message
+      setShowConfetti(true); 
       setShowVictoryMessage(true);
-      setTimeout(() => {
-        setShowVictoryMessage(false);
-      }, 2000);  // The victory message will be displayed for 2 seconds.
-
     } else {
       executeEnemyTurn();
     }
@@ -96,6 +91,9 @@ export default function BattleScreen() {
     setPlayerHP(100);
     setIsBattleOver(false);
     fetchNewEnemyPokemon();
+    setBattleLog([]);
+    setShowConfetti(false);
+    setShowVictoryMessage(false);
   };
 
   return (
@@ -108,7 +106,7 @@ export default function BattleScreen() {
         <div className="player-section">
           <h2>Your Pokémon: {playerPokemonName}</h2>
           <div className="sprite-container">
-          <img src={playerPokemonImage} alt={`${playerPokemonName} sprite`} className="flip-image" />
+            <img src={playerPokemonImage} alt={`${playerPokemonName} sprite`} className="flip-image" />
           </div>
           <p>HP: {playerHP}</p>
           <h3>Selected Moves:</h3>
@@ -131,6 +129,24 @@ export default function BattleScreen() {
             <button onClick={handleRedoBattle}>Redo Battle</button>
           )}
         </div>
+      </div>
+      <div className="battle-log-container">
+        <h3 className="battle-log-title">Battle Log:</h3>
+        <ul className="battle-log-list">
+          {battleLog.map((entry, index) => (
+            <li
+              key={index}
+              className={`battle-log-entry ${entry.source === "player" ? "player" : "enemy"}`}
+            >
+              <span className="log-source">{entry.source === "player" ? "Player" : "Enemy"}</span>{" "}
+              <span className="log-action">used</span>{" "}
+              <span className="log-move">{entry.move}</span>{" "}
+              {entry.damage !== undefined && (
+                <span className="log-damage">and dealt {entry.damage} damage.</span>
+              )}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
