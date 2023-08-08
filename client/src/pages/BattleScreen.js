@@ -13,6 +13,10 @@ export default function BattleScreen() {
   const [showConfetti, setShowConfetti] = useState(false);
   const [showVictoryMessage, setShowVictoryMessage] = useState(false);
   const [playerHP, setPlayerHP] = useState(100);
+  const [battleMessage, setBattleMessage] = useState("");
+  const [playerIsAttacking, setPlayerIsAttacking] = useState(false);
+  const [enemyIsAttacking, setEnemyIsAttacking] = useState(false);
+
   const [enemyPokemon, setEnemyPokemon] = useState({
     name: "Loading...",
     hp: 100,
@@ -45,8 +49,17 @@ export default function BattleScreen() {
   }, []);
 
   const executeEnemyTurn = () => {
-    const enemyMovePower = 30;
-    const damageDealt = Math.floor(enemyMovePower * (Math.random() + 0.5));
+    const enemyMoves = [
+      { name: "Tackle", power: 30 },
+      { name: "Quick Attack", power: 40 },
+      { name: "Slam", power: 50 },
+      { name: "Hyper Beam", power: 60 }
+    ];
+    setEnemyIsAttacking(true);
+    setTimeout(() => setEnemyIsAttacking(false), 500);
+    // Randomly select a move for the enemy
+    const randomMoveIndex = Math.floor(Math.random() * enemyMoves.length);
+    const selectedMove = enemyMoves[randomMoveIndex];
 
     setBattleLog((prevLog) => [...prevLog, { source: "enemy", move: "Tackle", damage: damageDealt }]);
 
@@ -61,10 +74,11 @@ export default function BattleScreen() {
     if (isBattleOver) {
       return;
     }
-
     console.log(`Selected move: ${move}`);
     const damageDone = Math.floor(power * (Math.random() + 0.5));
-    let newEnemyHP = Math.max(enemyPokemon.hp - damageDone, 0); // Compute the new HP value here
+    let newEnemyHP = Math.max(enemyPokemon.hp - damageDone, 0);
+    setPlayerIsAttacking(true);
+    setTimeout(() => setPlayerIsAttacking(false), 500);
 
     setBattleLog((prevLog) => [...prevLog, { source: "player", move, damage: damageDone }]);
 
@@ -78,7 +92,10 @@ export default function BattleScreen() {
       setShowConfetti(true); 
       setShowVictoryMessage(true);
     } else {
-      executeEnemyTurn();
+      // Delay the enemy's turn by 2 seconds so the player can read the message.
+      setTimeout(() => {
+        executeEnemyTurn();
+      }, 2000);
     }
   };
 
@@ -122,11 +139,13 @@ export default function BattleScreen() {
         <div className="enemy-section">
           <h2>Enemy Pokémon: {enemyPokemon.name}</h2>
           <div className="enemy-sprite-container">
-            <img src={enemyPokemon.sprite} alt={`${enemyPokemon.name} sprite`} />
+            <div className={enemyIsAttacking ? "shake" : ""}>
+              <img src={enemyPokemon.sprite} alt={`${enemyPokemon.name} sprite`} />
+            </div>
           </div>
           <p>HP: {enemyPokemon.hp}</p>
           {isBattleOver && (
-            <button onClick={handleRedoBattle}>Redo Battle</button>
+            <button onClick={handleRedoBattle}>Rematch</button>
           )}
         </div>
       </div>
