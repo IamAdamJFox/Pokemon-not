@@ -26,14 +26,14 @@
   height: 20em;
 }
 .pokemon-container:hover {
-  transform: translateY(-5em); /* Move container up slightly on hover */
+  transform: translateY(-5em); 
 }
 .pokemon-container img:hover {
   opacity: 0.5;
 }
 
 .pokemon-container.selected {
-  transform: translateY(-5em) !important; /* Apply hover effect for selected Pokemon */
+  transform: translateY(-5em) !important; 
 }
 .startBtn {
   display: flex;
@@ -72,7 +72,7 @@ h2 {
     to bottom,
     #611b1b,
     #db3131
-  ); /* Replace these colors with your desired hover gradient */
+  ); 
 }
 
 .startBtn a {

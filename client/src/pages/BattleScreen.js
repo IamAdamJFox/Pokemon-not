@@ -82,17 +82,18 @@ export default function BattleScreen() {
 
     setBattleLog((prevLog) => [...prevLog, { source: "enemy", move: selectedMove.name, damage: damageDone }]);
 
-    setPlayerHP((prevHP) => Math.max(prevHP - damageDone, 0));
-
+    const newPlayerHP = Math.max(playerHP - damageDone, 0);
+    setPlayerHP(newPlayerHP);
+    
     setTimeout(() => {
         setEnemyIsAttacking(false);
         
-        if (playerHP <= 0) {
-          setIsBattleOver(true);
+        if (newPlayerHP === 0) {
           setShowGameOverMessage(true);
+          setIsBattleOver(true);
         }
     }, 100);
-};
+  };
 
   const handleMoveClick = (move, power) => {
     // If the battle is over, the enemy is currently attacking, or the player is attacking, just return.

@@ -18,10 +18,13 @@ const App = () => {
     <button onClick={() => window.location.href = "/"} className="home-btn">HOME</button>
     {Auth.loggedIn() ? (
         <button onClick={() => Auth.logout()} className="logout-btn">LOGOUT</button>
-    ) : (
-        <button onClick={() => Auth.login()} className="login-btn">LOGIN</button>
-    )}
-</header>
+      ) : (
+        <>
+          <Link to="/login" className="login-btn">LOGIN</Link>
+          <Link to="/signup" className="signup-btn">SIGNUP</Link>
+        </>
+      )}
+    </header>
       <Routes>
         <Route path="/" element={<StartMenu />} />
 
