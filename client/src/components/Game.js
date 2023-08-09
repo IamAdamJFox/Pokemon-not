@@ -28,10 +28,12 @@ export default function Game({ selectedMoves }) {
       return {
         hit: true,
         damage: damageDealt,
+        playerHPAfterAttack: Math.max(currentPlayerHP - damageDealt, 0),
       };
     } else {
       return {
         hit: false,
+        playerHPAfterAttack: currentPlayerHP,
       };
     }
   };
@@ -64,8 +66,9 @@ export default function Game({ selectedMoves }) {
 
   
     if (result.hit) {
-      setPlayerHP((prevHP) => prevHP - result.damage);
+      setPlayerHP((prevHP) => Math.max(prevHP - result.damage, 0));
     }
+  
   
     console.log(`Enemy used ${enemyMove.name}.`);
     if (result.hit) {
@@ -76,15 +79,16 @@ export default function Game({ selectedMoves }) {
   
     console.log(`Player HP: ${playerHP}, Enemy HP: ${enemyHP}`);
   
-    const winner = checkWinner();
-    if (winner) {
-      console.log(winner);
-      handleGameOver(); // Handle the end of the game
-    } else {
-      // After the enemy's turn, set the turn to "player" for the next iteration
-      setTurn("player");
-    }
-  };
+    
+  const winner = checkWinner();
+  if (winner) {
+    console.log(winner);
+    handleGameOver(); // Handle the end of the game
+  } else {
+    // After the enemy's turn, set the turn to "player" for the next iteration
+    setTurn("player");
+  }
+};
 
   const handleGameOver = () => {
     console.log("The battle is over!");
@@ -98,14 +102,22 @@ export default function Game({ selectedMoves }) {
       setPlayerHP(100); // Reset player HP
       setEnemyHP(100); // Reset enemy HP
       setTurn("player"); // Reset the turn to "player"
-
+  
+      // Remove the event listener before restarting
+      document.removeEventListener("keypress", handleRestart);
+  
       // Start the game again
       console.log("Let the battle begin!");
-      playerTurn();
+      setBattleState(BattleStates.PLAYER_TURN); // Start with the player's turn
     }
   };
 
   const playerTurn = () => {
+    if (playerHP <= 0) {
+      console.log("You have no more HP. The enemy wins!");
+      handleGameOver();
+      return;
+    }
     // Display available moves for the player to select
     console.log("Available Moves:");
     moves.forEach((move, index) => {
@@ -127,6 +139,11 @@ export default function Game({ selectedMoves }) {
 };
 
   const handlePlayerMoveSelection = (event) => {
+    if (playerHP <= 0) {
+      console.log("You have no more HP. The enemy wins!");
+      handleGameOver();
+      return;
+    }
     const selectedMoveIndex = parseInt(event.key) - 1;
     const playerLogEntry = { source: "player", move: selectedMove.name, damage: result.damage };
     setBattleLog((prevLog) => [...prevLog, playerLogEntry]);
@@ -160,6 +177,15 @@ export default function Game({ selectedMoves }) {
         enemyTurn();
       }
     }
+  };
+
+  const checkWinner = () => {
+    if (playerHP <= 0) {
+      return "You lose! The enemy wins.";
+    } else if (enemyHP <= 0) {
+      return "Congratulations! You win!";
+    }
+    return null; // No winner yet
   };
 
   useEffect(() => {

@@ -42,7 +42,7 @@ This project had a few challenges for us to work through
 - Transferring API data along from front end through back end
 - Developing proper game logic
 - Working with react, when this was developed it was still new to us
-
+- Adding actual turn based logic
 
 ## Future Implemantation
 

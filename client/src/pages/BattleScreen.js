@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import "../assets/BattleScreen.css";
 import ReactConfetti from "react-confetti";
 
-const movePower = [20, 30, 40, 70];
+const movePower = [5, 30, 40, 70];
 
 export default function BattleScreen() {
   const location = useLocation();
@@ -16,6 +16,8 @@ export default function BattleScreen() {
   const [battleMessage, setBattleMessage] = useState("");
   const [playerIsAttacking, setPlayerIsAttacking] = useState(false);
   const [enemyIsAttacking, setEnemyIsAttacking] = useState(false);
+  const [showGameOverMessage, setShowGameOverMessage] = useState(false);
+
 
   const getHpBarColor = (currentHp, originalHp) => {
     const percentage = (currentHp / originalHp) * 100;
@@ -87,6 +89,7 @@ export default function BattleScreen() {
         
         if (playerHP <= 0) {
           setIsBattleOver(true);
+          setShowGameOverMessage(true);
         }
     }, 100);
 };
@@ -137,6 +140,8 @@ export default function BattleScreen() {
     setBattleLog([]);
     setShowConfetti(false);
     setShowVictoryMessage(false);
+    setShowGameOverMessage(false);
+
   };
   const playerHpColor = getHpBarColor(playerHP, 100);
   const enemyHpColor = getHpBarColor(enemyPokemon.currentHp, enemyPokemon.originalHp);
@@ -145,6 +150,8 @@ export default function BattleScreen() {
     <div>
       {showVictoryMessage && <div className="victory-message">VICTORY!</div>}
       {showConfetti && <ReactConfetti width={window.innerWidth} height={window.innerHeight} />}
+      {showGameOverMessage && <div className="game-over-message">GAME OVER!</div>}
+
       <h1 className="battle-header">FIGHT</h1>
 
       <div className="battle-arena">
