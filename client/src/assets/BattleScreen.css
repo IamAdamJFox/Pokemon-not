@@ -308,3 +308,16 @@
   font-weight: bold; /* Makes the text bold */
   text-shadow: 1px 1px rgba(255, 255, 255, 0.6); /* Gives a subtle white shadow to the text for readability */
 }
+.game-over-message {
+  font-size: 3rem;
+  color: red;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 1rem;
+  border: 3px solid black;
+  border-radius: 10px;
+}
