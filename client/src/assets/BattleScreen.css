@@ -270,24 +270,33 @@
 }
 
 .hp-bar-container {
-  width: 200px; 
-  height: 20px; 
-  border: 1px solid black;
-  background-color: #eee; 
-  position: relative; /* Enables absolute positioning of child elements */
-  border-radius: 5px; /* Adjust as necessary */
-  overflow: hidden;;
+  width: 200px;
+  height: 20px;
+  border: 2px solid #0c0f0b;
+  background-color: #eee;
+  position: relative;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* A subtle shadow to give it depth */
 }
 
 .hp-bar {
   height: 100%;
-  background-color: green;
+  background-color: #4caf50; /* Default color for 50% and above */
   width: 100%;
   transition: width 0.3s ease;
-  border: 3px solid #0c0f0b;
-  border-radius: 5px;
+  border-right: 3px solid #0c0f0b;
+  box-shadow: 1px 0 1px rgba(0, 0, 0, 0.1); /* A subtle shadow on the bar itself for some depth */
 }
 
+/* For different HP states, you'd likely want to toggle these classes in your JS based on HP percentage */
+.hp-bar.yellow {
+  background-color: #ffeb3b;
+}
+
+.hp-bar.red {
+  background-color: #f44336;
+}
 
 .hp-text {
   position: absolute;
@@ -295,5 +304,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 14px; /* Adjust as needed */
+  font-size: 14px;
+  font-weight: bold; /* Makes the text bold */
+  text-shadow: 1px 1px rgba(255, 255, 255, 0.6); /* Gives a subtle white shadow to the text for readability */
 }

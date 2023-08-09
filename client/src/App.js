@@ -8,17 +8,20 @@ import Attack from "./pages/Attack";
 import Battle from "./pages/BattleScreen";
 import PokemonDetails from './components/PokemonDetails';
 import Auth from "./utils/auth";
-import LoginLogoutButton from "./components/LoginLogoutButton"; 
-
+import "./assets/app.css";
 const App = () => {
   const isUserAuthenticated = Auth.loggedIn();
 
   return (
     <BrowserRouter>
-      <header>
-        <Link to="/">HOME</Link>
-        <LoginLogoutButton />
-      </header>
+    <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <button onClick={() => window.location.href = "/"} className="home-btn">HOME</button>
+    {Auth.loggedIn() ? (
+        <button onClick={() => Auth.logout()} className="logout-btn">LOGOUT</button>
+    ) : (
+        <button onClick={() => Auth.login()} className="login-btn">LOGIN</button>
+    )}
+</header>
       <Routes>
         <Route path="/" element={<StartMenu />} />
 

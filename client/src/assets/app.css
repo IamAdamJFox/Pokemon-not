@@ -1,0 +1,25 @@
+.home-btn, .logout-btn, .login-btn{
+  cursor: pointer;
+  display: block;
+  font-family: "pixel pokemon", sans-serif;
+  color: #fdfdfd;
+  background: linear-gradient(to bottom, #db3131, #611b1b);
+  border-radius: 10px;
+  border: 2px solid #000000;
+  font-size: 15px;
+  padding: 0.5em 1em;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+  text-align: center;
+  margin: 0.5em;
+  position: relative;
+}
+.home-btn{
+  margin-right: auto;
+}
+.logout-btn, .login-btn{
+  margin-left: auto;
+}
+.home-btn:hover, .logout-btn:hover{
+  background: linear-gradient(to bottom, #611b1b, #db3131);
+}
