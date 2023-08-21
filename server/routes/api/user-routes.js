@@ -9,11 +9,14 @@ const {
 
 const { authMiddleware } = require('../../utils/auth');
 
-router.route('/').post(createUser).put(authMiddleware, savePokemon);
+router.route('/').post(createUser)
 
 router.route('/login').post(login);
 
 router.route('/me').get(authMiddleware, getSingleUser);
+
+// For saving and deleting Pokémon associated with a user
+router.route('/me/pokemon').put(authMiddleware, savePokemon);
 
 router.route('/pokemon/:pokemonId').delete(authMiddleware, deletePokemon);
 

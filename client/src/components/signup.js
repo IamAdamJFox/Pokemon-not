@@ -1,85 +1,109 @@
-import React, { useState } from "react";
+import { useMutation } from '@apollo/client';
+import { ADD_USER } from '../utils/mutations';
+import React, { useState } from 'react';
+import { Form, Button, Alert } from 'react-bootstrap';
+import Auth from '../utils/auth';
+import '../assets/signupForm.css';
 
-export default function SignUpAndLogin() {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-    email: "",
-  });
+const SignupForm = () => {
+  const [userFormData, setUserFormData] = useState({ username: '', email: '', password: '' });
+  const [validated, setValidated] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  const [addUser, { error }] = useMutation(ADD_USER);
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setUserFormData({ ...userFormData, [name]: value });
   };
 
-  const handleSignUpSubmit = (e) => {
-    e.preventDefault();
-    console.log("Sign Up Form Data: ", formData);
-    // Add logic to submit sign-up data to backend or perform desired action
-  };
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
 
-  const handleLoginSubmit = (e) => {
-    e.preventDefault();
-    console.log("Login Form Data: ", formData);
-    // Add logic to submit login data to backend or perform desired action
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+      setValidated(true);
+    } else {
+      try {
+        const { data } = await addUser({
+          variables: { ...userFormData }
+        });
+
+        Auth.login(data.addUser.token);
+      } catch (err) {
+        console.error(err);
+        setShowAlert(true);
+      }
+
+      setUserFormData({
+        username: '',
+        email: '',
+        password: '',
+      });
+      setValidated(false);
+    }
   };
 
   return (
-    <div>
-      <div className="signUpForm">
-        <h2>Sign Up</h2>
-        <form onSubmit={handleSignUpSubmit}>
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            value={formData.username}
+    <div className="signup-container">
+      <Form noValidate validated={validated} onSubmit={handleFormSubmit} className="pokemon-form">
+        <Alert dismissible onClose={() => setShowAlert(false)} show={showAlert} variant='danger' className="pokemon-alert">
+          Something went wrong with your signup!
+        </Alert>
+
+        <Form.Group className='mb-3'>
+          <Form.Label htmlFor='username' className="pokemon-label">Username</Form.Label>
+          <Form.Control
+            type='text'
+            placeholder='Your username'
+            name='username'
             onChange={handleInputChange}
+            value={userFormData.username}
+            required
+            className="pokemon-input"
           />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
+        </Form.Group>
+
+        <Form.Group className='mb-3'>
+          <Form.Label htmlFor='email' className="pokemon-label">Email</Form.Label>
+          <Form.Control
+            type='email'
+            placeholder='Your email address'
+            name='email'
             onChange={handleInputChange}
+            value={userFormData.email}
+            required
+            className="pokemon-input"
           />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
+
+        </Form.Group>
+
+        <Form.Group className='mb-3'>
+          <Form.Label htmlFor='password' className="pokemon-label">Password</Form.Label>
+          <Form.Control
+            type='password'
+            placeholder='Your password'
+            name='password'
             onChange={handleInputChange}
+            value={userFormData.password}
+            required
+            className="pokemon-input"
           />
-          <button type="submit" className="btn btn-primary">
-            Sign Up
-          </button>
-        </form>
-      </div>
-      <div className="loginForm">
-        <h2>Login</h2>
-        <form onSubmit={handleLoginSubmit}>
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            value={formData.username}
-            onChange={handleInputChange}
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleInputChange}
-          />
-          <button type="submit" className="btn btn-primary">
-            Login
-          </button>
-        </form>
-      </div>
+
+        </Form.Group>
+        <Button
+          disabled={!(userFormData.username && userFormData.email && userFormData.password)}
+          type='submit'
+          variant='success'
+          className="pokemon-button"
+        >
+          Submit
+        </Button>
+      </Form>
     </div>
   );
-}
+};
+
+export default SignupForm;

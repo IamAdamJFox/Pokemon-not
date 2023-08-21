@@ -1,21 +1,48 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Link, Navigate } from "react-router-dom";
 import StartMenu from "./pages/StartMenu";
 import MoveList from "./pages/MoveList";
-import Login from "./components/signup";
+import Login from "./components/LoginForm";
+import SignupForm from "./components/signup";
 import Attack from "./pages/Attack";
+import Battle from "./pages/BattleScreen";
 import PokemonDetails from './components/PokemonDetails';
+import Auth from "./utils/auth";
+import "./assets/app.css";
+const App = () => {
+  const isUserAuthenticated = Auth.loggedIn();
 
-const App = () => (
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<StartMenu />} />
-      <Route path="/MoveList/:pokemonId" element={<MoveList />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/Attack/:selectedMoves" element={<Attack />} />
-      <Route path="/pokemon/:id" element={<PokemonDetails />} />
-    </Routes>
-  </BrowserRouter>
-);
+  return (
+    <BrowserRouter>
+    <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <button onClick={() => window.location.href = "/"} className="home-btn">HOME</button>
+    {Auth.loggedIn() ? (
+        <button onClick={() => Auth.logout()} className="logout-btn">LOGOUT</button>
+      ) : (
+        <>
+          <Link to="/login" className="login-btn">LOGIN</Link>
+          <Link to="/signup" className="signup-btn">SIGNUP</Link>
+        </>
+      )}
+    </header>
+      <Routes>
+        <Route path="/" element={<StartMenu />} />
 
+        <>
+          <Route path="/" element={<StartMenu />} />
+          <Route path="/MoveList/:pokemonId" element={<MoveList />} />
+          <Route path="/Attack" element={<Attack />} />
+          <Route path="/pokemon/:id" element={<PokemonDetails />} />
+          <Route path="/Battle" element={<Battle />} />
+          <Route path="/login" element={isUserAuthenticated ? <Navigate to="/" /> : <Login />} />
+          <Route path="/signup" element={isUserAuthenticated ? <Navigate to="/" /> : <SignupForm />} />
+        </>
+
+        <Route path="/login" element={isUserAuthenticated ? <Navigate to="/" /> : <Login />} />
+        <Route path="/signup" element={isUserAuthenticated ? <Navigate to="/" /> : <SignupForm />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
 export default App;
+

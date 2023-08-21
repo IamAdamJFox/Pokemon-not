@@ -43,13 +43,26 @@ module.exports = {
   },
 
   async savePokemon({ user, body }, res) {
-    console.log(user);
     try {
-      const updatedUser = await User.findOneAndUpdate(
-        { _id: user._id },
-        { $addToSet: { savedPokemons: body } },
-        { new: true, runValidators: true }
-      );
+      // Fetch the user
+      const foundUser = await User.findById(user._id);
+  
+      if (!foundUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      // Check if pokemon is already saved
+      const existingPokemonIndex = foundUser.savedPokemons.findIndex(p => p.pokemonId === body.pokemonId);
+  
+      if (existingPokemonIndex !== -1) {
+        // Update existing Pokemon
+        foundUser.savedPokemons[existingPokemonIndex] = body;
+      } else {
+        // Add new Pokemon
+        foundUser.savedPokemons.push(body);
+      }
+  
+      const updatedUser = await foundUser.save();
       return res.json(updatedUser);
     } catch (err) {
       console.log(err);
@@ -68,4 +81,22 @@ module.exports = {
     }
     return res.json(updatedUser);
   },
+  
+  async saveCurrentPokemon({ user, body }, res) {
+    try {
+      const updatedUser = await User.findByIdAndUpdate(
+        user._id,
+        { currentPokemon: body },
+        { new: true }
+      );
+      if (!updatedUser) {
+        return res.status(404).json({ message: "Couldn't find user with this id!" });
+      }
+      return res.json(updatedUser);
+    } catch (err) {
+      console.error(err);
+      return res.status(400).json(err);
+    }
+  }
+  
 };

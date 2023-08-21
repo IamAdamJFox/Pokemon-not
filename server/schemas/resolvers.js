@@ -1,3 +1,4 @@
+//includes getPokemonsByIds, getMovesByPokemonId, getPokemonById, getAbilityByIdOrName, getMoveByIdOrName
 const { User, Pokemon } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { signToken } = require('../utils/auth');
@@ -11,9 +12,20 @@ const resolvers = {
       }
       throw new AuthenticationError('You need to be logged in!');
     },
+    getPokemonsByIds: async (_, { ids }, { dataSources }) => {
+      const pokemons = [];
+      for (const id of ids) {
+        const pokemon = await dataSources.pokemonAPI.getPokemonById(id);
+        pokemons.push(pokemon);
+      }
+      return pokemons;
+    },
     getPokemonById: async (_, { id }, { dataSources }) => {
       return dataSources.pokemonAPI.getPokemonById(id);
-    }
+    },
+    getMovesByPokemonId: async (_, { pokemonId }, { dataSources }) => { // Add this resolver
+      return dataSources.pokemonAPI.getMovesByPokemonId(pokemonId);
+    },
   },
 
   Mutation: {
@@ -47,6 +59,12 @@ const resolvers = {
     // Define the savePokemon resolver to save a Pokemon to the user's account
     savePokemon: async (parent, { input }, context) => {
       if (context.user) {
+        // Ensure that the input contains a title
+        if (!input.title) {
+          throw new Error("Title is required for a Pokemon");
+        }
+
+        // Update the user's saved Pokemons with the new Pokemon input
         const updatedPokemons = await User.findOneAndUpdate(
           { _id: context.user._id },
           { $addToSet: { savedPokemons: input } },
@@ -60,11 +78,13 @@ const resolvers = {
     },
 
     // Define the removePokemon resolver to remove a Pokemon from the user's account
-    removePokemon: async (parent, { Id }, context) => {
+    removePokemon: async (parent, { input }, context) => {
       if (context.user) {
+        const { pokemonId } = input;
+
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $pull: { savedPokemons: { PokemonId: Id } } },
+          { $pull: { savedPokemons: { pokemonId: pokemonId } } }, // Notice the property name change from "PokemonId" to "pokemonId"
           { new: true }
         ).populate('savedPokemons');
 
@@ -77,6 +97,25 @@ const resolvers = {
 
       throw new AuthenticationError('You need to be logged in!');
     },
+    saveCurrentPokemon: async (parent, { input }, context) => {
+      if (context.user) {
+        const { name, sprite, moves } = input;
+    
+        const updatedUser = await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { currentPokemon: { name, sprite, moves } },
+          { new: true }
+        );
+    
+        if (!updatedUser) {
+          throw new Error('Failed to update the user with the current Pokemon.');
+        }
+    
+        return updatedUser;
+      }
+    
+      throw new AuthenticationError('You need to be logged in!');
+    }
   },
 };
 

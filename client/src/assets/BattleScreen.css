@@ -1,0 +1,313 @@
+/* Pokémon Battle Simulation */
+@font-face {
+  font-family: "Pokemon Solid";
+  src: url("./font/PocketMonk-15ze.ttf");
+}
+@font-face {
+  font-family: "Pixel Pokemon";
+  src: url("./font/PokemonGb-RAeo.ttf");
+}
+
+
+/* Battle Screen Container */
+.battle-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 80%;
+  height: 80vh;
+  font-family: Pixel Pokemon; 
+  color: #ffcb05;
+  padding-bottom: 50%
+}
+.battle-header{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 10vh;
+  font-family: Pixel Pokemon;
+  color: #ffcb05;
+  font-size: 3em;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000, -1px -1.5px 4px #e91c1c;
+}
+
+/* Wrapper for the player and enemy sections */
+.battle-arena {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 5px;
+  background-color: rgba(248, 248, 248, 0.367); /* Using rgba with opacity */
+}
+
+/* Player's Pokémon Section */
+.player-section,
+.enemy-section {
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sprite-container img {
+  width: 400px;
+  height: 400px;
+}
+.enemy-sprite-container img {
+  width: 400px;
+  height: 400px;
+}
+
+.player-section {
+  margin-right: 10px;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  color: #d04a4a;
+}
+
+.enemy-section {
+  margin-left: 10px;
+}
+
+.player-section h2,
+.enemy-section h2 {
+  font-size: 1.5em;
+  margin-bottom: 5px;
+  text-align: center;
+  color: #ffcb05;
+}
+
+.player-section p,
+.enemy-section p {
+  font-size: 1.2em;
+  margin: 5px 0;
+  color: #ffcb05;
+}
+
+.player-section ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.player-section button{
+  cursor: pointer;
+  display: block;
+  font-family: "pixel pokemon", sans-serif;
+  color: #fdfdfd;
+  background: linear-gradient(to bottom, #db3131, #611b1b);
+  border-radius: 10px;
+  border: 2px solid #000000;
+  font-size: 20px;
+  padding: 0.5em 1em;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  text-align: center;
+  margin: 0.3em;
+  position: relative;
+}
+
+/* Enemy's Pokémon Section */
+.enemy-section {
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.enemy-section button {
+  cursor: pointer;
+  display: block;
+  font-family: "pixel pokemon", sans-serif;
+  color: #fdfdfd;
+  background: linear-gradient(to bottom, #db3131, #611b1b);
+  border-radius: 10px;
+  border: 2px solid #000000;
+  font-size: 20px;
+  padding: 0.5em 1em;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  text-align: center;
+  margin: 0.3em 0;
+  position: relative;
+}
+
+/* Victory Message Display */
+.victory-message, .game-over-message {
+  position: absolute;
+  top: calc(50% + 60px);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3em;
+  color:  #ffcb05;
+  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+  animation: flashVictory 1s infinite;
+}
+.game-over-message{
+  color:  #db3131 !important;
+}
+
+/* Victory Animation */
+@keyframes flashVictory {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+.battle-log-container {
+  background-color: rgba(50, 50, 50, 0.85); 
+  border: 1px solid rgba(200, 200, 200, 0.5); 
+  border-radius: 10px; 
+  padding: 10px;
+  margin-top: 20px;
+  width: 35%;  
+  height: 35%; 
+  margin: 0 auto; 
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.4);
+  overflow-y: auto; 
+  margin: 0 auto 30px 30px;  
+  position: relative;
+  top: auto; 
+  left: 50%;
+  transform: translate(-50%, 0); 
+  margin-top: 50px; 
+}
+.battle-log-title {
+  font-size: 14px; /* Slightly smaller font */
+  margin-bottom: 10px;
+  color: #ffcb05; /* Light gray color */
+}
+
+.battle-log-list {
+  list-style: none;
+  padding: 0;
+  margin: 0; /* Remove default margin */
+}
+
+.battle-log-entry {
+  margin-bottom: 3px;
+  font-size: 12px; /* More compact font size */
+  padding: 3px 0; /* Compact padding */
+  color: #ddd; /* General light gray color for text */
+}
+
+.battle-log-entry:nth-child(odd) {
+  background-color: rgba(255, 255, 255, 0.05); /* Subtle striping with transparency */
+}
+
+.battle-log-entry.player {
+  color: #89a7ff; /* Light blue shade for player */
+  font-weight: normal;
+}
+
+.battle-log-entry.enemy {
+  color: #ff8f8f; /* Light red shade for enemy */
+  font-weight: normal;
+}
+
+.log-source, .log-move {
+  font-weight: bold;
+}
+
+.log-damage {
+  color: #999; /* Slightly darker shade for damage to not draw too much attention */
+}
+
+.flip-image {
+  transform: scaleX(-1);
+}
+
+@media (max-width: 768px) {
+  .battle-container {
+    flex-direction: column; /* Stack items vertically */
+    align-items: center;
+    height: auto; /* Adjust height as needed */
+  }
+  
+  .battle-header {
+    font-size: 2em; /* Decrease font size */
+  }
+  
+  .battle-arena {
+    flex-direction: column; 
+    align-items: center;
+  }
+  
+  .sprite-container img,
+  .enemy-sprite-container img {
+    width: 300px; 
+    height: 300px;
+  }
+  .player-section ul {
+    flex-direction: column; 
+    align-items: center; 
+  }
+  
+  .enemy-section ul {
+    flex-direction: column; 
+    align-items: center; 
+  }
+  .player-section button,
+  .enemy-section button {
+    font-size: 16px; 
+    padding: 0.3em 0.8em; 
+  }
+}
+
+
+@keyframes shake {
+  0% { transform: translate(0, 0) rotate(0); }
+  20% { transform: translate(-10px, 0) rotate(-20deg); }
+  30% { transform: translate(10px, 0) rotate(20deg); }
+  50% { transform: translate(-10px, 0) rotate(-10deg); }
+  60% { transform: translate(10px, 0) rotate(10deg); }
+  100% { transform: translate(0, 0) rotate(0); }
+}
+
+.shake {
+  animation: shake 0.5s;
+  animation-iteration-count: 1;
+}
+
+.hp-bar-container {
+  width: 200px;
+  height: 20px;
+  border: 2px solid #0c0f0b;
+  background-color: #eee;
+  position: relative;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.hp-bar {
+  height: 100%;
+  background-color: #4caf50; /* Default color for 50% and above */
+  width: 100%;
+  transition: width 0.3s ease;
+  border-right: 3px solid #0c0f0b;
+  box-shadow: 1px 0 1px rgba(0, 0, 0, 0.1); /* A subtle shadow on the bar itself for some depth */
+}
+
+
+.hp-bar.yellow {
+  background-color: #ffeb3b; /* Yellow color for 20% and above */
+}
+
+.hp-bar.red {
+  background-color: #f44336; /* Red color for 0% and above */
+}
+
+.hp-text {
+  position: absolute;
+  color: black;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  font-weight: bold; /* Makes the text bold */
+  text-shadow: 1px 1px rgba(255, 255, 255, 0.6); /* Gives a subtle white shadow to the text for readability */
+}

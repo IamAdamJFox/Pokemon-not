@@ -1,84 +1,122 @@
-import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom"; // Import useParams to access route parameters
-
-// Sample Pokémon data
-const pokemonData = [
-  { id: 1, name: "Bulbasaur", moves: ["Tackle", "Vine Whip", 'test'] },
-  { id: 2, name: "Charmander", moves: ["Scratch", "Ember"] },
-  { id: 3, name: "Squirtle", moves: ["Tackle", "Water Gun"] },
-  { id: 4, name: "Pikachu", moves: ["Quick Attack", "Thunder Shock"] },
-];
+import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_POKEMON_BY_ID, GET_MOVES_BY_POKEMON_ID } from "../utils/queries";
+import { ADD_SELECTED_MOVE } from "../utils/mutations";
+import '../assets/movelist.css';
 
 export default function MoveList() {
-  const { pokemonId } = useParams(); // Get the 'pokemonId' parameter from the URL
+  const { pokemonId } = useParams();
+  const [selectedMoves, setSelectedMoves] = useState([]);
+  const navigate = useNavigate();
 
-  // Find the selected Pokémon based on the ID
-  const selectedPokemon = pokemonData.find(
-    (pokemon) => pokemon.id === parseInt(pokemonId)
-  );
+  const { loading: loadingPokemon, error: errorPokemon, data: dataPokemon } = useQuery(GET_POKEMON_BY_ID, {
+    variables: { id: pokemonId },
+  });
 
-  if (!selectedPokemon) {
-    return <div>Pokémon not found.</div>;
+  const { loading: loadingMoves, error: errorMoves, data: dataMoves } = useQuery(GET_MOVES_BY_POKEMON_ID, {
+    variables: { pokemonId },
+  });
+
+  const [addSelectedMove] = useMutation(ADD_SELECTED_MOVE);
+
+  const handleMoveSelect = async (move) => {
+    if (selectedMoves.length < 4 && !selectedMoves.includes(move)) {
+      const updatedMoves = [...selectedMoves, move];
+      setSelectedMoves(updatedMoves);
+    }
+  }
+  const handleMoveRemove = (moveToRemove) => {
+    const updatedMoves = selectedMoves.filter(move => move !== moveToRemove);
+    setSelectedMoves(updatedMoves);
   }
 
-  // Local storage key to store selected moves
-  const localStorageKey = `selectedMoves_${selectedPokemon.name}`;
+  if (loadingPokemon || loadingMoves) {
+    return <div>Loading...</div>;
+  }
 
-  const [selectedMoves, setSelectedMoves] = useState([]); // State to store selected moves
+  if (errorPokemon || errorMoves) {
+    return <div>Error: {errorPokemon?.message || errorMoves?.message}</div>;
+  }
 
-  useEffect(() => {
-    // Load selected moves from local storage
-    const selectedMoves = JSON.parse(localStorage.getItem("selectedMoves")) || [];
-    console.log("localStorage selectedMoves:", selectedMoves);
-    // Update the state
-    setSelectedMoves(selectedMoves);
-  }, [localStorageKey]);  // Add localStorageKey as a dependency
-
-  // Function to handle move selection
-  const handleMoveSelect = (move) => {
-    // Check if the move is already selected
-    if (!selectedMoves.includes(move)) {
-      // Add the move to the list of selected moves
-      const updatedMoves = [...selectedMoves, move];
-      // Update the state
-      setSelectedMoves(updatedMoves);
-      // Save the updated list of moves to local storage
-      localStorage.setItem(localStorageKey, JSON.stringify(updatedMoves));
-      console.log(updatedMoves);
-    }
-  };
-
+  const selectedPokemon = dataPokemon.getPokemonById;
 
   return (
-    <div>
-      <div className="startHeader">
-        <h1>Pokemon Not</h1>
+    // this is the div that contains the entire page
+    <div className="center-container">
+      {/* <h1 className="move-header">Pokemon Not</h1> */}
+      <h2 className='move-header'>Choose 4 Moves</h2>
+      {/* this is a div that contains our selected pokemon */}
+      <div className="selected-pokemon">
+        {/* making the first letter captial */}
+        <h2>{selectedPokemon.name.charAt(0).toUpperCase() + selectedPokemon.name.slice(1)}</h2>
+        <img src={selectedPokemon.image} alt={selectedPokemon.name} />
       </div>
-      <h2>{selectedPokemon.name}</h2>
-      <h3>Selected Moves:</h3>
-      <ul>
-        {selectedMoves.map((move, index) => (
-          <li key={index}>{move}</li>
-        ))}
-      </ul>
-      <h3>All Moves:</h3>
-      <ul>
-        {selectedPokemon.moves.map((move, index) => (
-          <li
-            key={index}
-            className={selectedMoves.includes(move) ? "selected-move" : ""}
-            onClick={() => handleMoveSelect(move)}
+      {/* this is a div that contains our move list */}
+      <div className="move-list-container">
+        <div className="moves-wrapper">
+          <div className="moves-container-header">
+            <h3 className="move-select-title">All Moves:</h3>
+          </div>
+          <div className="moves-container">
+            {dataMoves.getMovesByPokemonId.slice(0, 6).map((move, index) => (
+              <button
+                key={index}
+                className={`move-button ${selectedMoves.includes(move.name) ? "selected-move" : ""}`}
+                onClick={() => handleMoveSelect(move.name)}
+                disabled={selectedMoves.includes(move.name) || selectedMoves.length >= 4}
+              >
+                {move.name}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="selected-moves-wrapper">
+          <div className="selected-moves-header">
+            <h3 className="move-select-title">Your Moves:</h3>
+          </div>
+          <div className="selected-moves-container">
+            {selectedMoves.map((move, index) => (
+              <div key={index} className="selected-move">
+                <button className="selected-move-button">
+                  {move}
+                </button>
+                <button
+                  className="remove-move-button"
+                  onClick={() => handleMoveRemove(move)}
+                >
+                  -
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="attack-button-container">
+        {selectedMoves.length === 4 ? (
+          <button
+            className={`button attack-button ${
+              selectedMoves.length === 4 ? "attack-button-enabled" : "attack-button-disabled"
+            }`}
+            onClick={() => {
+              navigate("/Attack", {
+                state: {
+                  selectedMoves,
+                  selectedPokemonSprite: selectedPokemon.image,
+                  selectedPokemonName: selectedPokemon.name,
+                },
+              });
+            }}
+            disabled={selectedMoves.length !== 4}
           >
-            {move}
-          </li>
-        ))}
-      </ul>
-      {console.log("Passing Moves to Attack:", selectedMoves)}
-      <Link
-        to={`/Attack/${encodeURIComponent(JSON.stringify(selectedMoves))}`}
-      >
-        <button>Attack</button>
-      </Link>
+            View Pokemon
+          </button>
+        ) : (
+          <button className="button attack-button-disabled" disabled>
+            View Pokemon
+          </button>
+        )}
+      </div>
     </div>
   );
 }
