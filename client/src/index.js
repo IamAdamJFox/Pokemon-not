@@ -6,7 +6,7 @@ import { setContext } from '@apollo/client/link/context';
 
 // Create an http link to your server
 const httpLink = createHttpLink({
-  uri: 'https://pokemon-not-bda447895737.herokuapp.com/graphql'
+  uri: 'http://localhost:3001/graphql'
 });
 
 // Middleware to set the auth token for every request
